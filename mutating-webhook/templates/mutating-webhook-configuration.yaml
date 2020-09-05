@@ -1,0 +1,29 @@
+{{- $ca := genCA "mutating-webhook-ca" 365 -}}
+{{- $cert := genSignedCert (include "mutating-webhook.svc" .) nil nil 365 $ca -}}
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: {{ include "mutating-webhook.fullname" . }}
+webhooks:
+  - name: envsub.pelo.tech
+    clientConfig:
+      service:
+        name: {{ include "mutating-webhook.fullname" . }}
+        namespace: {{ .Release.Namespace }}
+        path: "/"
+      caBundle: {{ $ca.Cert | b64enc }}
+    rules:
+      - operations: ["CREATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+---
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/tls
+metadata:
+  name: {{ include "mutating-webhook.fullname" . }}-tls
+data:
+  tls.crt: {{ $cert.Cert | b64enc }}
+  tls.key: {{ $cert.Key | b64enc }}
