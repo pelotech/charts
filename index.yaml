@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  mutating-webhook:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2021-03-26T17:48:47.878742973Z"
+    description: A Helm chart for Kubernetes
+    digest: b369626a09975e5a216bd05ddd772f4e182ac52dd8e35879cc3f14b91cf81c1d
+    name: mutating-webhook
+    type: application
+    urls:
+    - https://github.com/pelotech/charts/releases/download/mutating-webhook-0.1.1/mutating-webhook-0.1.1.tgz
+    version: 0.1.1
+generated: "2021-03-26T17:48:47.878747673Z"
