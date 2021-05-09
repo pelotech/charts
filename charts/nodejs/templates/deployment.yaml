@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "nodejs.fullname" . }}
+  labels:
+{{ include "nodejs.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "nodejs.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }} # https://helm.sh/docs/howto/charts_tips_and_tricks/#automatically-roll-deployments
+        {{ if .Values.podAnnotations }}
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{ end }}
+      labels:
+        app.kubernetes.io/name: {{ include "nodejs.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.healthCheckUrl }}
+              port: http
+              {{- if .Values.tls.enabled }}
+              scheme: HTTPS
+              {{- end }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.healthCheckUrl }}
+              port: http
+              {{- if .Values.tls.enabled }}
+              scheme: HTTPS
+              {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: PORT
+              value: {{ .Values.service.port | quote }}
+            - name: SECURE
+              value: {{ .Values.tls.enabled | quote }}
+            {{- if .Values.environment }}
+            {{- toYaml .Values.environment | nindent 12 }}
+            {{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: {{ .Values.applicationDirectory }}/config/production.json
+              subPath: configuration
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "nodejs.fullname" . }}
+      {{- if .Values.extraVolumes }}
+      {{- toYaml .Values.extraVolumes | nindent 6 }}
+      {{- end }}
+      {{- with .Values.hostAliases }}
+      hostAliases:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
