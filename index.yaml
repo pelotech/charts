@@ -62,4 +62,14 @@ entries:
     urls:
     - https://github.com/pelotech/charts/releases/download/mutating-webhook-0.1.1/mutating-webhook-0.1.1.tgz
     version: 0.1.1
-generated: "2021-04-21T18:27:42.100371296Z"
+  nodejs:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2021-05-09T16:47:50.398245064Z"
+    description: A Helm chart for Deploying NoodeJS applications to Kubernetes
+    digest: 424758f33d82d24f6e57046c6a2537c14e94602d8dbe00c753331c715eb044d2
+    name: nodejs
+    urls:
+    - https://github.com/pelotech/charts/releases/download/nodejs-0.1.0/nodejs-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-05-09T16:47:50.398253564Z"
