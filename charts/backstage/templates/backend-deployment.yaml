@@ -54,6 +54,11 @@ spec:
             - name: app-config
               mountPath: {{ printf "/usr/src/app/%s" (include "backstage.appConfigFilename" .) }}
               subPath: {{ include "backstage.appConfigFilename" . }}
+            {{- range $idx, $cfg := .Values.backend.secretMounts }}
+            - name: app-secret-{{ $idx }}
+              mountPath: {{ $cfg.mountPath }}
+              readOnly: true
+            {{- end }}
 
       volumes:
         - name: postgres-ca
@@ -62,6 +67,11 @@ spec:
         - name: app-config
           configMap:
             name: {{ include "backstage.fullname" . }}-app-config
+        {{- range $idx, $cfg := .Values.backend.secretMounts }}
+        - name: app-secret-{{ $idx }}
+          secret:
+            secretName: {{ $cfg.name }}
+        {{- end }}
 
       {{- if .Values.global.nodeSelector }}
       nodeSelector: {{- toYaml .Values.global.nodeSelector | nindent 8 }}
