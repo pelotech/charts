@@ -1,7 +1,12 @@
 {{- $frontendUrl := urlParse .Values.appConfig.app.baseUrl}}
 {{- $backendUrl := urlParse .Values.appConfig.backend.baseUrl}}
 {{- $lighthouseUrl := urlParse .Values.appConfig.lighthouse.baseUrl}}
+{{- $newAPI := .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
+{{- if $newAPI -}}
 apiVersion: networking.k8s.io/v1
+{{- else if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1/Ingress" }}
+apiVersion: networking.k8s.io/v1beta1
+{{- else }}
 kind: Ingress
 metadata:
   name: {{ include "backstage.fullname" . }}-ingress
@@ -55,7 +60,11 @@ spec:
 {{- else }}
 {{/* Route lighthouse by path with re-write rules when it is hosted under the same hostname */}}
 ---
+{{- if $newAPI -}}
 apiVersion: networking.k8s.io/v1
+{{- else if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1/Ingress" }}
+apiVersion: networking.k8s.io/v1beta1
+{{- else }}
 kind: Ingress
 metadata:
   name: {{ include "backstage.fullname" . }}-ingress-lighthouse
