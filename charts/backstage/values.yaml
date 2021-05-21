@@ -26,6 +26,7 @@ backend:
     tag: test1
     pullPolicy: IfNotPresent
   containerPort: 7000
+  secretMounts: []
   resources:
     requests:
       memory: 512Mi
