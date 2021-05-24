@@ -15,6 +15,7 @@ spec:
     metadata:
       annotations:
         ad.datadoghq.com/backstage.logs: '[{"source":"backstage","service":"backend"}]'
+        checksum/config: { { include (print $.Template.BasePath "/configmap.yaml") . | sha256sum } }
       labels:
         app: backstage
         component: backend
