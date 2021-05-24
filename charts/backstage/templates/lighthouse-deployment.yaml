@@ -16,6 +16,7 @@ spec:
     metadata:
       annotations:
         ad.datadoghq.com/backstage.logs: '[{"source":"backstage","service":"lighthouse"}]'
+        checksum/config: { { include (print $.Template.BasePath "/lighthouse-config.yaml") . | sha256sum } }
       labels:
         app: backstage
         component: lighthouse-audit-service
