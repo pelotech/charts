@@ -1,6 +1,7 @@
 {{- $frontendUrl := urlParse .Values.appConfig.app.baseUrl}}
 {{- $backendUrl := urlParse .Values.appConfig.backend.baseUrl}}
 {{- $lighthouseUrl := urlParse .Values.appConfig.lighthouse.baseUrl}}
+
 {{- $newAPI := .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
 {{- if $newAPI -}}
 apiVersion: networking.k8s.io/v1
@@ -30,25 +31,55 @@ spec:
       http:
         paths:
           - path: /
+            {{- if $newAPI }}
+            pathType: Prefix
+            {{- end }}
             backend:
+              {{- if $newAPI }}
+              service:
+                name: {{ include "frontend.serviceName" . }}
+                port:
+                  number: 80
+              {{- else }}
               serviceName: {{ include "frontend.serviceName" . }}
               servicePort: 80
+              {{- end }}
           {{/* Route the backend inside the same hostname as the frontend when they are the same */}}
-          {{- if eq $frontendUrl.host $backendUrl.host}}
+      {{- if eq $frontendUrl.host $backendUrl.host}}
           - path: /api
+            {{- if $newAPI }}
+            pathType: Prefix
+            {{- end }}
             backend:
+              {{- if $newAPI }}
+              service:
+                name: {{ include "backend.serviceName" . }}
+                port:
+                  number: 80
+              {{- else }}
               serviceName: {{ include "backend.serviceName" . }}
               servicePort: 80
+              {{- end }}
           {{/* Route the backend through a different host */}}
-          {{- else -}}
+      {{- else -}}
     - host: {{ $backendUrl.host }}
       http:
         paths:
           - path: {{ $backendUrl.path | default "/" }}
+            {{- if $newAPI }}
+            pathType: Prefix
+            {{- end }}
             backend:
+              {{- if $newAPI }}
+              service:
+                name: {{ include "backend.serviceName" . }}
+                port:
+                  number: 80
+              {{- else }}
               serviceName: {{ include "backend.serviceName" . }}
               servicePort: 80
-         {{- end }}
+              {{- end }}
+      {{- end }}
 
 {{/* Route lighthouse through a different host */}}
 {{- if not ( eq $frontendUrl.host $lighthouseUrl.host ) }}
@@ -56,9 +87,19 @@ spec:
       http:
         paths:
           - path: {{ $lighthouseUrl.path | default "/" }}
+            {{- if $newAPI }}
+            pathType: Prefix
+            {{- end }}
             backend:
+              {{- if $newAPI }}
+              service:
+                name: {{ include "lighthouse.serviceName" . }}
+                port:
+                  number: 80
+              {{- else }}
               serviceName: {{ include "lighthouse.serviceName" . }}
               servicePort: 80
+              {{- end }}
 {{- else }}
 {{/* Route lighthouse by path with re-write rules when it is hosted under the same hostname */}}
 ---
@@ -93,7 +134,17 @@ spec:
       http:
         paths:
           - path: {{$lighthouseUrl.path}}(/|$)(.*)
+            {{- if $newAPI }}
+            pathType: Prefix
+            {{- end }}
             backend:
+              {{- if $newAPI }}
+              service:
+                name: {{ include "lighthouse.serviceName" . }}
+                port:
+                  number: 80
+              {{- else }}
               serviceName: {{ include "lighthouse.serviceName" . }}
               servicePort: 80
+              {{- end }}
 {{- end }}
