@@ -16,8 +16,12 @@ data:
   APP_CONFIG_app_googleAnalyticsTrackingId: {{ .Values.appConfig.app.googleAnalyticsTrackingId | quote | quote }}
   APP_CONFIG_backend_baseUrl: {{ .Values.appConfig.backend.baseUrl | quote | quote }}
   APP_CONFIG_backend_cors_origin: {{ .Values.appConfig.backend.cors.origin | quote | quote }}
+  {{- if .Values.appConfig.techdocs.storageUrl }}
   APP_CONFIG_techdocs_storageUrl: {{ .Values.appConfig.techdocs.storageUrl | quote | quote }}
+  {{- end }}
+  {{- if .Values.appConfig.techdocs.requestUrl }}
   APP_CONFIG_techdocs_requestUrl: {{ .Values.appConfig.techdocs.requestUrl | quote | quote }}
+  {{- end }}
   APP_CONFIG_lighthouse_baseUrl: {{ .Values.appConfig.lighthouse.baseUrl | quote | quote }}
   APP_CONFIG_backend_database_connection_ssl_rejectUnauthorized: "false"
   APP_CONFIG_auth_providers_github_development_appOrigin: {{ .Values.appConfig.auth.providers.github.development.appOrigin | quote | quote }}
