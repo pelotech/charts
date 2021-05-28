@@ -38,7 +38,7 @@ spec:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: /
+          - path: /api
             {{- if $newAPI }}
             pathType: Prefix
             {{- end }}
