@@ -3,6 +3,22 @@ entries:
   backstage:
   - apiVersion: v2
     appVersion: v0.1.1-alpha.23
+    created: "2021-05-28T19:36:10.041226176Z"
+    description: A Helm chart for Backstage
+    digest: 9167107bebcfb470fce9f9b156b34487d41e832821d53a7090ea13366b4d4597
+    maintainers:
+    - email: avi@liffft.com
+      name: Avi Zimmerman
+    name: backstage
+    sources:
+    - https://github.com/backstage/backstage
+    - https://github.com/spotify/lighthouse-audit-service
+    type: application
+    urls:
+    - https://github.com/pelotech/charts/releases/download/backstage-0.2.1/backstage-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: v0.1.1-alpha.23
     created: "2021-05-28T18:38:40.595842734Z"
     description: A Helm chart for Backstage
     digest: c4654ce1ffab7c37e14b3240594596338d84d134622461a1d965d4dedc2eabda
@@ -238,4 +254,4 @@ entries:
     urls:
     - https://github.com/pelotech/charts/releases/download/nodejs-0.1.0/nodejs-0.1.0.tgz
     version: 0.1.0
-generated: "2021-05-28T18:38:40.595874034Z"
+generated: "2021-05-28T19:36:10.041274577Z"
