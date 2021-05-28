@@ -1,7 +1,3 @@
-{{- $frontendUrl := urlParse .Values.appConfig.app.baseUrl}}
-{{- $backendUrl := urlParse .Values.appConfig.backend.baseUrl}}
-{{- $lighthouseUrl := urlParse .Values.appConfig.lighthouse.baseUrl}}
-
 {{- $newAPI := .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
 {{- if $newAPI -}}
 apiVersion: networking.k8s.io/v1
@@ -14,20 +10,15 @@ kind: Ingress
 metadata:
   name: {{ include "backstage.fullname" . }}-ingress
   annotations:
-    {{- if .Values.issuer.email }}
-    cert-manager.io/cluster-issuer: {{ .Values.issuer.clusterIssuer }}
-    {{- end }}
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
   tls:
     - secretName: {{ include "backstage.fullname" . }}-tls
       hosts:
-        - {{ $frontendUrl.host }}
-        - {{ $backendUrl.host }}
-        - {{ $lighthouseUrl.host }}
+        - {{ .Values.ingress.host }}
 
   rules:
-    - host: {{ $frontendUrl.host }}
+    - host: {{ .Values.ingress.host }}
       http:
         paths:
           - path: /
@@ -44,8 +35,9 @@ spec:
               serviceName: {{ include "frontend.serviceName" . }}
               servicePort: 80
               {{- end }}
-          {{/* Route the backend inside the same hostname as the frontend when they are the same */}}
-      {{- if eq $frontendUrl.host $backendUrl.host}}
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
           - path: /api
             {{- if $newAPI }}
             pathType: Prefix
@@ -60,91 +52,4 @@ spec:
               serviceName: {{ include "backend.serviceName" . }}
               servicePort: 80
               {{- end }}
-          {{/* Route the backend through a different host */}}
-      {{- else -}}
-    - host: {{ $backendUrl.host }}
-      http:
-        paths:
-          - path: {{ $backendUrl.path | default "/" }}
-            {{- if $newAPI }}
-            pathType: Prefix
-            {{- end }}
-            backend:
-              {{- if $newAPI }}
-              service:
-                name: {{ include "backend.serviceName" . }}
-                port:
-                  number: 80
-              {{- else }}
-              serviceName: {{ include "backend.serviceName" . }}
-              servicePort: 80
-              {{- end }}
-      {{- end }}
-
-{{/* Route lighthouse through a different host */}}
-{{- if not ( eq $frontendUrl.host $lighthouseUrl.host ) }}
-    - host: {{ $lighthouseUrl.host }}
-      http:
-        paths:
-          - path: {{ $lighthouseUrl.path | default "/" }}
-            {{- if $newAPI }}
-            pathType: Prefix
-            {{- end }}
-            backend:
-              {{- if $newAPI }}
-              service:
-                name: {{ include "lighthouse.serviceName" . }}
-                port:
-                  number: 80
-              {{- else }}
-              serviceName: {{ include "lighthouse.serviceName" . }}
-              servicePort: 80
-              {{- end }}
-{{- else }}
-{{/* Route lighthouse by path with re-write rules when it is hosted under the same hostname */}}
----
-{{- if $newAPI -}}
-apiVersion: networking.k8s.io/v1
-{{- else if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1/Ingress" }}
-apiVersion: networking.k8s.io/v1beta1
-{{- else }}
-apiVersion: extensions/v1beta1
-{{- end }}
-kind: Ingress
-metadata:
-  name: {{ include "backstage.fullname" . }}-ingress-lighthouse
-  annotations:
-    {{- if .Values.issuer.email }}
-    cert-manager.io/cluster-issuer: {{ .Values.issuer.clusterIssuer }}
-    {{- end }}
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      if ($scheme = https) {
-      add_header  Strict-Transport-Security "max-age=0;";
-      }
-    {{- toYaml .Values.ingress.annotations | nindent 4 }}
-spec:
-  tls:
-    - secretName: {{ include "backstage.fullname" . }}-tls
-      hosts:
-        - {{ $lighthouseUrl.host }}
-  rules:
-    - host: {{ $frontendUrl.host }}
-      http:
-        paths:
-          - path: {{$lighthouseUrl.path}}(/|$)(.*)
-            {{- if $newAPI }}
-            pathType: Prefix
-            {{- end }}
-            backend:
-              {{- if $newAPI }}
-              service:
-                name: {{ include "lighthouse.serviceName" . }}
-                port:
-                  number: 80
-              {{- else }}
-              serviceName: {{ include "lighthouse.serviceName" . }}
-              servicePort: 80
-              {{- end }}
-{{- end }}
+ 
