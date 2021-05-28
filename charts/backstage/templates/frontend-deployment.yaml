@@ -33,8 +33,10 @@ spec:
             - containerPort: {{ .Values.frontend.containerPort }}
           resources:
             {{- toYaml .Values.backend.resources | nindent 12 }}
-          {{- if .Values.envSecret }}
           envFrom:
+            - configMapRef:
+                name: {{ include "backstage.fullname" . }}-app-env
+          {{- if .Values.envSecret }}
             - secretRef:
                 name: {{ .Values.envSecret }}
           {{- end }}

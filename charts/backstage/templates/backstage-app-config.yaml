@@ -5,3 +5,25 @@ metadata:
 data:
   app-config.local.yaml: |
   {{- toYaml .Values.appConfig | nindent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "backstage.fullname" . }}-app-env
+data:
+  {{- if .Values.appConfig.app }}
+  {{- if .Values.appConfig.app.baseUrl }}
+  APP_CONFIG_app_baseUrl: {{ .Values.appConfig.app.baseUrl | quote | quote }}
+  {{- end }}
+  {{- if .Values.appConfig.app.title }}
+  APP_CONFIG_app_title: {{ .Values.appConfig.app.title | quote | quote }}
+  {{- end }}
+  {{- end }}
+  {{- if .Values.appConfig.backend }}
+  {{- if .Values.appConfig.backend.baseUrl }}
+  APP_CONFIG_backend_baseUrl: {{ .Values.appConfig.backend.baseUrl | quote | quote }}
+  {{- end }}
+  {{- if .Values.appConfig.backend.cors.origin }}
+  APP_CONFIG_backend_cors_origin: {{ .Values.appConfig.backend.cors.origin | quote | quote }}
+  {{- end }}
+  {{- end }}
