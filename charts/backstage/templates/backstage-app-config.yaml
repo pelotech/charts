@@ -11,6 +11,7 @@ kind: ConfigMap
 metadata:
   name: {{ include "backstage.fullname" . }}-app-env
 data:
+  APP_CONFIG_backend_database_connection_ssl_rejectUnauthorized: "false"
   {{- if .Values.appConfig.app }}
   {{- if .Values.appConfig.app.baseUrl }}
   APP_CONFIG_app_baseUrl: {{ .Values.appConfig.app.baseUrl | quote | quote }}
@@ -25,5 +26,10 @@ data:
   {{- end }}
   {{- if .Values.appConfig.backend.cors.origin }}
   APP_CONFIG_backend_cors_origin: {{ .Values.appConfig.backend.cors.origin | quote | quote }}
+  {{- end }}
+  {{- end }}
+  {{- if and .Values.appConfig.auth }}
+  {{- if .Values.appConfig.auth.providers.gitlab.development.appOrigin }}
+  APP_CONFIG_auth_providers_gitlab_development_appOrigin: {{ .Values.appConfig.auth.providers.gitlab.development.appOrigin | quote | quote }}
   {{- end }}
   {{- end }}
