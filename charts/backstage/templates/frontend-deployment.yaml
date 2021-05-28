@@ -15,7 +15,7 @@ spec:
     metadata:
       annotations:
         ad.datadoghq.com/backstage.logs: '[{"source":"backstage","service":"frontend"}]'
-        checksum/config: {{ include (print $.Template.BasePath "/backstage-app-config.yaml") . | sha256sum }}
+        checksum/config: {{ toJson .Values.appConfig | sha256sum }}
       labels:
         app: backstage
         component: frontend
@@ -33,13 +33,15 @@ spec:
             - containerPort: {{ .Values.frontend.containerPort }}
           resources:
             {{- toYaml .Values.backend.resources | nindent 12 }}
+          {{- if .Values.envSecret }}
           envFrom:
-            - configMapRef:
-                name: {{ include "backstage.fullname" . }}-app-env
+            - secretRef:
+                name: {{ .Values.envSecret }}
+          {{- end }}
           volumeMounts:
             - name: app-config
-              mountPath: {{ printf "/usr/share/nginx/html/static/%s" (include "backstage.appConfigFilename" .) }}
-              subPath: {{ include "backstage.appConfigFilename" . }}
+              mountPath: {{ printf "%s/app-config.local.yaml" .Values.frontend.appDirectory }}
+              subPath: app-config.local.yaml
       volumes:
         - name: app-config
           configMap:
@@ -47,21 +49,3 @@ spec:
       {{- if .Values.global.nodeSelector }}
       nodeSelector: {{- toYaml .Values.global.nodeSelector | nindent 8 }}
       {{- end }}
-{{- if .Values.frontend.enabled }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "frontend.serviceName" . }}
-
-spec:
-  ports:
-    - port: 80
-      targetPort: {{ .Values.frontend.containerPort }}
-
-  selector:
-    app: backstage
-    component: frontend
-
-  type: ClusterIP
-{{- end }}

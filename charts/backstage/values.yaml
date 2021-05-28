@@ -2,8 +2,14 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+envSecret: ""
+
+global:
+  nodeSelector: {}
+
 frontend:
   enabled: true
+  appDirectory: /usr/share/nginx/html/static
   replicaCount: 1
   image:
     repository: martinaif/backstage-k8s-demo-frontend
@@ -18,6 +24,7 @@ frontend:
 
 backend:
   enabled: true
+  appDirectory: /usr/src/app
   nodeEnv: development
   demoData: true
   replicaCount: 1
@@ -33,32 +40,11 @@ backend:
     limits:
       memory: 1024Mi
 
-lighthouse:
-  enabled: true
-  replicaCount: 1
-  image:
-    repository: roadiehq/lighthouse-audit-service
-    tag: latest
-    pullPolicy: IfNotPresent
-  containerPort: 3003
-  resources:
-    requests:
-      memory: 128Mi
-    limits:
-      memory: 256Mi
-  database:
-    connection:
-      port:
-      host:
-      user:
-      password:
-      database: lighthouse_audit_service
-    pathToDatabaseCa:
-
 nameOverride: ''
 fullnameOverride: ''
 
 ingress:
+  host: example.com
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
@@ -67,173 +53,4 @@ ingress:
       add_header  Strict-Transport-Security "max-age=0;";
       }
 
-issuer:
-  email:
-  clusterIssuer: 'letsencrypt-staging'
-
-global:
-  postgresql:
-    postgresqlUsername: backend-user
-    caFilename: ca.crt
-  nodeSelector: {}
-
-postgresql:
-  enabled: true
-  nameOverride: postgresql
-  tls:
-    enabled: true
-    certificatesSecret: backstage-postgresql-certs
-    certFilename: tls.crt
-    certKeyFilename: tls.key
-  volumePermissions:
-    enabled: true
-  initdbScriptsSecret: backstage-postgresql-initdb
-
-appConfig:
-  app:
-    baseUrl: https://demo.example.com
-    title: Backstage
-    googleAnalyticsTrackingId:
-  backend:
-    baseUrl: https://demo.example.com
-    listen:
-      port: 7000
-    cors:
-      origin: https://demo.example.com
-    database:
-      client: pg
-      connection:
-        database: backstage_plugin_catalog
-        host:
-        user:
-        port:
-        password:
-        ssl:
-          rejectUnauthorized: false
-          ca:
-  sentry:
-    organization: example-org-name
-  techdocs:
-    storageUrl: https://demo.example.com/api/techdocs/static/docs
-    requestUrl: https://demo.example.com/api/techdocs
-  lighthouse:
-    baseUrl: https://demo.example.com/lighthouse-api
-  rollbar:
-    organization: example-org-name
-
-  # Auth config has recently moved into the app config file in upstream Backstage. However,
-  # most of this config simply mandates that items like the client id and client secret should
-  # be picked up from the environment variables named below. Those environment variables are
-  # set in this helm controlled environment by the 'auth' configuration below this section.
-  # Thus, the only key in this config which directly controls an app config is the
-  # auth.providers.github.development.appOrigin property.
-  auth:
-    providers:
-      google:
-        development:
-          appOrigin: 'http://localhost:3000/'
-          secure: false
-          clientId:
-            $env: AUTH_GOOGLE_CLIENT_ID
-          clientSecret:
-            $env: AUTH_GOOGLE_CLIENT_SECRET
-      github:
-        development:
-          appOrigin: 'http://localhost:3000/'
-          secure: false
-          clientId:
-            $env: AUTH_GITHUB_CLIENT_ID
-          clientSecret:
-            $env: AUTH_GITHUB_CLIENT_SECRET
-          enterpriseInstanceUrl:
-            $env: AUTH_GITHUB_ENTERPRISE_INSTANCE_URL
-      gitlab:
-        development:
-          appOrigin: 'http://localhost:3000/'
-          secure: false
-          clientId:
-            $env: AUTH_GITLAB_CLIENT_ID
-          clientSecret:
-            $env: AUTH_GITLAB_CLIENT_SECRET
-          audience:
-            $env: GITLAB_BASE_URL
-      okta:
-        development:
-          appOrigin: 'http://localhost:3000/'
-          secure: false
-          clientId:
-            $env: AUTH_OKTA_CLIENT_ID
-          clientSecret:
-            $env: AUTH_OKTA_CLIENT_SECRET
-          audience:
-            $env: AUTH_OKTA_AUDIENCE
-      oauth2:
-        development:
-          appOrigin: 'http://localhost:3000/'
-          secure: false
-          clientId:
-            $env: AUTH_OAUTH2_CLIENT_ID
-          clientSecret:
-            $env: AUTH_OAUTH2_CLIENT_SECRET
-          authorizationURL:
-            $env: AUTH_OAUTH2_AUTH_URL
-          tokenURL:
-            $env: AUTH_OAUTH2_TOKEN_URL
-      auth0:
-        development:
-          clientId:
-            $env: AUTH_AUTH0_CLIENT_ID
-          clientSecret:
-            $env: AUTH_AUTH0_CLIENT_SECRET
-          domain:
-            $env: AUTH_AUTH0_DOMAIN
-      microsoft:
-        development:
-          clientId:
-            $env: AUTH_MICROSOFT_CLIENT_ID
-          clientSecret:
-            $env: AUTH_MICROSOFT_CLIENT_SECRET
-          tenantId:
-            $env: AUTH_MICROSOFT_TENANT_ID
-
-auth:
-  google:
-    clientId: a
-    clientSecret: a
-  github:
-    clientId: c
-    clientSecret: c
-  gitlab:
-    clientId: b
-    clientSecret: b
-    baseUrl: b
-  okta:
-    clientId: b
-    clientSecret: b
-    audience: b
-  oauth2:
-    clientId: b
-    clientSecret: b
-    authUrl: b
-    tokenUrl: b
-  auth0:
-    clientId: b
-    clientSecret: b
-    domain: b
-  microsoft:
-    clientId: f
-    clientSecret: f
-    tenantId: f
-  azure:
-    api:
-      token: h
-  sentryToken: e
-  rollbarAccountToken: f
-  # This is a 'Personal Access Token'
-  circleciAuthToken: r
-  # Used by the scaffolder to create GitHub repos. Must have 'repo' scope.
-  githubToken: g
-  gitlabToken: g
-  newRelicRestApiKey: r
-  travisciAuthToken: fake-travis-ci-auth-token
-  pagerdutyToken: h
+appConfig: {}

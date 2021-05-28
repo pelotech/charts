@@ -15,9 +15,7 @@ spec:
     metadata:
       annotations:
         ad.datadoghq.com/backstage.logs: '[{"source":"backstage","service":"backend"}]'
-        checksum/config: {{ include (print $.Template.BasePath "/backstage-app-config.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print $.Template.BasePath "/backend-secret.yaml") . | sha256sum }}
-        checksum/auth-config: {{ include (print $.Template.BasePath "/backstage-auth-config.yaml") . | sha256sum }}
+        checksum/config: {{ toJson .Values.appConfig | sha256sum }}
       labels:
         app: backstage
         component: backend
@@ -35,28 +33,18 @@ spec:
             - containerPort: {{ .Values.backend.containerPort }}
           resources:
           {{- toYaml .Values.backend.resources | nindent 12 }}
-
+          {{- if .Values.envSecret }}
           envFrom:
             - secretRef:
-                name: {{ include "backstage.fullname" . }}-backend
-            - configMapRef:
-                name: {{ include "backstage.fullname" . }}-app-env
-            - configMapRef:
-                name: {{ include "backstage.fullname" . }}-auth
+                name: {{ .Values.envSecret }}
+          {{- end }}
           env:
             - name: NODE_ENV
               value: {{ .Values.backend.nodeEnv | default "development" }}
-            - name: APP_CONFIG_backend_database_connection_password
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "backend.postgresql.passwordSecret" .}}
-                  key: postgresql-password
           volumeMounts:
-            - name: postgres-ca
-              mountPath: {{ include "backstage.backend.postgresCaDir" . }}
             - name: app-config
-              mountPath: {{ printf "/usr/src/app/%s" (include "backstage.appConfigFilename" .) }}
-              subPath: {{ include "backstage.appConfigFilename" . }}
+              mountPath: {{ printf "%s/app-config.local.yaml" .Values.backend.appDirectory }}
+              subPath: app-config.local.yaml
             {{- range $idx, $cfg := .Values.backend.secretMounts }}
             - name: app-secret-{{ $idx }}
               mountPath: {{ $cfg.mountPath }}
@@ -64,9 +52,6 @@ spec:
             {{- end }}
 
       volumes:
-        - name: postgres-ca
-          configMap:
-            name: {{ include "backstage.fullname" . }}-postgres-ca
         - name: app-config
           configMap:
             name: {{ include "backstage.fullname" . }}-app-config
@@ -79,22 +64,3 @@ spec:
       {{- if .Values.global.nodeSelector }}
       nodeSelector: {{- toYaml .Values.global.nodeSelector | nindent 8 }}
       {{- end }}
-
-{{- if .Values.backend.enabled }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "backend.serviceName" . }}
-
-spec:
-  ports:
-    - port: 80
-      targetPort: {{ .Values.backend.containerPort }}
-
-  selector:
-    app: backstage
-    component: backend
-
-  type: ClusterIP
-{{- end }}
