@@ -18,6 +18,7 @@ spec:
         - {{ .Values.ingress.host }}
 
   rules:
+    {{- if .Values.frontend.enabled }}
     - host: {{ .Values.ingress.host }}
       http:
         paths:
@@ -52,4 +53,23 @@ spec:
               serviceName: {{ include "backend.serviceName" . }}
               servicePort: 80
               {{- end }}
+    {{- else }}
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: /
+            {{- if $newAPI }}
+            pathType: Prefix
+            {{- end }}
+            backend:
+              {{- if $newAPI }}
+              service:
+                name: {{ include "backend.serviceName" . }}
+                port:
+                  number: 80
+              {{- else }}
+              serviceName: {{ include "backend.serviceName" . }}
+              servicePort: 80
+              {{- end }}
+    {{- end }}
  
