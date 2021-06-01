@@ -20,7 +20,6 @@ A Helm chart for Backstage
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | appConfig | object | `{}` | Additional configurations to override the `app-config.yaml` in the backend.               These configurations will be written to `app-config.local.yaml` in the `backend.appDirectory`. |
-| backend | object | `{"appDirectory":"/usr/src/app","containerPort":7000,"enabled":true,"image":{"pullPolicy":"IfNotPresent","repository":"martinaif/backstage-k8s-demo-backend","tag":"test1"},"nodeEnv":"development","replicaCount":1,"resources":{"limits":{"memory":"1024Mi"},"requests":{"memory":"512Mi"}},"secretMounts":[]}` | Backend configurations |
 | backend.appDirectory | string | `"/usr/src/app"` | The working directory where the backend is served. |
 | backend.containerPort | int | `7000` | The port the backend is listening on insie the container. |
 | backend.enabled | bool | `true` | Whether to enable the backend deployment. |
@@ -33,7 +32,6 @@ A Helm chart for Backstage
 | backend.resources | object | `{"limits":{"memory":"1024Mi"},"requests":{"memory":"512Mi"}}` | Resource requests/limits to apply to the backend deployment. |
 | backend.secretMounts | list | `[]` | Additional secrets to mount as files inside the backend deployment. |
 | envSecret | string | `""` | An optional secret containing values to be mounted in the pods as environment variables. |
-| frontend | object | `{"appDirectory":"/usr/share/nginx/html/static","containerPort":80,"enabled":true,"image":{"pullPolicy":"IfNotPresent","repository":"martinaif/backstage-k8s-demo-frontend","tag":"test1"},"replicaCount":1,"resources":{"limits":{"memory":"256Mi"},"requests":{"memory":"128Mi"}}}` | Frontend configurations. |
 | frontend.appDirectory | string | `"/usr/share/nginx/html/static"` | The directory where the frontend contents are being served. |
 | frontend.containerPort | int | `80` | The port the frontend is listening on inside the container. |
 | frontend.enabled | bool | `true` | Whether to enable the frontend deployment. |
@@ -41,6 +39,7 @@ A Helm chart for Backstage
 | frontend.image.pullPolicy | string | `"IfNotPresent"` | The ImagePullPolicy to apply to the frontend deployment. |
 | frontend.image.repository | string | `"martinaif/backstage-k8s-demo-frontend"` | The repository where the frontend image is hosted. |
 | frontend.image.tag | string | `"test1"` | The tag to pull from the repository for the frontend image. |
+| frontend.replicaCount | int | `1` |  |
 | frontend.resources | object | `{"limits":{"memory":"256Mi"},"requests":{"memory":"128Mi"}}` | Resource requests/limits to apply to the frontend deployment. |
 | fullnameOverride | string | `""` | Override the default full name generated for resources. |
 | global | object | `{"nodeSelector":{}}` | Global settings for the deployments. |

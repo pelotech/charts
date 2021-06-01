@@ -10,7 +10,6 @@ global:
   # global.nodeSelector -- The node selector to apply to deployments.
   nodeSelector: {}
 
-# frontend -- Frontend configurations.
 frontend:
   # frontend.enabled -- Whether to enable the frontend deployment.
   enabled: true
@@ -35,7 +34,6 @@ frontend:
     limits:
       memory: 256Mi
 
-# backend -- Backend configurations
 backend:
   # backend.enabled -- Whether to enable the backend deployment.
   enabled: true
