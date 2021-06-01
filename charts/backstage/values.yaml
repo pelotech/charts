@@ -15,7 +15,7 @@ frontend:
   enabled: true
   # frontend.appDirectory -- The directory where the frontend contents are being served.
   appDirectory: /usr/share/nginx/html/static
-  # frontend.replicas -- The number of replicas to run of the frontend.
+  # frontend.replicaCount -- The number of replicas to run of the frontend.
   replicaCount: 1
   # frontend.image -- Image settings for the frontend.
   image:
