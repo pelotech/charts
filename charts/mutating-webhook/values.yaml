@@ -2,29 +2,37 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# replicaCount -- The number of replicas to run in the webhook deployment.
 replicaCount: 1
 
+# image -- Image settings for the webhook.
 image:
+  # image.repository -- The repository where the webhook image is located.
   repository: kavla/mwc
-  # pullPolicy: IfNotPresent
+  # image.pullPolicy -- The pull policy to use when downloading the webhook image.
   pullPolicy: Always
 
+# imagePullSecrets -- Pull secrets for retrieving the webhook image.
 imagePullSecrets: []
+# nameOverride -- Override for the generated name for resources.
 nameOverride: ""
+# fullnameOverride -- Override for the generated full name for resources.
 fullnameOverride: ""
 
 serviceAccount:
-  # Specifies whether a service account should be created
+  # serviceAccount.create -- Specifies whether a service account should be created
   create: true
-  # Annotations to add to the service account
+  # serviceAccount.annotations -- Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
+  # serviceAccount.name -- The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name:
 
+# podSecurityContext -- The PodSecurityContext to apply to the webhook deployment.
 podSecurityContext: {}
   # fsGroup: 2000
 
+# securityContext -- The ContainerSecurityContext to apply to the container inside the webhook deployment.
 securityContext: {}
   # capabilities:
   #   drop:
@@ -33,10 +41,14 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
+# service -- Service configurations.
 service:
+  # service.type -- The type of service to create.
   type: ClusterIP
+  # service.port -- The port for the service to accept connections on.
   port: 443
 
+# resources -- Resources requests/limits for the webhook deployment.
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -49,8 +61,11 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+# nodeSelector -- A node selector for the webhook deployment.
 nodeSelector: {}
 
+# tolerations -- Tolerations for the webhook deployment.
 tolerations: []
 
+# affinity -- Affinity for the webhook deployment.
 affinity: {}
