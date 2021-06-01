@@ -1,272 +1,54 @@
-# Backstage demo helm charts
-
-This folder contains Helm charts that can easily create a Kubernetes deployment of a demo Backstage app.
-
-### Pre-requisites
-
-These charts depend on the `nginx-ingress` controller being present in the cluster. If it's not already installed you
-can run:
-
-```shell
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm install nginx-ingress ingress-nginx/ingress-nginx
-```
-
-### Installing the charts
-
-After choosing a DNS name where backstage will be hosted create a yaml file for your custom configuration.
-
-```yaml
-appConfig:
-  app:
-    baseUrl: https://backstage.mydomain.com
-    title: Backstage
-  backend:
-    baseUrl: https://backstage.mydomain.com
-    cors:
-      origin: https://backstage.mydomain.com
-  lighthouse:
-    baseUrl: https://backstage.mydomain.com/lighthouse-api
-  techdocs:
-    storageUrl: https://backstage.mydomain.com/api/techdocs/static/docs
-    requestUrl: https://backstage.mydomain.com/api/techdocs
-```
-
-Then use it to run:
-
-```shell
-git clone https://github.com/backstage/backstage.git
-cd contrib/chart/backstage
-helm dependency update
-helm install -f backstage-mydomain.yaml backstage .
-```
-
-This command will deploy the following pieces:
-
-- Backstage frontend
-- Backstage backend with scaffolder and auth plugins
-- (optional) a PostgreSQL instance
-- lighthouse plugin
-- ingress
-
-After a few minutes Backstage should be up and running in your cluster under the DNS specified earlier.
-
-Make sure to create the appropriate DNS entry in your infrastructure. To find the public IP address run:
-
-```shell
-$ kubectl get ingress
-NAME                HOSTS   ADDRESS         PORTS   AGE
-backstage-ingress   *       123.1.2.3       80      17m
-```
-
-> **NOTE**: this is not a production ready deployment.
-
-## Customization
-
-### Issue certificates
-
-These charts can install or reuse a `clusterIssuer` to generate certificates for the backstage `ingress`. To do that:
-
-1. [Install][install-cert-manager] or make sure [cert-manager][cert-manager] is installed in the cluster.
-2. Enable the issuer in the charts. This will first check if there is a `letsencrypt` issuer already deployed in your
-   cluster and deploy one if it doesn't exist.
-
-To enable it you need to provide a valid email address in the chart's values:
-
-```yaml
-issuer:
-  email: me@example.com
-  clusterIssuer: 'letsencrypt-prod'
-```
-
-By default, the charts use `letsencrypt-staging` so in the above example we instruct helm to use the production issuer
-instead.
-
-[cert-manager]: https://cert-manager.io/docs/
-[install-cert-manager]: https://cert-manager.io/docs/installation/kubernetes/#installing-with-helm
-
-### Custom PostgreSQL instance
-
-Configuring a connection to an existing PostgreSQL instance is possible through the chart's values.
-
-First create a yaml file with the configuration you want to override, for example `backstage-prod.yaml`:
-
-```yaml
-postgresql:
-  enabled: false
-
-appConfig:
-  app:
-    baseUrl: https://backstage-demo.mydomain.com
-    title: Backstage
-  backend:
-    baseUrl: https://backstage-demo.mydomain.com
-    cors:
-      origin: https://backstage-demo.mydomain.com
-    database:
-      client: pg
-      connection:
-        database: backstage_plugin_catalog
-        host: <host>
-        user: <pg user>
-        password: <password>
-  lighthouse:
-    baseUrl: https://backstage-demo.mydomain.com/lighthouse-api
-
-lighthouse:
-  database:
-    client: pg
-    connection:
-      host: <host>
-      user: <pg user>
-      password: <password>
-      database: lighthouse_audit_service
-```
-
-For the CA, create a `configMap` named `<release name>-<chart name>-postgres-ca` with a file called `ca.crt`:
-
-```shell
-kubectl create configmap my-company-backstage-postgres-ca --from-file=ca.crt"
-```
-
-> Where the release name contains the chart name "backstage" then only the release name will be used.
-
-Now install the helm chart:
-
-```shell
-cd contrib/chart/backstage
-helm install -f backstage-prod.yaml my-backstage .
-```
-
-### Use your own docker images
-
-The docker images used for the deployment can be configured through the charts values:
-
-```yaml
-frontend:
-  image:
-    repository: <image-name>
-    tag: <image-tag>
-
-backend:
-  image:
-    repository: <image-name>
-    tag: <image-tag>
-
-lighthouse:
-  image:
-    repository: <image-name>
-    tag: <image-tag>
-```
-
-### Use a private docker repo
-
-Create a docker-registry secret
-
-```shell
-kubectl create secret docker-registry <docker_registry_secret_name> # args
-```
-
-> For private images on docker hub --docker-server can be set to docker.io
-
-Reference the secret in your chart values
-
-```yaml
-dockerRegistrySecretName: <docker_registry_secret_name>
-```
-
-### Different namespace
-
-To install the charts a specific namespace use `--namespace <ns>`:
-
-```shell
-helm install -f my_values.yaml --namespace demos backstage .
-```
-
-### Disable loading of demo data
-
-To deploy backstage with the pre-loaded demo data disable `backend.demoData`:
-
-```shell
-helm install -f my_values.yaml --set backend.demoData=false backstage .
-```
-
-### Other options
-
-For more customization options take a look at the [values.yaml](/contrib/chart/backstage/values.yaml) file.
-
-## Troubleshooting
-
-Some resources created by these charts are meant to survive after upgrades and even after uninstalls. When
-troubleshooting these charts it can be useful to delete these resources between re-installs.
-
-Secrets:
-
-```
-<release-name>-postgresql-certs -- contains the certificates used by the deployed PostgreSQL
-```
-
-Persistent volumes:
-
-```
-data-<release-name>-postgresql-0 -- this is the data volume used by PostgreSQL to store data and configuration
-```
-
-> **NOTE**: this volume also stores the configuration for PostgreSQL which includes things like the password for the
-> `postgres` user. This means that uninstalling and re-installing the charts with `postgres.enabled` set to `true` and
-> auto generated passwords will fail. The solution is to delete this volume with
-> `kubectl delete pvc data-<release-name>-postgresql-0`
-
-ConfigMaps:
-
-```
-<release-name>-postgres-ca -- contains the generated CA certificate for PostgreSQL when `postgres` is enabled
-```
-
-#### Unable to verify signature
-
-```
-Backend failed to start up Error: unable to verify the first certificate
-    at TLSSocket.onConnectSecure (_tls_wrap.js:1501:34)
-    at TLSSocket.emit (events.js:315:20)
-    at TLSSocket._finishInit (_tls_wrap.js:936:8)
-    at TLSWrap.ssl.onhandshakedone (_tls_wrap.js:710:12) {
-  code: 'UNABLE_TO_VERIFY_LEAF_SIGNATURE'
-```
-
-This error happens in the backend when it tries to connect to the configured PostgreSQL database and the specified CA is not correct. The solution is to make sure that the contents of the `configMap` that holds the certificate match the CA for the PostgreSQL instance. A workaround is to set `appConfig.backend.database.connection.ssl.rejectUnauthorized` to `false` in the chart's values.
-
-#### Multi-Platform Kubernetes Services
-
-If you are running a multi-platform Kubernetes service with Windows and Linux nodes then you will need to apply a `nodeSelector` to the Helm chart to ensure that pods are scheduled onto the correct platform nodes.
-
-Add the following to your Helm values file:
-
-```yaml
-global:
-  nodeSelector:
-    kubernetes.io/os: linux
-
-# If using Postgres Chart also add
-postgresql:
-  master:
-    nodeSelector:
-      kubernetes.io/os: linux
-  slave:
-    nodeSelector:
-      kubernetes.io/os: linux
-```
-
-<!-- TODO Add example command when we know the final name of the charts -->
-
-## Uninstalling Backstage
-
-To uninstall Backstage simply run:
-
-```shell
-RELEASE_NAME=<release-name> # use `helm list` to find out the name
-helm uninstall ${RELEASE_NAME}
-kubectl delete pvc data-${RELEASE_NAME}-postgresql-0
-kubectl delete secret ${RELEASE_NAME}-postgresql-certs
-kubectl delete configMap ${RELEASE_NAME}-postgres-ca
-```
+# backstage
+
+![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.1.1-alpha.23](https://img.shields.io/badge/AppVersion-v0.1.1--alpha.23-informational?style=flat-square)
+
+A Helm chart for Backstage
+
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| Avi Zimmerman | avi@liffft.com |  |
+
+## Source Code
+
+* <https://github.com/backstage/backstage>
+* <https://github.com/spotify/lighthouse-audit-service>
+
+## Values
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| appConfig | object | `{}` | Additional configurations to override the `app-config.yaml` in the backend.               These configurations will be written to `app-config.local.yaml` in the `backend.appDirectory`. |
+| backend | object | `{"appDirectory":"/usr/src/app","containerPort":7000,"enabled":true,"image":{"pullPolicy":"IfNotPresent","repository":"martinaif/backstage-k8s-demo-backend","tag":"test1"},"nodeEnv":"development","replicaCount":1,"resources":{"limits":{"memory":"1024Mi"},"requests":{"memory":"512Mi"}},"secretMounts":[]}` | Backend configurations |
+| backend.appDirectory | string | `"/usr/src/app"` | The working directory where the backend is served. |
+| backend.containerPort | int | `7000` | The port the backend is listening on insie the container. |
+| backend.enabled | bool | `true` | Whether to enable the backend deployment. |
+| backend.image | object | `{"pullPolicy":"IfNotPresent","repository":"martinaif/backstage-k8s-demo-backend","tag":"test1"}` | Image settings for the backend. |
+| backend.image.pullPolicy | string | `"IfNotPresent"` | The ImagePullPolicy to apply to the backend deployment. |
+| backend.image.repository | string | `"martinaif/backstage-k8s-demo-backend"` | The repository where the backend image is hosted. |
+| backend.image.tag | string | `"test1"` | The tag to pull from the repository for the backend image. |
+| backend.nodeEnv | string | `"development"` | The NODE_ENV to set inside the backend deployment. |
+| backend.replicaCount | int | `1` | The number of backend replicas to run. |
+| backend.resources | object | `{"limits":{"memory":"1024Mi"},"requests":{"memory":"512Mi"}}` | Resource requests/limits to apply to the backend deployment. |
+| backend.secretMounts | list | `[]` | Additional secrets to mount as files inside the backend deployment. |
+| envSecret | string | `""` | An optional secret containing values to be mounted in the pods as environment variables. |
+| frontend | object | `{"appDirectory":"/usr/share/nginx/html/static","containerPort":80,"enabled":true,"image":{"pullPolicy":"IfNotPresent","repository":"martinaif/backstage-k8s-demo-frontend","tag":"test1"},"replicaCount":1,"resources":{"limits":{"memory":"256Mi"},"requests":{"memory":"128Mi"}}}` | Frontend configurations. |
+| frontend.appDirectory | string | `"/usr/share/nginx/html/static"` | The directory where the frontend contents are being served. |
+| frontend.containerPort | int | `80` | The port the frontend is listening on inside the container. |
+| frontend.enabled | bool | `true` | Whether to enable the frontend deployment. |
+| frontend.image | object | `{"pullPolicy":"IfNotPresent","repository":"martinaif/backstage-k8s-demo-frontend","tag":"test1"}` | Image settings for the frontend. |
+| frontend.image.pullPolicy | string | `"IfNotPresent"` | The ImagePullPolicy to apply to the frontend deployment. |
+| frontend.image.repository | string | `"martinaif/backstage-k8s-demo-frontend"` | The repository where the frontend image is hosted. |
+| frontend.image.tag | string | `"test1"` | The tag to pull from the repository for the frontend image. |
+| frontend.resources | object | `{"limits":{"memory":"256Mi"},"requests":{"memory":"128Mi"}}` | Resource requests/limits to apply to the frontend deployment. |
+| fullnameOverride | string | `""` | Override the default full name generated for resources. |
+| global | object | `{"nodeSelector":{}}` | Global settings for the deployments. |
+| global.nodeSelector | object | `{}` | The node selector to apply to deployments. |
+| ingress | object | `{"annotations":{"kubernetes.io/ingress.class":"nginx","nginx.ingress.kubernetes.io/configuration-snippet":"if ($scheme = https) {\nadd_header  Strict-Transport-Security \"max-age=0;\";\n}\n","nginx.ingress.kubernetes.io/ssl-redirect":"false"},"host":"example.com"}` | Ingress configurations |
+| ingress.annotations | object | `{"kubernetes.io/ingress.class":"nginx","nginx.ingress.kubernetes.io/configuration-snippet":"if ($scheme = https) {\nadd_header  Strict-Transport-Security \"max-age=0;\";\n}\n","nginx.ingress.kubernetes.io/ssl-redirect":"false"}` | Annotations to apply to the ingress (TODO: These should be empty by default) |
+| ingress.host | string | `"example.com"` | The hostname to route to the backstage deployments. |
+| nameOverride | string | `""` | Override the default name generated for resources. |
+
+----------------------------------------------
+Autogenerated from chart metadata using [helm-docs v1.5.0](https://github.com/norwoodj/helm-docs/releases/v1.5.0)

@@ -2,49 +2,78 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# envSecret -- An optional secret containing values to be mounted in the pods as environment variables.
 envSecret: ""
 
+# global -- Global settings for the deployments.
 global:
+  # global.nodeSelector -- The node selector to apply to deployments.
   nodeSelector: {}
 
+# frontend -- Frontend configurations.
 frontend:
+  # frontend.enabled -- Whether to enable the frontend deployment.
   enabled: true
+  # frontend.appDirectory -- The directory where the frontend contents are being served.
   appDirectory: /usr/share/nginx/html/static
+  # frontend.replicas -- The number of replicas to run of the frontend.
   replicaCount: 1
+  # frontend.image -- Image settings for the frontend.
   image:
+    # frontend.image.repository -- The repository where the frontend image is hosted.
     repository: martinaif/backstage-k8s-demo-frontend
+    # frontend.image.tag -- The tag to pull from the repository for the frontend image.
     tag: test1
+    # frontend.image.pullPolicy -- The ImagePullPolicy to apply to the frontend deployment.
     pullPolicy: IfNotPresent
+  # frontend.containerPort -- The port the frontend is listening on inside the container.
   containerPort: 80
+  # frontend.resources -- Resource requests/limits to apply to the frontend deployment.
   resources:
     requests:
       memory: 128Mi
     limits:
       memory: 256Mi
 
+# backend -- Backend configurations
 backend:
+  # backend.enabled -- Whether to enable the backend deployment.
   enabled: true
+  # backend.appDirectory -- The working directory where the backend is served.
   appDirectory: /usr/src/app
+  # backend.nodeEnv -- The NODE_ENV to set inside the backend deployment.
   nodeEnv: development
-  demoData: true
+  # backend.replicaCount -- The number of backend replicas to run.
   replicaCount: 1
+  # backend.image -- Image settings for the backend.
   image:
+    # backend.image.repository -- The repository where the backend image is hosted.
     repository: martinaif/backstage-k8s-demo-backend
+    # backend.image.tag -- The tag to pull from the repository for the backend image.
     tag: test1
+    # backend.image.pullPolicy -- The ImagePullPolicy to apply to the backend deployment.
     pullPolicy: IfNotPresent
+  # backend.containerPort -- The port the backend is listening on insie the container.
   containerPort: 7000
+  # backend.secretMounts -- Additional secrets to mount as files inside the backend deployment.
   secretMounts: []
+  # backend.resources -- Resource requests/limits to apply to the backend deployment.
   resources:
     requests:
       memory: 512Mi
     limits:
       memory: 1024Mi
 
+# nameOverride -- Override the default name generated for resources.
 nameOverride: ''
+# fullnameOverride -- Override the default full name generated for resources.
 fullnameOverride: ''
 
+# ingress -- Ingress configurations
 ingress:
+  # ingress.host -- The hostname to route to the backstage deployments.
   host: example.com
+  # ingress.annotations -- Annotations to apply to the ingress (TODO: These should be empty by default)
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
@@ -53,4 +82,6 @@ ingress:
       add_header  Strict-Transport-Security "max-age=0;";
       }
 
+# appConfig -- Additional configurations to override the `app-config.yaml` in the backend. 
+#              These configurations will be written to `app-config.local.yaml` in the `backend.appDirectory`.
 appConfig: {}
