@@ -67,18 +67,12 @@ nameOverride: ''
 # fullnameOverride -- Override the default full name generated for resources.
 fullnameOverride: ''
 
-# ingress -- Ingress configurations
 ingress:
-  # ingress.host -- The hostname to route to the backstage deployments.
+  # ingress.host -- The hostname to route to the backstage deployments. By default, `/api` is routed to the backend
+  #                 and all other requests to the frontend.
   host: example.com
   # ingress.annotations -- Annotations to apply to the ingress (TODO: These should be empty by default)
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      if ($scheme = https) {
-      add_header  Strict-Transport-Security "max-age=0;";
-      }
+  annotations: {}
 
 # appConfig -- Additional configurations to override the `app-config.yaml` in the backend. 
 #              These configurations will be written to `app-config.local.yaml` in the `backend.appDirectory`.

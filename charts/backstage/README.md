@@ -44,9 +44,8 @@ A Helm chart for Backstage
 | fullnameOverride | string | `""` | Override the default full name generated for resources. |
 | global | object | `{"nodeSelector":{}}` | Global settings for the deployments. |
 | global.nodeSelector | object | `{}` | The node selector to apply to deployments. |
-| ingress | object | `{"annotations":{"kubernetes.io/ingress.class":"nginx","nginx.ingress.kubernetes.io/configuration-snippet":"if ($scheme = https) {\nadd_header  Strict-Transport-Security \"max-age=0;\";\n}\n","nginx.ingress.kubernetes.io/ssl-redirect":"false"},"host":"example.com"}` | Ingress configurations |
-| ingress.annotations | object | `{"kubernetes.io/ingress.class":"nginx","nginx.ingress.kubernetes.io/configuration-snippet":"if ($scheme = https) {\nadd_header  Strict-Transport-Security \"max-age=0;\";\n}\n","nginx.ingress.kubernetes.io/ssl-redirect":"false"}` | Annotations to apply to the ingress (TODO: These should be empty by default) |
-| ingress.host | string | `"example.com"` | The hostname to route to the backstage deployments. |
+| ingress.annotations | object | `{}` | Annotations to apply to the ingress (TODO: These should be empty by default) |
+| ingress.host | string | `"example.com"` | The hostname to route to the backstage deployments. By default, `/api` is routed to the backend                 and all other requests to the frontend. |
 | nameOverride | string | `""` | Override the default name generated for resources. |
 
 ----------------------------------------------
