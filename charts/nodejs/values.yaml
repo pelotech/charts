@@ -2,39 +2,62 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# replicaCount -- The number of replicas to run in the application deployment.
 replicaCount: 1
 
+# image -- Image settings for the deployment.
 image:
+  # image.registry -- The registry where the image is hosted.
   registry: docker.io
+  # image.repository -- The repository to pull images from.
   repository: node
+  # image.pullPolicy -- The pull policy to use when launching pods for the deployment.
   pullPolicy: IfNotPresent
+  # image.tag -- The tag of the image to pull from the repository.
+  tag: latest
 
+# service -- Service configurations.
 service:
+  # service.annotations -- Annotations to apply to the service.
   annotations: {}
+  # service.type -- The type of service to create for the deployment.
   type: ClusterIP
+  # service.port -- The port to expose on the service for the deployment.
   port: 81
 
+# tls -- tls configurations
 tls:
+  # tls.enabled -- Whether to enable TLS for incoming connections to the service.
   enabled: false
 
 ingress:
+  # ingress.enabled -- Whether to enable ingress to the application.
   enabled: false
+  # ingress.annotations -- Annotations to apply to the ingress.
   annotations:
     kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
+  # ingress.hosts -- Host and path configurations to route to the service
   hosts:
+    # ingress.hosts[0].host -- An example hostname.
     - host: chart-example.local
+      # ingress.hosts[0].paths -- Example paths at the configured hostname.
       paths:
       - /
-
+  # ingress.tls -- TLS configurations for the ingress.
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+# applicationDirectory -- The directory from where the application is being served in the container.
 applicationDirectory: /usr/src/app
+# healthCheckUrl -- The health check endpoint for the application.
 healthCheckUrl: /health-check
+# configuration -- Additional configurations to apply to the containers.
 configuration: {}
+# environment -- Environment variables to set inside the containers.
 environment: []
+# resources -- Resource requests/limits for the deployment.
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -47,18 +70,20 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+# nodeSelector -- A node selector for the deployment.
 nodeSelector: {}
 
+# tolerations -- Tolerations for the deployment.
 tolerations: []
 
+# affinity -- Affinity configurations for the deployment.
 affinity: {}
 
+# podAnnotations -- Additional annotations to apply to the pods inside the deployment.
 podAnnotations: {}
 
-## Extra volumes to add to the deployment
-##
+# extraVolumes -- Extra volumes to add to the deployment.
 extraVolumes: []
 
-## Extra volume mounts to add to the container
-##
+# extraVolumeMounts -- Extra volume mounts to add to the deployment.
 extraVolumeMounts: []
