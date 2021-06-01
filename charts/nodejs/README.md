@@ -15,7 +15,6 @@ A Helm chart for Deploying NoodeJS applications to Kubernetes
 | extraVolumeMounts | list | `[]` | Extra volume mounts to add to the deployment. |
 | extraVolumes | list | `[]` | Extra volumes to add to the deployment. |
 | healthCheckUrl | string | `"/health-check"` | The health check endpoint for the application. |
-| image | object | `{"pullPolicy":"IfNotPresent","registry":"docker.io","repository":"node","tag":"latest"}` | Image settings for the deployment. |
 | image.pullPolicy | string | `"IfNotPresent"` | The pull policy to use when launching pods for the deployment. |
 | image.registry | string | `"docker.io"` | The registry where the image is hosted. |
 | image.repository | string | `"node"` | The repository to pull images from. |

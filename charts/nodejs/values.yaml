@@ -5,7 +5,6 @@
 # replicaCount -- The number of replicas to run in the application deployment.
 replicaCount: 1
 
-# image -- Image settings for the deployment.
 image:
   # image.registry -- The registry where the image is hosted.
   registry: docker.io
