@@ -71,7 +71,7 @@ ingress:
   # ingress.host -- The hostname to route to the backstage deployments. By default, `/api` is routed to the backend
   #                 and all other requests to the frontend.
   host: example.com
-  # ingress.annotations -- Annotations to apply to the ingress (TODO: These should be empty by default)
+  # ingress.annotations -- Annotations to apply to the ingress.
   annotations: {}
 
 # appConfig -- Additional configurations to override the `app-config.yaml` in the backend. 
