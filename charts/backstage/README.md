@@ -44,7 +44,7 @@ A Helm chart for Backstage
 | fullnameOverride | string | `""` | Override the default full name generated for resources. |
 | global | object | `{"nodeSelector":{}}` | Global settings for the deployments. |
 | global.nodeSelector | object | `{}` | The node selector to apply to deployments. |
-| ingress.annotations | object | `{}` | Annotations to apply to the ingress (TODO: These should be empty by default) |
+| ingress.annotations | object | `{}` | Annotations to apply to the ingress. |
 | ingress.host | string | `"example.com"` | The hostname to route to the backstage deployments. By default, `/api` is routed to the backend                 and all other requests to the frontend. |
 | nameOverride | string | `""` | Override the default name generated for resources. |
 
