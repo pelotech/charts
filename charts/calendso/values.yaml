@@ -1,0 +1,128 @@
+# Default values for calendso.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+config:
+  # -- The full URI for the database connection. If left blank, it will be generated
+  # from the postgresql chart values.
+  databaseURL: ""
+  # -- The base URL of the calendso server. It is important to configure this for
+  # callbacks to work correctly.
+  baseURL: "http://localhost:3000"
+  # -- The NextAuth URL for the server.
+  nextAuthURL: "http://localhost:3000"
+  # -- Whether to allow calendso to collect anonymous usage statistics.
+  collectAnonymousUsage: true
+  # -- The name of a secret with a key `GOOGLE_API_CREDENTIALS` containing the
+  # full contents of a Google JSON credentials file. For more information on obtaining
+  # the credentials, see the [documentation](https://github.com/calendso/calendso#obtaining-the-google-api-credentials).
+  googleCredentialsSecret: ""
+  # -- The name of a secret with the keys `MS_GRAPH_CLIENT_ID` and `MS_GRAPH_CLIENT_SECRET` containing
+  # credentials for connecting with the Microsoft Graph Client. For more information
+  # on obtainining the credentials, see the [documentation](https://github.com/calendso/calendso#obtaining-microsoft-graph-client-id-and-secret).
+  msCredentialsSecret: ""
+  # -- The name of a secret with the keys `ZOOM_CLIENT_ID` and `ZOOM_CLIENT_SECRET` containing
+  # credentials for connecting to Zoom. For more information on obtaining the credentials,
+  # see the [documentation](https://github.com/calendso/calendso#obtaining-zoom-client-id-and-secret).
+  zoomCredentialsSecret: ""
+  # -- The name of a secret with a key `CALENDSO_ENCRYPTION_KEY` that will be used to encrypt CalDAV
+  # credentials. Choose a random string, for example with `dd if: /dev/urandom bs: 1K count: 1 | md5sum`.
+  encryptionKeySecret: ""
+  email:
+    # -- Configure the From: header whilst sending emails.
+    from: "notifications@example.com"
+    # -- The host of the SMTP server.
+    smtpHost: ""
+    # -- The port of the SMTP server.
+    smtpPort: "587"
+    # -- The name of a secret with the keys `EMAIL_SERVER_USER` and `EMAIL_SERVER_PASSWORD` containing
+    # the credentials for the SMTP server.
+    smtpCredentialsSecret: ""
+
+# -- Provide the name of a pre-populated secret for calendso configurations.
+# All values in the `config` block will be ignored.
+externalConfigSecret: ""
+
+image:
+  # -- The repository to pull the image from.
+  repository: ghcr.io/pelotech/calendso
+  # -- The image pull policy.
+  pullPolicy: IfNotPresent
+  # -- Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+# -- Image pull secrets.
+imagePullSecrets: []
+# -- Override the name in resource name templates.
+nameOverride: ""
+# -- Override the full name of resources.
+fullnameOverride: ""
+
+# -- Additional annotations to apply to the calendso pods.
+podAnnotations: {}
+
+podSecurityContext:
+  # -- Pod fs group.
+  fsGroup: 1000
+
+securityContext:
+  # -- Container capabilities.
+  capabilities:
+    drop:
+    - ALL
+  # -- Container read-only root filesystem.
+  readOnlyRootFilesystem: true
+  # -- Container run as non-root.
+  runAsNonRoot: true
+  # -- Container run-as user.
+  runAsUser: 1000
+
+service:
+  # -- The type of service to create in front of the calendso deployment.
+  type: ClusterIP
+  # -- The port the service should listen on.
+  port: 80
+
+ingress:
+  # -- Enable ingress to the calendso service.
+  enabled: false
+  # -- The name of the ingress class.
+  className: ""
+  # -- Extra annotations to apply to the ingress object.
+  annotations: {}
+  # -- Host and path configurations for the ingress.
+  hosts:
+    - host: calendso.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  # -- TLS configurations for the ingress.
+  tls: []
+
+# -- Resource requests and limits for the calendso deployment.
+resources: {}
+
+# -- A node selector for the calendso deployment.
+nodeSelector: {}
+
+# -- Tolertations for for the calendso deployment.
+tolerations: []
+
+# -- Affinity for the calendso deployment.
+affinity: {}
+
+
+global:
+  postgresql:
+    # -- The name for the postgresql database.
+    postgresqlDatabase: "calendso"
+    # -- The username for calendso to authenticate to the database.
+    postgresqlUsername: "calendso"
+    # -- The password for calendso to authenticate to the database.
+    postgresqlPassword: "changeme"
+
+postgresql:
+  # -- Use the bitnami chart to lay down a postgresql server.
+  enabled: true
+  # -- Overrides the names generated in the dependant chart.
+  fullnameOverride: "calendso-db"
