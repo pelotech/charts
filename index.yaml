@@ -249,6 +249,40 @@ entries:
     urls:
     - https://github.com/pelotech/charts/releases/download/backstage-0.1.1/backstage-0.1.1.tgz
     version: 0.1.1
+  cube-stack:
+  - apiVersion: v2
+    appVersion: 0.28.26
+    created: "2022-09-07T14:39:53.373621864Z"
+    dependencies:
+    - condition: global.cubejs.enabled
+      name: cubejs
+      repository: https://www.pelo.tech/charts/
+      version: 0.1.*
+    - condition: global.cubestore.enabled
+      name: cubestore
+      repository: https://www.pelo.tech/charts/
+      version: 0.1.*
+    - condition: global.redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.1.*
+    description: Cube Stack is an Umbrella Chart that contains everything needed to
+      run Cube in production.
+    digest: 66d18d4beca72f45ccb2923707247e8114dd9ea95f30b5d1a3e0aa50cfe00d79
+    keywords:
+    - cubejs
+    maintainers:
+    - email: luc.vauvillier@gmail.com
+      name: Luc Vauvillier
+    - email: adnan@cube.dev
+      name: Adnan Rahic
+    name: cube-stack
+    sources:
+    - https://github.com/cube-js/cube.js
+    type: application
+    urls:
+    - https://github.com/pelotech/charts/releases/download/cube-stack-0.1.0/cube-stack-0.1.0.tgz
+    version: 0.1.0
   cubejs:
   - apiVersion: v2
     appVersion: 0.29.31
@@ -307,4 +341,4 @@ entries:
     urls:
     - https://github.com/pelotech/charts/releases/download/nodejs-0.1.0/nodejs-0.1.0.tgz
     version: 0.1.0
-generated: "2022-09-07T14:33:12.569682091Z"
+generated: "2022-09-07T14:39:53.373676466Z"
