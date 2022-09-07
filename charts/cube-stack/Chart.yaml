@@ -23,6 +23,6 @@ dependencies:
     repository: https://www.pelo.tech/charts/
     condition: global.cubestore.enabled
   - name: redis
-    version: "~11.2"
+    version: "17.1.*"
     repository: https://charts.bitnami.com/bitnami
     condition: global.redis.enabled
