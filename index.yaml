@@ -249,6 +249,43 @@ entries:
     urls:
     - https://github.com/pelotech/charts/releases/download/backstage-0.1.1/backstage-0.1.1.tgz
     version: 0.1.1
+  cubejs:
+  - apiVersion: v2
+    appVersion: 0.29.31
+    created: "2022-09-07T14:33:12.394220749Z"
+    description: A Helm chart for Cubejs
+    digest: 7287e8d11bcbe92b357d1367a39b4774e91f057f23088bbd4274207f3aebc5e5
+    keywords:
+    - cubejs
+    maintainers:
+    - email: luc.vauvillier@gmail.com
+      name: Luc Vauvillier
+    name: cubejs
+    sources:
+    - https://github.com/cube-js/cube.js
+    type: application
+    urls:
+    - https://github.com/pelotech/charts/releases/download/cubejs-0.1.0/cubejs-0.1.0.tgz
+    version: 0.1.0
+  cubestore:
+  - apiVersion: v2
+    appVersion: 0.29.31
+    created: "2022-09-07T14:33:12.569651591Z"
+    description: A Helm chart for Cubestore
+    digest: a17447a5590f31ae659cf227487cd337b803335d024b61dc69e2e472139a90c6
+    keywords:
+    - cubejs
+    - cubestore
+    maintainers:
+    - email: luc.vauvillier@gmail.com
+      name: Luc Vauvillier
+    name: cubestore
+    sources:
+    - https://github.com/cube-js/cube.js
+    type: application
+    urls:
+    - https://github.com/pelotech/charts/releases/download/cubestore-0.1.0/cubestore-0.1.0.tgz
+    version: 0.1.0
   mutating-webhook:
   - apiVersion: v2
     appVersion: 0.1.0
@@ -270,4 +307,4 @@ entries:
     urls:
     - https://github.com/pelotech/charts/releases/download/nodejs-0.1.0/nodejs-0.1.0.tgz
     version: 0.1.0
-generated: "2021-05-28T19:49:57.42767478Z"
+generated: "2022-09-07T14:33:12.569682091Z"
