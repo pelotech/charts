@@ -5,7 +5,7 @@ type: application
 version: 0.1.0
 appVersion: "0.28.26"
 keywords:
-- cubejs
+  - cubejs
 maintainers:
   - name: Luc Vauvillier
     email: luc.vauvillier@gmail.com
@@ -14,15 +14,15 @@ maintainers:
 sources:
   - https://github.com/cube-js/cube.js
 dependencies:
-- name: cubejs
-  version: "0.1.*"
-  repository: file://../cubejs
-  condition: global.cubejs.enabled
-- name: cubestore
-  version: "0.1.*"
-  repository: file://../cubestore
-  condition: global.cubestore.enabled
-- name: redis
-  version: "~11.2"
-  repository: "@bitnami"
-  condition: global.redis.enabled
+  - name: cubejs
+    version: "0.1.*"
+    repository: https://www.pelo.tech/charts/
+    condition: global.cubejs.enabled
+  - name: cubestore
+    version: "0.1.*"
+    repository: https://www.pelo.tech/charts/
+    condition: global.cubestore.enabled
+  - name: redis
+    version: "~11.2"
+    repository: https://charts.bitnami.com/bitnami
+    condition: global.redis.enabled
