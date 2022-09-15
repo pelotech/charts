@@ -15,7 +15,7 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 ## Add the Pelotech Helm Repo
 
 ```bash
-helm repo add pelotech https://charts.bitnami.com/bitnami
+helm repo add pelotech https://www.pelo.tech/charts
 ```
 
 ## Update Dependencies
