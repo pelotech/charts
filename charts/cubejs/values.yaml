@@ -617,3 +617,5 @@ ingress:
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
+
+  useTLSSecret: true
