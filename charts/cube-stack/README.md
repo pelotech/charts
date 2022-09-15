@@ -12,6 +12,12 @@ This Helm Chart is an Umbrella chart wrapping everything that's needed to run an
 helm repo add bitnami https://charts.bitnami.com/bitnami
 ```
 
+## Add the Pelotech Helm Repo
+
+```bash
+helm repo add pelotech https://charts.bitnami.com/bitnami
+```
+
 ## Update Dependencies
 
 ```bash
@@ -23,7 +29,7 @@ helm dependency update
 Installing the Chart with the `values.yaml` file looks like this:
 
 ```bash
-helm install cube-stack . -f ./values.yaml
+helm install pelotech/cube-stack
 ```
 
 Because this is an Umbrella Chart, you can set any value from the dependent charts in the `values.yaml`.
