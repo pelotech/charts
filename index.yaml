@@ -319,6 +319,23 @@ entries:
   cubejs:
   - apiVersion: v2
     appVersion: 0.29.31
+    created: "2022-09-15T23:56:44.863042099Z"
+    description: A Helm chart for Cubejs
+    digest: 8dba5224cae67fa8a1208777d8b92538b96fee03ca703b9f2ae39f98bc3554d8
+    keywords:
+    - cubejs
+    maintainers:
+    - email: luc.vauvillier@gmail.com
+      name: Luc Vauvillier
+    name: cubejs
+    sources:
+    - https://github.com/cube-js/cube.js
+    type: application
+    urls:
+    - https://github.com/pelotech/charts/releases/download/cubejs-0.1.1/cubejs-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 0.29.31
     created: "2022-09-07T14:33:12.394220749Z"
     description: A Helm chart for Cubejs
     digest: 7287e8d11bcbe92b357d1367a39b4774e91f057f23088bbd4274207f3aebc5e5
@@ -374,4 +391,4 @@ entries:
     urls:
     - https://github.com/pelotech/charts/releases/download/nodejs-0.1.0/nodejs-0.1.0.tgz
     version: 0.1.0
-generated: "2022-09-15T22:34:20.048193643Z"
+generated: "2022-09-15T23:56:44.863085901Z"
