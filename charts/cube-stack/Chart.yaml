@@ -11,6 +11,8 @@ maintainers:
     email: luc.vauvillier@gmail.com
   - name: Adnan Rahic
     email: adnan@cube.dev
+  - email: emmanuel@pelo.tech
+    name: Emmanuel Gomez
 sources:
   - https://github.com/cube-js/cube.js
 dependencies:

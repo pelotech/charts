@@ -9,5 +9,7 @@ keywords:
 maintainers:
   - email: luc.vauvillier@gmail.com
     name: Luc Vauvillier
+  - email: emmanuel@pelo.tech
+    name: Emmanuel Gomez
 sources:
   - https://github.com/cube-js/cube.js
