@@ -2,13 +2,15 @@ apiVersion: v2
 name: cubestore
 description: A Helm chart for Cubestore
 type: application
-version: 0.1.0
-appVersion: "0.29.31"
+version: 0.1.1
+appVersion: "0.31.6"
 keywords:
   - cubejs
   - cubestore
 maintainers:
   - email: luc.vauvillier@gmail.com
     name: Luc Vauvillier
+  - email: emmanuel@pelo.tech
+    name: Emmanuel Gomez
 sources:
   - https://github.com/cube-js/cube.js

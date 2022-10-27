@@ -290,6 +290,34 @@ CUBEJS_REDIS_PASSWORD.
 - name: CUBEJS_DB_EXPORT_BUCKET_TYPE
   value: {{ .Values.exportBucket.type | quote }}
 {{- end }}
+
+{{- if eq .Values.exportBucket.type "s3" }}
+{{- if .Values.exportBucket.aws.region }}
+- name: CUBEJS_DB_EXPORT_BUCKET_AWS_REGION
+  value: {{ .Values.exportBucket.aws.region | quote }}
+{{- end }}
+{{- if .Values.exportBucket.aws.key }}
+- name: CUBEJS_DB_EXPORT_BUCKET_AWS_KEY
+  value: {{ .Values.exportBucket.aws.key | quote }}
+{{- else if .Values.exportBucket.aws.keyFromSecret }}
+- name: CUBEJS_DB_EXPORT_BUCKET_AWS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.exportBucket.aws.keyFromSecret.name | required "exportBucket.aws.keyFromSecret.name is required" }}
+      key: {{ .Values.exportBucket.aws.keyFromSecret.key | required "exportBucket.aws.keyFromSecret.key is required" }}
+{{- end }}
+{{- if .Values.exportBucket.aws.key }}
+- name: CUBEJS_DB_EXPORT_BUCKET_AWS_SECRET
+  value: {{ .Values.exportBucket.aws.secret | quote }}
+{{- else if .Values.exportBucket.aws.secretFromSecret }}
+- name: CUBEJS_DB_EXPORT_BUCKET_AWS_SECRET
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.exportBucket.aws.secretFromSecret.name | required "exportBucket.aws.secretFromSecret.name is required" }}
+      key: {{ .Values.exportBucket.aws.secretFromSecret.key | required "exportBucket.aws.secretFromSecret.key is required" }}
+{{- end }}
+{{- end }}
+
 {{- if .Values.exportBucket.gcsCredentials }}
 - name: CUBEJS_DB_EXPORT_GCS_CREDENTIALS
   value: {{ .Values.exportBucket.gcsCredentials | quote }}
