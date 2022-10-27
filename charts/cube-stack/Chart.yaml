@@ -3,7 +3,7 @@ name: cube-stack
 description: Cube Stack is an Umbrella Chart that contains everything needed to run Cube in production.
 type: application
 version: 0.1.1
-appVersion: "0.28.26"
+appVersion: "0.31.6"
 keywords:
   - cubejs
 maintainers:
