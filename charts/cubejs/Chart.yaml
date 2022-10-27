@@ -2,8 +2,8 @@ apiVersion: v2
 name: cubejs
 description: A Helm chart for Cubejs
 type: application
-version: 0.1.1
 appVersion: "0.29.31"
+version: 0.1.1
 keywords:
   - cubejs
 maintainers:
