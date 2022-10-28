@@ -99,10 +99,12 @@ By default local dir are not persisted. You can enable persistance on router and
 | `cloudStorage.gcp.credentialsFromSecret.key`  | A Base64 encoded JSON key file for connecting to Google Cloud. Required when using Google Cloud Storage (using secret) |       |
 | `cloudStorage.gcp.bucket`                     | The name of a bucket in GCS. Required when using GCS                                                                   |       |
 | `cloudStorage.gcp.subPath`                    | The path in a GCS bucket to store pre-aggregations. Optional                                                           |       |
-| `cloudStorage.aws.accessKeyID`                | The Access Key ID for AWS. Required when using AWS S3                                                                  |       |
-| `cloudStorage.aws.secretKey`                  | A Base64 encoded JSON key file for connecting to Google Cloud. Required when using Google Cloud Storage                |       |
-| `cloudStorage.aws.secretKeyFromSecret.name`   | The Secret Access Key for AWS. Required when using AWS S3 (using secret)                                               |       |
-| `cloudStorage.aws.secretKeyFromSecret.key`    | The Secret Access Key for AWS. Required when using AWS S3 (using secret)                                               |       |
+| `cloudStorage.aws.accessKeyId`                | The Access Key ID for AWS. Required when using AWS S3                                                                  |       |
+| `cloudStorage.aws.accessKeyIdFromSecret.name`   | The Access Key ID for AWS. Required when using AWS S3 (using secret)                                               |       |
+| `cloudStorage.aws.accessKeyIdFromSecret.key`    | The Access Key ID for AWS. Required when using AWS S3 (using secret)                                               |       |
+| `cloudStorage.aws.secretAccessKey`                  | A Base64 encoded JSON key file for connecting to Google Cloud. Required when using Google Cloud Storage                |       |
+| `cloudStorage.aws.secretAccessKeyFromSecret.name`   | The Secret Access Key for AWS. Required when using AWS S3 (using secret)                                               |       |
+| `cloudStorage.aws.secretAccessKeyFromSecret.key`    | The Secret Access Key for AWS. Required when using AWS S3 (using secret)                                               |       |
 | `cloudStorage.aws.bucket`                     | The name of a bucket in AWS S3. Required when using AWS S3                                                             |       |
 | `cloudStorage.aws.region`                     | The region of a bucket in AWS S3. Required when using AWS S3                                                           |       |
 | `cloudStorage.aws.subPath`                    | The path in a AWS S3 bucket to store pre-aggregations. Optional                                                        |       |

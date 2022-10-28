@@ -37,19 +37,23 @@
       name: {{ .Values.cloudStorage.gcp.credentialsFromSecret.name | required "cloudStorage.gcp.credentialsFromSecret.name is required" }}
       key: {{ .Values.cloudStorage.gcp.credentialsFromSecret.key | required "cloudStorage.gcp.credentialsFromSecret.key is required" }}
 {{- end }}
-{{- if .Values.cloudStorage.aws.accessKeyID }}
+{{- $cloudStorageAwsAccessKeyId := .Values.cloudStorage.aws.accessKeyID | default .Values.cloudStorage.aws.accessKeyId }}
+{{- if $cloudStorageAwsAccessKeyId }}
 - name: CUBESTORE_AWS_ACCESS_KEY_ID
-  value: {{ .Values.cloudStorage.aws.accessKeyID | quote }}
+  value: {{ $cloudStorageAwsAccessKeyId | quote }}
+{{- else if .Values.cloudStorage.aws.accessKeyIdFromSecret }}
+- name: CUBESTORE_AWS_ACCESS_KEY_ID
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.cloudStorage.aws.accessKeyIdFromSecret.name | required "cloudStorage.aws.accessKeyIdFromSecret.name is required" }}
+      key: {{ .Values.cloudStorage.aws.accessKeyIdFromSecret.key | required "cloudStorage.aws.accessKeyIdFromSecret.key is required" }}
 {{- end }}
-{{- if .Values.cloudStorage.aws.secretKey }}
-- name: CUBESTORE_AWS_SECRET_ACCESS_KEY
-  value: {{ .Values.cloudStorage.aws.secretKey | quote }}
-{{- else if .Values.cloudStorage.aws.secretKeyFromSecret }}
+{{- if .Values.cloudStorage.aws.secretAccessKeyFromSecret }}
 - name: CUBESTORE_AWS_SECRET_ACCESS_KEY
   valueFrom:
     secretKeyRef:
-      name: {{ .Values.cloudStorage.aws.secretKeyFromSecret.name | required "cloudStorage.aws.secretKeyFromSecret.name is required" }}
-      key: {{ .Values.cloudStorage.aws.secretKeyFromSecret.key | required "cloudStorage.aws.secretKeyFromSecret.key is required" }}
+      name: {{ .Values.cloudStorage.aws.secretAccessKeyFromSecret.name | required "cloudStorage.aws.secretAccessKeyFromSecret.name is required" }}
+      key: {{ .Values.cloudStorage.aws.secretAccessKeyFromSecret.key | required "cloudStorage.aws.secretAccessKeyFromSecret.key is required" }}
 {{- end }}
 {{- if .Values.cloudStorage.aws.bucket }}
 - name: CUBESTORE_S3_BUCKET
