@@ -442,6 +442,38 @@ exportBucket:
   #   name:
   #   key:
 
+  ## AWS export bucket configuration (S3)
+  ##
+  aws:
+    ## AWS region in which the export bucket is located
+    ##
+    region:
+
+    ## AWS Access Key ID for use when accessing the export bucket
+    ##
+    accessKeyId:
+
+    ## AWS Access Key ID for use when accessing the export bucket
+    ##
+    accessKeyIdFromSecret:
+      ## Name of the Kubernetes secret that contains the AWS Access Key ID
+      ##
+      name:
+      ## Key in the Kubernetes secret that contains the AWS Access Key ID
+      ##
+      key:
+
+    ## AWS Secret Access Key for use when accessing the export bucket
+    ##
+    secretAccessKeyFromSecret:
+      ## Name of the Kubernetes secret that contains the AWS Secret Access Key
+      ##
+      name:
+      ## Key in the Kubernetes secret that contains the AWS Secret Access Key
+      ##
+      key:
+
+
 ## Cubestore configuration
 ##
 cubestore:
