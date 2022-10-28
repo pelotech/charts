@@ -232,15 +232,27 @@ CUBEJS_REDIS_PASSWORD.
 - name: CUBEJS_DB_MAX_POOL
   value: {{ .Values.database.maxPool | quote }}
 {{- end }}
-{{- if .Values.database.aws.key }}
+{{- $awsAccessKeyId := .Values.database.aws.key | default .Values.database.aws.accessKeyId }}
+{{- if $awsAccessKeyId }}
 - name: CUBEJS_AWS_KEY
-  value: {{ .Values.database.aws.key | quote }}
-{{- else if .Values.database.aws.keyFromSecret }}
+  value: {{ $awsAccessKeyId | quote }}
+{{- else if .Values.database.aws.accessKeyIdFromSecret }}
 - name: CUBEJS_AWS_KEY
   valueFrom:
     secretKeyRef:
-      name: {{ .Values.database.aws.keyFromSecret.name | required "database.key.keyFromSecret.name is required" }}
-      key: {{ .Values.database.aws.keyFromSecret.key | required "database.key.keyFromSecret.key is required" }}
+      name: {{ .Values.database.aws.accessKeyIdFromSecret.name | required "database.key.accessKeyIdFromSecret.name is required" }}
+      key: {{ .Values.database.aws.accessKeyIdFromSecret.key | required "database.key.accessKeyIdFromSecret.key is required" }}
+{{- end }}
+{{- $awsSecretAccessKey := .Values.database.aws.secret | default .Values.database.aws.secretAccessKey }}
+{{- if $awsSecretAccessKey }}
+- name: CUBEJS_AWS_SECRET
+  value: {{ $awsSecretAccessKey | quote }}
+{{- else if .Values.database.aws.secretAccessKeyFromSecret }}
+- name: CUBEJS_AWS_SECRET
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.database.aws.secretAccessKeyFromSecret.name | required "database.key.secretAccessKeyFromSecret.name is required" }}
+      key: {{ .Values.database.aws.secretAccessKeyFromSecret.key | required "database.key.secretAccessKeyFromSecret.key is required" }}
 {{- end }}
 {{- if .Values.database.aws.region }}
 - name: CUBEJS_AWS_REGION
@@ -249,16 +261,6 @@ CUBEJS_REDIS_PASSWORD.
 {{- if .Values.database.aws.s3OutputLocation }}
 - name: CUBEJS_AWS_S3_OUTPUT_LOCATION
   value: {{ .Values.database.aws.s3OutputLocation | quote }}
-{{- end }}
-{{- if .Values.database.aws.secret }}
-- name: CUBEJS_AWS_SECRET
-  value: {{ .Values.database.aws.secret | quote }}
-{{- else if .Values.database.aws.secretFromSecret }}
-- name: CUBEJS_AWS_SECRET
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Values.database.aws.secretFromSecret.name | required "database.key.secretFromSecret.name is required" }}
-      key: {{ .Values.database.aws.secretFromSecret.key | required "database.key.secretFromSecret.key is required" }}
 {{- end }}
 {{- if .Values.database.aws.athenaWorkgroup }}
 - name: CUBEJS_AWS_ATHENA_WORKGROUP
@@ -296,25 +298,23 @@ CUBEJS_REDIS_PASSWORD.
 - name: CUBEJS_DB_EXPORT_BUCKET_AWS_REGION
   value: {{ .Values.exportBucket.aws.region | quote }}
 {{- end }}
-{{- if .Values.exportBucket.aws.key }}
+{{- $exportBucketAwsAccessKeyId := .Values.exportBucket.aws.key | default .Values.exportBucket.aws.accessKeyId }}
+{{- if $exportBucketAwsAccessKeyId }}
 - name: CUBEJS_DB_EXPORT_BUCKET_AWS_KEY
-  value: {{ .Values.exportBucket.aws.key | quote }}
-{{- else if .Values.exportBucket.aws.keyFromSecret }}
+  value: {{ $exportBucketAwsAccessKeyId | quote }}
+{{- else if .Values.exportBucket.aws.accessKeyIdFromSecret }}
 - name: CUBEJS_DB_EXPORT_BUCKET_AWS_KEY
   valueFrom:
     secretKeyRef:
-      name: {{ .Values.exportBucket.aws.keyFromSecret.name | required "exportBucket.aws.keyFromSecret.name is required" }}
-      key: {{ .Values.exportBucket.aws.keyFromSecret.key | required "exportBucket.aws.keyFromSecret.key is required" }}
+      name: {{ .Values.exportBucket.aws.accessKeyIdFromSecret.name | required "exportBucket.aws.accessKeyIdFromSecret.name is required" }}
+      key: {{ .Values.exportBucket.aws.accessKeyIdFromSecret.key | required "exportBucket.aws.accessKeyIdFromSecret.key is required" }}
 {{- end }}
-{{- if .Values.exportBucket.aws.key }}
-- name: CUBEJS_DB_EXPORT_BUCKET_AWS_SECRET
-  value: {{ .Values.exportBucket.aws.secret | quote }}
-{{- else if .Values.exportBucket.aws.secretFromSecret }}
+{{- if .Values.exportBucket.aws.secretAccessKeyFromSecret }}
 - name: CUBEJS_DB_EXPORT_BUCKET_AWS_SECRET
   valueFrom:
     secretKeyRef:
-      name: {{ .Values.exportBucket.aws.secretFromSecret.name | required "exportBucket.aws.secretFromSecret.name is required" }}
-      key: {{ .Values.exportBucket.aws.secretFromSecret.key | required "exportBucket.aws.secretFromSecret.key is required" }}
+      name: {{ .Values.exportBucket.aws.secretAccessKeyFromSecret.name | required "exportBucket.aws.secretAccessKeyFromSecret.name is required" }}
+      key: {{ .Values.exportBucket.aws.secretAccessKeyFromSecret.key | required "exportBucket.aws.secretAccessKeyFromSecret.key is required" }}
 {{- end }}
 {{- end }}
 

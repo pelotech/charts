@@ -111,14 +111,17 @@ cloudStorage:
   aws:
     ## The Access Key ID for AWS. Required when using AWS S3
     ##
-    accessKeyID:
-
-    ## The Secret Access Key for AWS. Required when using AWS S3
-    ##
-    secretKey:
-    # secretKeyFromSecret:
+    accessKeyId:
+    # accessKeyIdFromSecret:
     #   name:
     #   key:
+
+    ## The Kubernetes secret name & key in which to find the
+    ## Secret Access Key. Required when using AWS S3
+    ##
+    secretAccessKeyFromSecret:
+      name:
+      key:
 
     ## The name of a bucket in AWS S3. Required when using AWS S3
     ##

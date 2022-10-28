@@ -302,11 +302,16 @@ cubestore:
 
 | Name                                         | Description                                                                | Value |
 | -------------------------------------------- | -------------------------------------------------------------------------- | ----- |
-| `exportBucket.name`                          | The name of a bucket in cloud storage                                      |       |
-| `exportBucket.type`                          | The cloud provider where the bucket is hosted (gcs, s3)                    |       |
-| `exportBucket.gcsCredentials`                | Base64 encoded JSON key file for connecting to Google Cloud                |       |
-| `exportBucket.gcsCredentialsFromSecret.name` | Base64 encoded JSON key file for connecting to Google Cloud (using secret) |       |
-| `exportBucket.gcsCredentialsFromSecret.key`  | Base64 encoded JSON key file for connecting to Google Cloud (using secret) |       |
+| `exportBucket.name`                               | The name of a bucket in cloud storage                                      |       |
+| `exportBucket.type`                               | The cloud provider where the bucket is hosted (gcs, s3)                    |       |
+| `exportBucket.gcsCredentials`                     | Base64 encoded JSON key file for connecting to Google Cloud                |       |
+| `exportBucket.gcsCredentialsFromSecret.name`      | Base64 encoded JSON key file for connecting to Google Cloud (using secret) |       |
+| `exportBucket.gcsCredentialsFromSecret.key`       | Base64 encoded JSON key file for connecting to Google Cloud (using secret) |       |
+| `exportBucket.aws.region`                         | AWS region where the S3 bucket is loaded                |       |
+| `exportBucket.aws.accessKeyIdFromSecret.name`     | Name of the Kubernetes secret (in the same namespace) where the AWS Access Key ID is located |       |
+| `exportBucket.aws.accessKeyIdFromSecret.key`      | Key in the Kubernetes secret (in the same namespace) where the AWS Access Key ID is located |       |
+| `exportBucket.aws.secretAccessKeyFromSecret.name` | Name of the Kubernetes secret (in the same namespace) where the AWS Secret Access Key is located |       |
+| `exportBucket.aws.secretAccessKeyFromSecret.key`  | Key in the Kubernetes secret (in the same namespace) where the AWS Secret Access Key is located |       |
 
 ### Cubestore parameters
 

@@ -75,6 +75,7 @@ spec:
             {{- end }}
             - name: CUBESTORE_WORKERS
               value: {{ join "," $workers | quote }}
+            # " // workaround VSCode parsing bug
             {{- end }}
             - name: CUBESTORE_DATA_DIR
               value: /cube/.cubestore/data
