@@ -120,7 +120,7 @@ spec:
     - metadata:
         name: datadir
         labels:
-          app.kubernetes.io/component: cubestore-router
+          app.kubernetes.io/component: workers
           {{- include "cubestore.selectorLabels" . | nindent 10 }}
         {{- if .Values.workers.persistence.annotations }}
         annotations: {{- toYaml .Values.workers.persistence.annotations | nindent 10 }}
