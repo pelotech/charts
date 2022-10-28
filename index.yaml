@@ -252,6 +252,41 @@ entries:
   cube-stack:
   - apiVersion: v2
     appVersion: 0.31.6
+    created: "2022-10-28T18:22:28.804010759Z"
+    dependencies:
+    - condition: global.cubejs.enabled
+      name: cubejs
+      repository: https://www.pelo.tech/charts/
+      version: 0.1.2
+    - condition: global.cubestore.enabled
+      name: cubestore
+      repository: https://www.pelo.tech/charts/
+      version: 0.1.1
+    - condition: global.redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.1.*
+    description: Cube Stack is an Umbrella Chart that contains everything needed to
+      run Cube in production.
+    digest: 4ab35d03e31aa92a6ef720380165ee9447c80ea09dfad9013d1af5aed3d8d3c0
+    keywords:
+    - cubejs
+    maintainers:
+    - email: luc.vauvillier@gmail.com
+      name: Luc Vauvillier
+    - email: adnan@cube.dev
+      name: Adnan Rahic
+    - email: emmanuel@pelo.tech
+      name: Emmanuel Gomez
+    name: cube-stack
+    sources:
+    - https://github.com/cube-js/cube.js
+    type: application
+    urls:
+    - https://github.com/pelotech/charts/releases/download/cube-stack-0.1.4/cube-stack-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: 0.31.6
     created: "2022-10-27T19:14:03.53002742Z"
     dependencies:
     - condition: global.cubejs.enabled
@@ -389,6 +424,25 @@ entries:
   cubejs:
   - apiVersion: v2
     appVersion: 0.31.6
+    created: "2022-10-28T18:22:28.984403397Z"
+    description: A Helm chart for Cubejs
+    digest: b4fb28ebdae2a403a5ad9931876f9e0ad0c7a7ca69d581e61813c99151968ef6
+    keywords:
+    - cubejs
+    maintainers:
+    - email: luc.vauvillier@gmail.com
+      name: Luc Vauvillier
+    - email: emmanuel@pelo.tech
+      name: Emmanuel Gomez
+    name: cubejs
+    sources:
+    - https://github.com/cube-js/cube.js
+    type: application
+    urls:
+    - https://github.com/pelotech/charts/releases/download/cubejs-0.2.0/cubejs-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 0.31.6
     created: "2022-10-27T18:33:47.961930602Z"
     description: A Helm chart for Cubejs
     digest: a21a0d027c7cb2f3945d2874543cd441b62ef10e691c512061e21c48fbe52611
@@ -441,6 +495,26 @@ entries:
     - https://github.com/pelotech/charts/releases/download/cubejs-0.1.0/cubejs-0.1.0.tgz
     version: 0.1.0
   cubestore:
+  - apiVersion: v2
+    appVersion: 0.31.6
+    created: "2022-10-28T18:22:29.152037631Z"
+    description: A Helm chart for Cubestore
+    digest: 8e020c93148601cfa628f8de9934c6bb445cafe7c2c6a8430e91400f3b77f7ab
+    keywords:
+    - cubejs
+    - cubestore
+    maintainers:
+    - email: luc.vauvillier@gmail.com
+      name: Luc Vauvillier
+    - email: emmanuel@pelo.tech
+      name: Emmanuel Gomez
+    name: cubestore
+    sources:
+    - https://github.com/cube-js/cube.js
+    type: application
+    urls:
+    - https://github.com/pelotech/charts/releases/download/cubestore-0.2.0/cubestore-0.2.0.tgz
+    version: 0.2.0
   - apiVersion: v2
     appVersion: 0.31.6
     created: "2022-10-27T18:33:48.082190225Z"
@@ -500,4 +574,4 @@ entries:
     urls:
     - https://github.com/pelotech/charts/releases/download/nodejs-0.1.0/nodejs-0.1.0.tgz
     version: 0.1.0
-generated: "2022-10-27T19:14:03.530082521Z"
+generated: "2022-10-28T18:22:29.152131134Z"
