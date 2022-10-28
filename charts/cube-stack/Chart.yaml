@@ -2,7 +2,7 @@ apiVersion: v2
 name: cube-stack
 description: Cube Stack is an Umbrella Chart that contains everything needed to run Cube in production.
 type: application
-version: 0.1.4
+version: 0.2.0
 appVersion: "0.31.6"
 keywords:
   - cubejs
@@ -19,11 +19,11 @@ dependencies:
   - name: cubejs
     condition: global.cubejs.enabled
     repository: https://www.pelo.tech/charts/
-    version: "0.1.2"
+    version: "0.2.0"
   - name: cubestore
     condition: global.cubestore.enabled
     repository: https://www.pelo.tech/charts/
-    version: "0.1.1"
+    version: "0.2.0"
   - name: redis
     condition: global.redis.enabled
     repository: https://charts.bitnami.com/bitnami
