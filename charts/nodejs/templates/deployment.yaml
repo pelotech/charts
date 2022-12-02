@@ -57,17 +57,25 @@ spec:
             {{- if .Values.environment }}
             {{- toYaml .Values.environment | nindent 12 }}
             {{- end }}
+          {{- if .Values.envFrom }}
+          envFrom:
+            {{- toYaml .Values.envFrom | nindent 12 }}
+          {{- end }}
           volumeMounts:
+            {{- if .Values.configuration }}
             - name: config
               mountPath: {{ .Values.applicationDirectory }}/config/production.json
               subPath: configuration
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
       volumes:
+      {{- if .Values.configuration }}
       - name: config
         configMap:
           name: {{ include "nodejs.fullname" . }}
+      {{- end }}
       {{- if .Values.extraVolumes }}
       {{- toYaml .Values.extraVolumes | nindent 6 }}
       {{- end }}
