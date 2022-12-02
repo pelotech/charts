@@ -32,10 +32,13 @@ tls:
 ingress:
   # ingress.enabled -- Whether to enable ingress to the application.
   enabled: false
+  # ingress.ingressClassName -- Which ingressClass to assign this ingress to.
+  ingressClassName: nginx
   # ingress.annotations -- Annotations to apply to the ingress.
-  annotations:
-    kubernetes.io/ingress.class: nginx
+  annotations: {}
     # kubernetes.io/tls-acme: "true"
+  # ingress.pathType -- https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types
+  pathType: Prefix
   # ingress.hosts -- Host and path configurations to route to the service
   hosts:
     # ingress.hosts[0].host -- An example hostname.
@@ -56,6 +59,8 @@ healthCheckUrl: /health-check
 configuration: {}
 # environment -- Environment variables to set inside the containers.
 environment: []
+# envFrom -- Environment variables from ConfigMaps/Secrets to import into the containers.
+envFrom: []
 # resources -- Resource requests/limits for the deployment.
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

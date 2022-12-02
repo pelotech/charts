@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "nodejs.fullname" . -}}
-apiVersion: extensions/v1beta1
+apiVersion: {{ include "nodejs.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ $fullName }}
@@ -10,7 +10,13 @@ metadata:
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
+  {{- if and .Values.ingress.ingressClassName (eq "false" (include "nodejs.ingress.supportsIngressClassname" .)) }}
+    kubernetes.io/ingress.class: {{ .Values.ingress.ingressClassName | quote }}
+  {{- end }}
 spec:
+  {{- if and .Values.ingress.ingressClassName (eq "true" (include "nodejs.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
+  {{- end }}
 {{- if .Values.ingress.tls }}
   tls:
   {{- range .Values.ingress.tls }}
@@ -18,19 +24,25 @@ spec:
       {{- range .hosts }}
         - {{ . | quote }}
       {{- end }}
+      {{- if .secretName }}
       secretName: {{ .secretName }}
+      {{- end }}
   {{- end }}
 {{- end }}
   rules:
+  {{- $pathType := .Values.ingress.pathType -}}
   {{- range .Values.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
         {{- range .paths }}
           - path: {{ . }}
+            pathType: {{ $pathType }}
             backend:
-              serviceName: {{ $fullName }}
-              servicePort: http
+              service:
+                name: {{ $fullName }}
+                port:
+                  name: http
         {{- end }}
   {{- end }}
 {{- end }}
