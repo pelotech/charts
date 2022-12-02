@@ -602,6 +602,15 @@ entries:
   nodejs:
   - apiVersion: v2
     appVersion: "1.0"
+    created: "2022-12-02T01:01:11.837089098Z"
+    description: A Helm chart for Deploying NoodeJS applications to Kubernetes
+    digest: 983d81add94ab04d809b453071fc8d5e5bf6b0f2dc5c5fb6e530b2fde6a18e36
+    name: nodejs
+    urls:
+    - https://github.com/pelotech/charts/releases/download/nodejs-0.2.1/nodejs-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: "1.0"
     created: "2022-12-02T00:51:15.892514262Z"
     description: A Helm chart for Deploying NoodeJS applications to Kubernetes
     digest: 1e7690f302042f226c3d4876e10ef947f873c505e60af1f639cea24044a352fe
@@ -618,4 +627,4 @@ entries:
     urls:
     - https://github.com/pelotech/charts/releases/download/nodejs-0.1.0/nodejs-0.1.0.tgz
     version: 0.1.0
-generated: "2022-12-02T00:51:15.892563058Z"
+generated: "2022-12-02T01:01:11.83729931Z"
