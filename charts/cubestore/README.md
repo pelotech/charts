@@ -1,169 +1,101 @@
-# Cubestore Chart
+# cubestore
 
-## Installing the Chart
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.31.6](https://img.shields.io/badge/AppVersion-0.31.6-informational?style=flat-square)
 
-```bash
-$ cd examples/helm-charts
-$ helm install my-release ./cubestore
-```
+A Helm chart for Cubestore
 
-## Uninstalling the Chart
+## Maintainers
 
-To uninstall/delete the `my-release` deployment:
+| Name | Email | Url |
+| ---- | ------ | --- |
+| Luc Vauvillier | <luc.vauvillier@gmail.com> |  |
+| Emmanuel Gomez | <emmanuel@pelo.tech> |  |
 
-```bash
-$ helm delete my-release
-```
+## Source Code
 
-## Customize values
+* <https://github.com/cube-js/cube.js>
 
-By default a router and two workers will be deployed. You can customize the deployment using helm values.
+## Values
 
-Refer to the official documentation for more information:
-https://cube.dev/docs/reference/environment-variables#cube-store
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| cloudStorage.aws.accessKeyId | string | `nil` |  |
+| cloudStorage.aws.bucket | string | `nil` |  |
+| cloudStorage.aws.region | string | `nil` |  |
+| cloudStorage.aws.secretAccessKeyFromSecret.key | string | `nil` |  |
+| cloudStorage.aws.secretAccessKeyFromSecret.name | string | `nil` |  |
+| cloudStorage.aws.subPath | string | `nil` |  |
+| cloudStorage.gcp.bucket | string | `nil` |  |
+| cloudStorage.gcp.credentials | string | `nil` |  |
+| cloudStorage.gcp.subPath | string | `nil` |  |
+| cloudStorage.minio.accessKeyID | string | `nil` |  |
+| cloudStorage.minio.bucket | string | `nil` |  |
+| cloudStorage.minio.endpoint | string | `nil` |  |
+| cloudStorage.minio.region | string | `nil` |  |
+| cloudStorage.minio.secretKey | string | `nil` |  |
+| commonAnnotations | object | `{}` |  |
+| commonLabels | object | `{}` |  |
+| config.jobRunners | string | `nil` |  |
+| config.logLevel | string | `"error"` |  |
+| config.noUpload | string | `nil` |  |
+| config.queryTimeout | string | `nil` |  |
+| config.selectWorkers | string | `nil` |  |
+| config.walSplitThreshold | string | `nil` |  |
+| fullnameOverride | string | `""` |  |
+| image.pullPolicy | string | `"IfNotPresent"` |  |
+| image.pullSecrets | list | `[]` |  |
+| image.repository | string | `"cubejs/cubestore"` |  |
+| image.tag | string | `nil` |  |
+| nameOverride | string | `""` |  |
+| remoteDir.persistence.accessModes[0] | string | `"ReadWriteOnce"` |  |
+| remoteDir.persistence.annotations | object | `{}` |  |
+| remoteDir.persistence.resourcePolicy | string | `"keep"` |  |
+| remoteDir.persistence.size | string | `"10Gi"` |  |
+| remoteDir.persistence.storageClass | string | `nil` |  |
+| router.affinity | object | `{}` |  |
+| router.customLivenessProbe | object | `{}` |  |
+| router.customReadinessProbe | object | `{}` |  |
+| router.httpPort | int | `3030` |  |
+| router.livenessProbe.enabled | bool | `true` |  |
+| router.livenessProbe.failureThreshold | int | `3` |  |
+| router.livenessProbe.initialDelaySeconds | int | `10` |  |
+| router.livenessProbe.periodSeconds | int | `30` |  |
+| router.livenessProbe.successThreshold | int | `1` |  |
+| router.livenessProbe.timeoutSeconds | int | `3` |  |
+| router.metaPort | int | `9999` |  |
+| router.mysqlPort | int | `3306` |  |
+| router.nodeSelector | object | `{}` |  |
+| router.persistence.accessModes[0] | string | `"ReadWriteOnce"` |  |
+| router.persistence.annotations | object | `{}` |  |
+| router.persistence.enabled | bool | `false` |  |
+| router.persistence.size | string | `"10Gi"` |  |
+| router.readinessProbe.enabled | bool | `true` |  |
+| router.readinessProbe.failureThreshold | int | `3` |  |
+| router.readinessProbe.initialDelaySeconds | int | `10` |  |
+| router.readinessProbe.periodSeconds | int | `30` |  |
+| router.readinessProbe.successThreshold | int | `1` |  |
+| router.readinessProbe.timeoutSeconds | int | `3` |  |
+| router.resources | object | `{}` |  |
+| router.serviceAccount.annotations | object | `{}` |  |
+| router.serviceAccount.automountServiceAccountToken | bool | `true` |  |
+| router.serviceAccount.create | bool | `false` |  |
+| router.serviceAccount.name | string | `""` |  |
+| router.spreadConstraints | list | `[]` |  |
+| router.statusPort | int | `3031` |  |
+| router.tolerations | object | `{}` |  |
+| workers.affinity | object | `{}` |  |
+| workers.nodeSelector | object | `{}` |  |
+| workers.persistence.accessModes[0] | string | `"ReadWriteOnce"` |  |
+| workers.persistence.annotations | object | `{}` |  |
+| workers.persistence.enabled | bool | `false` |  |
+| workers.persistence.size | string | `"10Gi"` |  |
+| workers.port | int | `9001` |  |
+| workers.resources | object | `{}` |  |
+| workers.serviceAccount.annotations | object | `{}` |  |
+| workers.serviceAccount.automountServiceAccountToken | bool | `true` |  |
+| workers.serviceAccount.create | bool | `false` |  |
+| workers.serviceAccount.name | string | `""` |  |
+| workers.spreadConstraints | list | `[]` |  |
+| workers.tolerations | object | `{}` |  |
+| workers.workersCount | int | `1` |  |
 
-### Example
-
-Deployment with:
-
-- 3 workers
-- GCP cloud storage (using a secret)
-
-```bash
-$ helm install my-release \
---set workers.workersCount=3 \
---set cloudStorage.gcp.credentialsFromSecret.name=<service-account-secret-name> \
---set cloudStorage.gcp.credentialsFromSecret.key=<service-account-secret-key> \
---set cloudStorage.gcp.bucket=<my-bucket>
-./cubestore
-```
-
-## Persistance
-
-### Remote dir
-
-By default a shared remoteDir is created to store metadata and datasets if no cloudstorage is configured.
-Prefer usin cloudStorage if your are running on `gcp` or `aws`.
-
-### Local dir
-
-By default local dir are not persisted. You can enable persistance on router and master.
-
-## Parameters
-
-### Common parameters
-
-| Name                | Description                                                  | Value |
-| ------------------- | ------------------------------------------------------------ | ----- |
-| `nameOverride`      | Override the name                                            | `""`  |
-| `fullnameOverride`  | Provide a name to substitute for the full names of resources | `""`  |
-| `commonLabels`      | Labels to add to all deployed objects                        | `{}`  |
-| `commonAnnotations` | Annotations to add to all deployed objects                   | `{}`  |
-
-### Image parameters
-
-| Name                | Description                                                                             | Value              |
-| ------------------- | --------------------------------------------------------------------------------------- | ------------------ |
-| `image.repository`  | Cubestore image repository                                                              | `cubejs/cubestore` |
-| `image.tag`         | Cubestore image tag (immutable tags are recommended)                                    | `0.28.26`          |
-| `image.pullPolicy`  | Cubestore image pull policy                                                             | `IfNotPresent`     |
-| `image.pullSecrets` | If defined, uses a Secret to pull an image from a private Docker registry or repository | `[]`               |
-
-### Global parameters
-
-| Name                       | Description                                                                                                       | Value   |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------- |
-| `config.logLevel`          | The logging level for Cube Store                                                                                  | `error` |
-| `config.noUpload`          | If true, prevents uploading serialized pre-aggregations to cloud storage                                          |         |
-| `config.jobRunners`        | The number of parallel tasks that process non-interactive jobs like data insertion, compaction etc. Defaults to 4 |         |
-| `config.queryTimeout`      | The timeout for SQL queries in seconds. Defaults to 120                                                           |         |
-| `config.selectWorkers`     | The number of Cube Store sub-processes that handle SELECT queries. Defaults to 4                                  |         |
-| `config.walSplitThreshold` | The maximum number of rows to keep in a single chunk of data right after insertion. Defaults to 262144            |         |
-
-### Remote dir parameters
-
-| Name                                   | Description                                                                | Value  |
-| -------------------------------------- | -------------------------------------------------------------------------- | ------ |
-| `remoteDir.persistence.resourcePolicy` | Setting it to "keep" to avoid removing PVCs during a helm delete operation | `keep` |
-| `remoteDir.persistence.size`           | Persistent Volume size                                                     | `10Gi` |
-| `remoteDir.persistence.annotations`    | Additional custom annotations for the PVC                                  | `{}`   |
-| `remoteDir.persistence.accessModes`    | Persistent Volume access modes                                             | [`ReadWriteOnce`] |
-| `remoteDir.persistence.storageClass`   | The storage class to use for the remoteDir pvc                             | `""` |
-
-### Cloud Storage parameters
-
-| Name                                          | Description                                                                                                            | Value |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----- |
-| `cloudStorage.gcp.credentials`                | A Base64 encoded JSON key file for connecting to Google Cloud. Required when using Google Cloud Storage                |
-| `cloudStorage.gcp.credentialsFromSecret.name` | A Base64 encoded JSON key file for connecting to Google Cloud. Required when using Google Cloud Storage (using secret) |       |
-| `cloudStorage.gcp.credentialsFromSecret.key`  | A Base64 encoded JSON key file for connecting to Google Cloud. Required when using Google Cloud Storage (using secret) |       |
-| `cloudStorage.gcp.bucket`                     | The name of a bucket in GCS. Required when using GCS                                                                   |       |
-| `cloudStorage.gcp.subPath`                    | The path in a GCS bucket to store pre-aggregations. Optional                                                           |       |
-| `cloudStorage.aws.accessKeyId`                | The Access Key ID for AWS. Required when using AWS S3                                                                  |       |
-| `cloudStorage.aws.accessKeyIdFromSecret.name`   | The Access Key ID for AWS. Required when using AWS S3 (using secret)                                               |       |
-| `cloudStorage.aws.accessKeyIdFromSecret.key`    | The Access Key ID for AWS. Required when using AWS S3 (using secret)                                               |       |
-| `cloudStorage.aws.secretAccessKey`                  | A Base64 encoded JSON key file for connecting to Google Cloud. Required when using Google Cloud Storage                |       |
-| `cloudStorage.aws.secretAccessKeyFromSecret.name`   | The Secret Access Key for AWS. Required when using AWS S3 (using secret)                                               |       |
-| `cloudStorage.aws.secretAccessKeyFromSecret.key`    | The Secret Access Key for AWS. Required when using AWS S3 (using secret)                                               |       |
-| `cloudStorage.aws.bucket`                     | The name of a bucket in AWS S3. Required when using AWS S3                                                             |       |
-| `cloudStorage.aws.region`                     | The region of a bucket in AWS S3. Required when using AWS S3                                                           |       |
-| `cloudStorage.aws.subPath`                    | The path in a AWS S3 bucket to store pre-aggregations. Optional                                                        |       |
-| `cloudStorage.minio.accessKeyID`              | The The Access Key ID for minIO. Required when using minIO                                                             |       |
-| `cloudStorage.minio.secretKey`                | The Secret Access Key for minIO. Required when using minIO                                                             |       |
-| `cloudStorage.minio.secretKeyFromSecret.name` | The Secret Access Key for minIO. Required when using minIO (using secret)                                              |       |
-| `cloudStorage.minio.secretKeyFromSecret.key`  | The Secret Access Key for minIO. Required when using minIO (using secret)                                              |       |
-| `cloudStorage.minio.bucket`                   | The name of the bucket that you want to use minIO. Required when using minIO                                           |       |
-| `cloudStorage.minio.region`                   | The region of a bucket in S3 that you want to use minIO. Optional when using minIO                                     |       |
-| `cloudStorage.minio.endpoint`                 | The minIO server endpoint. Required when using minIO                                                                   |       |
-
-### Router parameters
-
-| Name                                                 | Description                                                                                                         | Value             |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------- |
-| `router.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `false`           |
-| `router.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`              |
-| `router.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true`            |
-| `router.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if create is true.                              | `{}`              |
-| `router.httpPort`                                    | The port for Cube Store to listen to HTTP connections on                                                            | `3030`            |
-| `router.metaPort`                                    | The port for the router node to listen for connections on                                                           | `9999`            |
-| `router.mysqlPort`                                   | The port for Cube Store to listen to connections on                                                                 | `3306`            |
-| `router.statusPort`                                  | The port for Cube Store to expose status probes                                                                     | `3331`            |
-| `router.persistence.enabled`                         | Enable persistence for local data using Persistent Volume Claims                                                    | `false`           |
-| `router.persistance.size`                            | Persistent Volume size                                                                                              | `10Gi`            |
-| `router.persistance.accessModes`                     | Persistent Volume access modes                                                                                      | [`ReadWriteOnce`] |
-| `router.persistance.annotations`                     | Additional custom annotations for the PVC                                                                           | `{}`              |
-| `router.affinity`                                    | Affinity for pod assignment                                                                                         | `{}`              |
-| `router.spreadConstraints`                           | Topology spread constraint for pod assignment                                                                       | `[]`              |
-| `router.resources`                                   | Define resources requests and limits for single Pods                                                                | `{}`              |
-| `router.livenessProbe.enabled`                       | Enable livenessProbe                                                                                                | `true`            |
-| `router.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                             | `10`              |
-| `router.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                                    | `30`              |
-| `router.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                                   | `3`               |
-| `router.livenessProbe.successThreshold`              | Failure threshold for livenessProbe                                                                                 | `1`               |
-| `router.livenessProbe.failureThreshold`              | Success threshold for livenessProbe                                                                                 | `3`               |
-| `router.readinessProbe.enabled`                      | Enable readinessProbe                                                                                               | `true`            |
-| `router.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                                            | `10`              |
-| `router.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                                   | `30`              |
-| `router.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                                  | `3`               |
-| `router.readinessProbe.successThreshold`             | Failure threshold for readinessProbe                                                                                | `1`               |
-| `router.readinessProbe.failureThreshold`             | Success threshold for readinessProbe                                                                                | `3`               |
-| `router.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                                 | `{}`              |
-| `router.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                                | `{}`              |
-
-### Workers parameters
-
-| Name                                                  | Description                                                                                                         | Value             |
-| ----------------------------------------------------  | ------------------------------------------------------------------------------------------------------------------- | ----------------- |
-| `workers.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `false`           |
-| `workers.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`              |
-| `workers.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true`            |
-| `workers.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if create is true.                              | `{}`              |
-| `workers.workersCount`                                | Number of workers to deploy                                                                                         | `1`               |
-| `workers.port`                                        | The port for the router node to listen for connections on                                                           | `9001`            |
-| `workers.persistence.enabled`                         | Enable persistence for local data using Persistent Volume Claims                                                    | `false`           |
-| `workers.persistance.size`                            | Persistent Volume size                                                                                              | `10Gi`            |
-| `workers.persistance.accessModes`                     | Persistent Volume access modes                                                                                      | [`ReadWriteOnce`] |
-| `workers.persistance.annotations`                     | Additional custom annotations for the PVC                                                                           | `{}`              |
-| `workers.affinity`                                    | Affinity for pod assignment                                                                                         | `{}`              |
-| `workers.spreadConstraints`                           | Topology spread constraint for pod assignment                                                                       | `[]`              |
-| `workers.resources`                                   | Define resources requests and limits for single Pods                                                                | `{}`              |

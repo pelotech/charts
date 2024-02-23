@@ -1,73 +1,34 @@
-# Cube Stack Chart
+# cube-stack
 
-This Helm Chart is an Umbrella chart wrapping everything that's needed to run an entire Cube Stack:
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.31.6](https://img.shields.io/badge/AppVersion-0.31.6-informational?style=flat-square)
 
-- Cube Server
-- Cube Store
-- Redis
+Cube Stack is an Umbrella Chart that contains everything needed to run Cube in production.
 
-## Add the Bitnami Helm Repo
+## Maintainers
 
-```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-```
+| Name | Email | Url |
+| ---- | ------ | --- |
+| Luc Vauvillier | <luc.vauvillier@gmail.com> |  |
+| Adnan Rahic | <adnan@cube.dev> |  |
+| Emmanuel Gomez | <emmanuel@pelo.tech> |  |
 
-## Add the Pelotech Helm Repo
+## Source Code
 
-```bash
-helm repo add pelotech https://www.pelo.tech/charts
-```
+* <https://github.com/cube-js/cube.js>
 
-## Update Dependencies
+## Requirements
 
-```bash
-helm dependency update
-```
+| Repository | Name | Version |
+|------------|------|---------|
+| https://charts.bitnami.com/bitnami | redis | 17.1.* |
+| oci://ghcr.io/pelotech/charts | cubejs | 0.2.0 |
+| oci://ghcr.io/pelotech/charts | cubestore | 0.2.0 |
 
-## Install the Cube Stack
+## Values
 
-Installing the Chart with the `values.yaml` file looks like this:
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| global.cubejs.enabled | bool | `true` |  |
+| global.cubestore.enabled | bool | `true` |  |
+| global.redis.enabled | bool | `true` |  |
 
-```bash
-helm install pelotech/cube-stack
-```
-
-Because this is an Umbrella Chart, you can set any value from the dependent charts in the `values.yaml`.
-
-Any value from the `../cubejs/values.yaml`, `../cubestore/values.yaml`, and `bitnami/redis` can be set in the `./values.yaml`.
-
-The requirement is to prefix the values with `cubejs`, `cubestore`, and `redis` respectively.
-
-Here's an example:
-
-```yaml
-# values.yaml
-
-global:
-  cubejs:
-    enabled: true
-  cubestore:
-    enabled: true
-  redis:
-    enabled: true
-
-cubejs:
-...
-
-  config:
-    apiSecret: secret
-
-    volumes:
-      - name: schema
-        configMap:
-          name: schema
-    volumeMounts:
-      - name: schema
-        readOnly: true
-        mountPath: /cube/conf/schema
-...
-```
-
-## Details
-
-To view more config options please look at the `../cubejs` and `../cubestore` Charts respectively.
