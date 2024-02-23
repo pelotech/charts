@@ -18,11 +18,11 @@ sources:
 dependencies:
   - name: cubejs
     condition: global.cubejs.enabled
-    repository: https://www.pelo.tech/charts/
+    repository: oci://ghcr.io/pelotech/charts/
     version: "0.2.0"
   - name: cubestore
     condition: global.cubestore.enabled
-    repository: https://www.pelo.tech/charts/
+    repository: oci://ghcr.io/pelotech/charts/
     version: "0.2.0"
   - name: redis
     condition: global.redis.enabled
