@@ -49,7 +49,7 @@ pachd:
  ## For available images please check: https://hub.docker.com/r/pachyderm/pachd/tags/
  image:
   repository: pachyderm/pachd
-  tag: 1.8.6
+  tag: 1.13.4
   pullPolicy: Always
  worker:
   repository: pachyderm/worker
