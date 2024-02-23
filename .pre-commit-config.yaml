@@ -4,6 +4,7 @@ repos:
   hooks:
     - id: check-merge-conflict
     - id: end-of-file-fixer
+      exclude: "^charts/"
     - id: trailing-whitespace
     - id: forbid-submodules
 - repo: https://github.com/adrienverge/yamllint
