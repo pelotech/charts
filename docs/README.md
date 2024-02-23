@@ -1,5 +1,5 @@
 ![pre-commit](https://github.com/pelotech/charts/actions/workflows/pre-commit.yaml/badge.svg)
-![helm charts](https://github.com/pelotech/charts/actions/workflows/charts.yaml/badge.svg)
+![helm charts](https://github.com/pelotech/charts/actions/workflows/main.yaml/badge.svg)
 
 # Pelotech Charts
 
@@ -9,7 +9,6 @@
 
 * Helm Chart Docs are generated using [helm-docs](https://github.com/norwoodj/helm-docs)
 
-note: dependency updates via https://developer.mend.io/github/pelotech
 ## Contributing
 
 * We're staring to add the use of [pre-commit](https://pre-commit.com/)

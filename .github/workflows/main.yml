@@ -31,21 +31,6 @@ jobs: # TODO: refactor plublish of charts
           registry_username: ${{ github.actor }}
           registry_password: ${{ secrets.github_token }}
 
-      - name: Build dependencies Helm - cube-stack
-        uses: WyriHaximus/github-action-helm3@v3
-        with:
-          exec: helm dependency build charts/cube-stack
-
-      - name: Chart | Push - cube-stack
-        uses: appany/helm-oci-chart-releaser@v0.4.1
-        with:
-          name: cube-stack
-          repository: pelotech/charts
-          tag: 0.2.0
-          registry: ghcr.io
-          registry_username: ${{ github.actor }}
-          registry_password: ${{ secrets.github_token }}
-
       - name: Build dependencies Helm - cubejs
         uses: WyriHaximus/github-action-helm3@v3
         with:
@@ -70,6 +55,21 @@ jobs: # TODO: refactor plublish of charts
         uses: appany/helm-oci-chart-releaser@v0.4.1
         with:
           name: cubestore
+          repository: pelotech/charts
+          tag: 0.2.0
+          registry: ghcr.io
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.github_token }}
+
+      - name: Build dependencies Helm - cube-stack
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm dependency build charts/cube-stack
+
+      - name: Chart | Push - cube-stack
+        uses: appany/helm-oci-chart-releaser@v0.4.1
+        with:
+          name: cube-stack
           repository: pelotech/charts
           tag: 0.2.0
           registry: ghcr.io
