@@ -1,0 +1,8 @@
+site_name: charts
+site_description: helm charts
+nav:
+  - Home: README.md
+
+plugins:
+  - techdocs-core
+  - monorepo

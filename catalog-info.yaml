@@ -1,0 +1,14 @@
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: helm-charts
+  description: Helm charts to publish for pelotech
+  tags:
+    - helm
+  annotations:
+    github.com/project-slug: pelotech/charts
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: infrastructure
+  lifecycle: production
+  owner: group:pelotech/leads

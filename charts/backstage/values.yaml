@@ -74,6 +74,6 @@ ingress:
   # ingress.annotations -- Annotations to apply to the ingress.
   annotations: {}
 
-# appConfig -- Additional configurations to override the `app-config.yaml` in the backend. 
+# appConfig -- Additional configurations to override the `app-config.yaml` in the backend.
 #              These configurations will be written to `app-config.local.yaml` in the `backend.appDirectory`.
 appConfig: {}

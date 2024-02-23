@@ -1,41 +1,122 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the action will run.
+name: publish-charts
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [main]
-
-  # Allows you to run this workflow manually from the Actions tab
+    branches:
+      - main
+    paths:
+      - charts/**
+      - '!**/*.md'
   workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  release:
+jobs: # TODO: refactor plublish of charts
+  publish-charts:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+
+      - name: Build dependencies Helm - backstage
+        uses: WyriHaximus/github-action-helm3@v3
         with:
-          fetch-depth: 0
+          exec: helm dependency build charts/backstage
 
-      - name: Configure Git
-        run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-
-      - name: Install Helm
-        uses: azure/setup-helm@v1
+      - name: Chart | Push - backstage
+        uses: appany/helm-oci-chart-releaser@v0.4.1
         with:
-          version: v3.4.0
+          name: backstage
+          repository: pelotech/charts
+          tag: 0.2.3
+          registry: ghcr.io
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.github_token }}
 
-      - name: Add Chart Repos
-        run: |
-          helm repo add bitnami https://charts.bitnami.com/bitnami
+      - name: Build dependencies Helm - cube-stack
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm dependency build charts/cube-stack
 
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.2.0
-        env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Chart | Push - cube-stack
+        uses: appany/helm-oci-chart-releaser@v0.4.1
+        with:
+          name: cube-stack
+          repository: pelotech/charts
+          tag: 0.2.0
+          registry: ghcr.io
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.github_token }}
+
+      - name: Build dependencies Helm - cubejs
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm dependency build charts/cubejs
+
+      - name: Chart | Push - cubejs
+        uses: appany/helm-oci-chart-releaser@v0.4.1
+        with:
+          name: cubejs
+          repository: pelotech/charts
+          tag: 0.2.0
+          registry: ghcr.io
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.github_token }}
+
+      - name: Build dependencies Helm - cuebestore
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm dependency build charts/cubestore
+
+      - name: Chart | Push - cubestore
+        uses: appany/helm-oci-chart-releaser@v0.4.1
+        with:
+          name: cubestore
+          repository: pelotech/charts
+          tag: 0.2.0
+          registry: ghcr.io
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.github_token }}
+
+      - name: Build dependencies Helm - mutating-webhook
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm dependency build charts/mutating-webhook
+
+      - name: Chart | Push - mutating-webhook
+        uses: appany/helm-oci-chart-releaser@v0.4.1
+        with:
+          name: mutating-webhook
+          repository: pelotech/charts
+          tag: 0.1.1
+          registry: ghcr.io
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.github_token }}
+
+      - name: Build dependencies Helm - nodejs
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm dependency build charts/nodejs
+
+      - name: Chart | Push - nodejs
+        uses: appany/helm-oci-chart-releaser@v0.4.1
+        with:
+          name: nodejs
+          repository: pelotech/charts
+          tag: 0.2.1
+          registry: ghcr.io
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.github_token }}
+
+      - name: Build dependencies Helm - pachyderm
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm dependency build charts/pachyderm
+
+      - name: Chart | Push - pachyderm
+        uses: appany/helm-oci-chart-releaser@v0.4.1
+        with:
+          name: pachyderm
+          repository: pelotech/charts
+          tag: 0.2.1
+          registry: ghcr.io
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.github_token }}
