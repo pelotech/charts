@@ -17,7 +17,7 @@ jobs: # TODO: refactor plublish of charts
       - uses: actions/checkout@v4
 
       - name: Build dependencies Helm - backstage
-        uses: WyriHaximus/github-action-helm3@v3
+        uses: WyriHaximus/github-action-helm3@v4
         with:
           exec: helm dependency build charts/backstage
 
@@ -32,7 +32,7 @@ jobs: # TODO: refactor plublish of charts
           registry_password: ${{ secrets.github_token }}
 
       - name: Build dependencies Helm - cubejs
-        uses: WyriHaximus/github-action-helm3@v3
+        uses: WyriHaximus/github-action-helm3@v4
         with:
           exec: helm dependency build charts/cubejs
 
@@ -47,7 +47,7 @@ jobs: # TODO: refactor plublish of charts
           registry_password: ${{ secrets.github_token }}
 
       - name: Build dependencies Helm - cuebestore
-        uses: WyriHaximus/github-action-helm3@v3
+        uses: WyriHaximus/github-action-helm3@v4
         with:
           exec: helm dependency build charts/cubestore
 
@@ -62,7 +62,7 @@ jobs: # TODO: refactor plublish of charts
           registry_password: ${{ secrets.github_token }}
 
       - name: Build dependencies Helm - cube-stack
-        uses: WyriHaximus/github-action-helm3@v3
+        uses: WyriHaximus/github-action-helm3@v4
         with:
           exec: helm dependency build charts/cube-stack
 
@@ -77,7 +77,7 @@ jobs: # TODO: refactor plublish of charts
           registry_password: ${{ secrets.github_token }}
 
       - name: Build dependencies Helm - mutating-webhook
-        uses: WyriHaximus/github-action-helm3@v3
+        uses: WyriHaximus/github-action-helm3@v4
         with:
           exec: helm dependency build charts/mutating-webhook
 
@@ -92,7 +92,7 @@ jobs: # TODO: refactor plublish of charts
           registry_password: ${{ secrets.github_token }}
 
       - name: Build dependencies Helm - nodejs
-        uses: WyriHaximus/github-action-helm3@v3
+        uses: WyriHaximus/github-action-helm3@v4
         with:
           exec: helm dependency build charts/nodejs
 
@@ -107,7 +107,7 @@ jobs: # TODO: refactor plublish of charts
           registry_password: ${{ secrets.github_token }}
 
       - name: Build dependencies Helm - pachyderm
-        uses: WyriHaximus/github-action-helm3@v3
+        uses: WyriHaximus/github-action-helm3@v4
         with:
           exec: helm dependency build charts/pachyderm
 
