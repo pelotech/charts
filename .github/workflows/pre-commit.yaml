@@ -15,5 +15,10 @@ jobs:
       - name: install pre-commit
         run: pip install pre-commit
 
+      - name: add Helm bitnami repo
+        uses: WyriHaximus/github-action-helm3@v4
+        with:
+          exec: helm repo add bitnami https://charts.bitnami.com/bitnami
+
       - name: pre-commit
         run: pre-commit run --all-files --show-diff-on-failure
