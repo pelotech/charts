@@ -120,3 +120,18 @@ jobs: # TODO: refactor plublish of charts
           registry: ghcr.io
           registry_username: ${{ github.actor }}
           registry_password: ${{ secrets.github_token }}
+
+      - name: Build dependencies Helm - lrsql
+        uses: WyriHaximus/github-action-helm3@v4
+        with:
+          exec: helm dependency build charts/lrsql
+
+      - name: Chart | Push - lrsql
+        uses: appany/helm-oci-chart-releaser@v0.4.1
+        with:
+          name: lrsql
+          repository: pelotech/charts
+          tag: 0.1.0
+          registry: ghcr.io
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.github_token }}
