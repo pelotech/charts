@@ -20,5 +20,10 @@ jobs:
         with:
           exec: helm repo add bitnami https://charts.bitnami.com/bitnami
 
+      - name: Build dependencies Helm - lrsql
+        uses: WyriHaximus/github-action-helm3@v4
+        with:
+          exec: helm dependency build charts/lrsql
+
       - name: pre-commit
         run: pre-commit run --all-files --show-diff-on-failure
