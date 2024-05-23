@@ -16,6 +16,11 @@ jobs: # TODO: refactor plublish of charts
     steps:
       - uses: actions/checkout@v4
 
+      - name: add Helm bitnami repo
+        uses: WyriHaximus/github-action-helm3@v4
+        with:
+          exec: helm repo add bitnami https://charts.bitnami.com/bitnami
+
       - name: Build dependencies Helm - backstage
         uses: WyriHaximus/github-action-helm3@v4
         with:
