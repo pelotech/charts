@@ -27,7 +27,7 @@ jobs: # TODO: refactor plublish of charts
           exec: helm dependency build charts/backstage
 
       - name: Chart | Push - backstage
-        uses: appany/helm-oci-chart-releaser@v0.4.1
+        uses: appany/helm-oci-chart-releaser@v0.4.2
         with:
           name: backstage
           repository: pelotech/charts
@@ -42,7 +42,7 @@ jobs: # TODO: refactor plublish of charts
           exec: helm dependency build charts/cubejs
 
       - name: Chart | Push - cubejs
-        uses: appany/helm-oci-chart-releaser@v0.4.1
+        uses: appany/helm-oci-chart-releaser@v0.4.2
         with:
           name: cubejs
           repository: pelotech/charts
@@ -57,7 +57,7 @@ jobs: # TODO: refactor plublish of charts
           exec: helm dependency build charts/cubestore
 
       - name: Chart | Push - cubestore
-        uses: appany/helm-oci-chart-releaser@v0.4.1
+        uses: appany/helm-oci-chart-releaser@v0.4.2
         with:
           name: cubestore
           repository: pelotech/charts
@@ -72,7 +72,7 @@ jobs: # TODO: refactor plublish of charts
           exec: helm dependency build charts/cube-stack
 
       - name: Chart | Push - cube-stack
-        uses: appany/helm-oci-chart-releaser@v0.4.1
+        uses: appany/helm-oci-chart-releaser@v0.4.2
         with:
           name: cube-stack
           repository: pelotech/charts
@@ -87,7 +87,7 @@ jobs: # TODO: refactor plublish of charts
           exec: helm dependency build charts/mutating-webhook
 
       - name: Chart | Push - mutating-webhook
-        uses: appany/helm-oci-chart-releaser@v0.4.1
+        uses: appany/helm-oci-chart-releaser@v0.4.2
         with:
           name: mutating-webhook
           repository: pelotech/charts
@@ -102,7 +102,7 @@ jobs: # TODO: refactor plublish of charts
           exec: helm dependency build charts/nodejs
 
       - name: Chart | Push - nodejs
-        uses: appany/helm-oci-chart-releaser@v0.4.1
+        uses: appany/helm-oci-chart-releaser@v0.4.2
         with:
           name: nodejs
           repository: pelotech/charts
@@ -117,7 +117,7 @@ jobs: # TODO: refactor plublish of charts
           exec: helm dependency build charts/pachyderm
 
       - name: Chart | Push - pachyderm
-        uses: appany/helm-oci-chart-releaser@v0.4.1
+        uses: appany/helm-oci-chart-releaser@v0.4.2
         with:
           name: pachyderm
           repository: pelotech/charts
@@ -132,7 +132,7 @@ jobs: # TODO: refactor plublish of charts
           exec: helm dependency build charts/lrsql
 
       - name: Chart | Push - lrsql
-        uses: appany/helm-oci-chart-releaser@v0.4.1
+        uses: appany/helm-oci-chart-releaser@v0.4.2
         with:
           name: lrsql
           repository: pelotech/charts
