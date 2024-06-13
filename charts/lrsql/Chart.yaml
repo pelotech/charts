@@ -24,7 +24,7 @@ version: 0.1.0
 appVersion: "v0.7.14"
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x

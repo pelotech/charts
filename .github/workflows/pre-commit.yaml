@@ -18,7 +18,7 @@ jobs:
       - name: add Helm bitnami repo
         uses: WyriHaximus/github-action-helm3@v4
         with:
-          exec: helm repo add bitnami https://charts.bitnami.com/bitnami
+          exec: helm repo add bitnami oci://registry-1.docker.io/bitnamicharts
 
       - name: Build dependencies Helm - lrsql
         uses: WyriHaximus/github-action-helm3@v4

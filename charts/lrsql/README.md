@@ -8,7 +8,7 @@ SQL LRS/lrsql helm chart
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | common | 2.x |
+| oci://registry-1.docker.io/bitnamicharts | common | 2.x |
 
 ## Values
 
