@@ -34,6 +34,10 @@ extraEnvVars:
     value: admin
   - name: LRSQL_ADMIN_PASS_DEFAULT
     value: admin
+  - name: LRSQL_API_KEY_DEFAULT
+    value: my_key
+  - name: LRSQL_API_SECRET_DEFAULT
+    value: my_secret
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
 extraEnvVarsCM: ""
