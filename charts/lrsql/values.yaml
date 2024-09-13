@@ -13,86 +13,35 @@ image:
   pullSecrets: []
   debug: false
 
+## Command and args for running the container (set to default if not set). Use array form
+## @param postgres.command Override default container command (useful when using custom images) ie. ["/lrsql/bin/run_postgres.sh"]
+## @param postgres.args Override default container args (useful when using custom images)
+##
+command: []
+args: []
 
 sqlite:
   enabled: true
-  ## Command and args for running the container (set to default if not set). Use array form
-  ## @param sqlite.command Override default container command (useful when using custom images) ie. ["/lrsql/bin/run_postgres.sh"]
-  ## @param sqlite.args Override default container args (useful when using custom images)
-  ##
-  command: ["/lrsql/bin/run_sqlite.sh"]
-  args: []
-  ## @param sqlite.extraEnvVars Extra environment variables to be set on NGINX containers
-  ## E.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: BAR
-  ##
-  extraEnvVars:
-    - name: LRSQL_DB_NAME
-      value: "db/lrsql.sqlite.db"
-    - name: LRSQL_ALLOW_ALL_ORIGINS
-      value: "true"
-    - name: LRSQL_ADMIN_USER_DEFAULT
-      value: admin
-    - name: LRSQL_ADMIN_PASS_DEFAULT
-      value: admin
-    - name: LRSQL_API_KEY_DEFAULT
-      value: my_key
-    - name: LRSQL_API_SECRET_DEFAULT
-      value: my_secret
+  lrsql:
+    dbName: db/lrsql.sqlite.db
 
-
-postgres:
+# TODO: this is clunky and needs a new home.
+# we also want to either set the env vars based on this
+# or set these based on the env vars.
+# The actual values for the postgres dependancy are mixed in here
+postgresql:
   enabled: false
-  ## Command and args for running the container (set to default if not set). Use array form
-  ## @param postgres.command Override default container command (useful when using custom images) ie. ["/lrsql/bin/run_postgres.sh"]
-  ## @param postgres.args Override default container args (useful when using custom images)
-  ##
-  command: ["/lrsql/bin/run_postgres.sh"]
-  ## @param postgres.extraEnvVars Extra environment variables to be set on NGINX containers
-  ## E.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: BAR
-  ##
-  extraEnvVars:
-    - name: LRSQL_DB_NAME
-      value: "lrsql_db"
-    # TODO: REMOVE ME END POSTGRES
-    # TODO: this should be pg hostname yeah?
-    - name: LRSQL_DB_HOST
-      value: lrsql-postgresql
-    - name: LRSQL_DB_PORT
-      value: "5432"
-    - name: LRSQL_DB_USER
-      value: lrsql_user
-    - name: LRSQL_DB_PASSWORD
-      value: lrsql_password
-    # TODO: REMOVE ME END POSTGRES
-    - name: LRSQL_ALLOW_ALL_ORIGINS
-      value: "true"
-    - name: LRSQL_ADMIN_USER_DEFAULT
-      value: admin
-    - name: LRSQL_ADMIN_PASS_DEFAULT
-      value: admin
-    - name: LRSQL_API_KEY_DEFAULT
-      value: my_key
-    - name: LRSQL_API_SECRET_DEFAULT
-      value: my_secret
-
-  # TODO: this is clunky and needs a new home.
-  # we also want to either set the env vars based on this
-  # or set these based on the env vars.
-  postgresql:
-    auth:
-      enablePostgresUser: true
-      postgresPassword: lrsql
-      username: lrsql_user
-      password: lrsql_password
-      database: lrsql_db
-      existingSecret: ""
-    architecture: standalone
+  auth:
+    enablePostgresUser: true
+    postgresPassword: lrsql
+    username: lrsql_user
+    password: lrsql_password
+    database: lrsql_db
+    existingSecret: ""
+  architecture: standalone
+  lrsql:
+    dbHost: lrsql-postgresql
+    dbPort: 5432
 
 
 ## @param extraEnvVars Extra environment variables to be set on NGINX containers
@@ -101,7 +50,17 @@ postgres:
 ##   - name: FOO
 ##     value: BAR
 ##
-extraEnvVars: ""
+extraEnvVars:
+  - name: LRSQL_ALLOW_ALL_ORIGINS
+    value: "true"
+  - name: LRSQL_ADMIN_USER_DEFAULT
+    value: admin
+  - name: LRSQL_ADMIN_PASS_DEFAULT
+    value: admin
+  - name: LRSQL_API_KEY_DEFAULT
+    value: my_key
+  - name: LRSQL_API_SECRET_DEFAULT
+    value: my_secret
 ## @param extraEnvVarsCM ConfigMap with extra environment variables
 ##
 extraEnvVarsCM: ""
