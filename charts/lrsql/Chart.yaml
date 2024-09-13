@@ -28,3 +28,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 2.x
+  - condition: postgres.enabled
+    name: postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 15.X.X

@@ -33,8 +33,18 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ include "lrsql.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          # TODO: This should go somewhere else
+          {{- if not (or (.Values.sqlite.enabled) (.Values.postgres.enabled)) }}
+          {{- fail ".Values.sqlite.enabled or .Values.postgres.enabled must be enabled" }}
+          {{- end }}
+          # TODO: This should go somewhere else
+          {{- if and (.Values.sqlite.enabled) (.Values.postgres.enabled) }}
+          {{- fail ".Values.sqlite.enabled and .Values.postgres.enabled cannot both be true" }}
+          {{- end }}
+          {{- if and (.Values.sqlite.enabled) (.Values.sqlite.command) }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.sqlite.command "context" $) | nindent 12 }}
+          {{- else if and (.Values.postgres.enabled) (.Values.postgres.command) }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.postgres.command "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
@@ -50,6 +60,11 @@ spec:
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if and (.Values.sqlite.enabled) (.Values.sqlite.extraEnvVars) }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.sqlite.extraEnvVars "context" $) | nindent 12 }}
+            {{- else if and (.Values.postgres.enabled) (.Values.postgres.extraEnvVars) }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.postgres.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
