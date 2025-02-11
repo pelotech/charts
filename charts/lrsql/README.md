@@ -6,8 +6,6 @@
 
 SQL LRS/lrsql helm chart
 
-## Maintainers
-
 ## Requirements
 
 | Repository | Name | Version |

@@ -6,8 +6,6 @@
 
 A Helm chart for Kubernetes
 
-## Maintainers
-
 ## Values
 
 | Key | Type | Default | Description |

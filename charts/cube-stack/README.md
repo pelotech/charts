@@ -6,8 +6,6 @@
 
 Cube Stack is an Umbrella Chart that contains everything needed to run Cube in production.
 
-## Maintainers
-
 ## Requirements
 
 | Repository | Name | Version |

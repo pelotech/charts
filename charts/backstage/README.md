@@ -6,8 +6,6 @@
 
 A Helm chart for Backstage
 
-## Maintainers
-
 ## Values
 
 | Key | Type | Default | Description |

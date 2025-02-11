@@ -8,8 +8,6 @@ Pachyderm is a large-scale container-based workflow engine that offers complete 
 
 **Homepage:** <https://pachyderm.io>
 
-## Maintainers
-
 ## Values
 
 | Key | Type | Default | Description |

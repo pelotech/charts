@@ -6,8 +6,6 @@
 
 A Helm chart for Cubestore
 
-## Maintainers
-
 ## Values
 
 | Key | Type | Default | Description |

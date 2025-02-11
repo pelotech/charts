@@ -6,8 +6,6 @@
 
 A Helm chart for Cubejs
 
-## Maintainers
-
 ## Values
 
 | Key | Type | Default | Description |

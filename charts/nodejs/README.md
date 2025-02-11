@@ -6,8 +6,6 @@
 
 A Helm chart for Deploying NoodeJS applications to Kubernetes
 
-## Maintainers
-
 ## Values
 
 | Key | Type | Default | Description |
