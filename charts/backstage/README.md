@@ -1,19 +1,12 @@
 # backstage
 
-![Version: 0.2.3](https://img.shields.io/badge/Version-0.2.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.1.1-alpha.23](https://img.shields.io/badge/AppVersion-v0.1.1--alpha.23-informational?style=flat-square)
+### version: 0.3.0<!-- x-release-please-version -->
+
+![AppVersion: v0.1.1-alpha.23](https://img.shields.io/badge/AppVersion-v0.1.1--alpha.23-informational?style=flat-square)
 
 A Helm chart for Backstage
 
 ## Maintainers
-
-| Name | Email | Url |
-| ---- | ------ | --- |
-| Avi Zimmerman | <avi@liffft.com> |  |
-
-## Source Code
-
-* <https://github.com/backstage/backstage>
-* <https://github.com/spotify/lighthouse-audit-service>
 
 ## Values
 

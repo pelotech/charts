@@ -6,13 +6,29 @@
   "release-type": "helm",
   "separate-pull-requests": true,
   "packages": {
-    "charts/backstage": {},
-    "charts/cube-stack": {},
-    "charts/cubejs": {},
-    "charts/cubestore": {},
-    "charts/lrsql": {},
-    "charts/mutating-webhook": {},
-    "charts/nodejs": {},
-    "charts/pachyderm": {}
+    "charts/backstage": {
+      "extra-files": ["README.md"]
+    },
+    "charts/cube-stack": {
+      "extra-files": ["README.md"]
+    },
+    "charts/cubejs": {
+      "extra-files": ["README.md"]
+    },
+    "charts/cubestore": {
+      "extra-files": ["README.md"]
+    },
+    "charts/lrsql": {
+      "extra-files": ["README.md"]
+    },
+    "charts/mutating-webhook": {
+      "extra-files": ["README.md"]
+    },
+    "charts/nodejs": {
+      "extra-files": ["README.md"]
+    },
+    "charts/pachyderm": {
+      "extra-files": ["README.md"]
+    }
   }
 }

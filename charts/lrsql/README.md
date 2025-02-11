@@ -1,8 +1,12 @@
 # lrsql
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.7.14](https://img.shields.io/badge/AppVersion-v0.7.14-informational?style=flat-square)
+### version: 0.2.0<!-- x-release-please-version -->
+
+![AppVersion: v0.7.14](https://img.shields.io/badge/AppVersion-v0.7.14-informational?style=flat-square)
 
 SQL LRS/lrsql helm chart
+
+## Maintainers
 
 ## Requirements
 

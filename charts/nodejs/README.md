@@ -1,8 +1,12 @@
 # nodejs
 
-![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![AppVersion: 1.0](https://img.shields.io/badge/AppVersion-1.0-informational?style=flat-square)
+### version: 0.3.0<!-- x-release-please-version -->
+
+![AppVersion: 1.0](https://img.shields.io/badge/AppVersion-1.0-informational?style=flat-square)
 
 A Helm chart for Deploying NoodeJS applications to Kubernetes
+
+## Maintainers
 
 ## Values
 

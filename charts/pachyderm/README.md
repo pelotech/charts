@@ -1,22 +1,14 @@
 # pachyderm
 
-![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![AppVersion: 1.8.6](https://img.shields.io/badge/AppVersion-1.8.6-informational?style=flat-square)
+### version: 0.3.0<!-- x-release-please-version -->
+
+![AppVersion: 1.8.6](https://img.shields.io/badge/AppVersion-1.8.6-informational?style=flat-square)
 
 Pachyderm is a large-scale container-based workflow engine that offers complete version control for data and reproducible data processing
 
 **Homepage:** <https://pachyderm.io>
 
 ## Maintainers
-
-| Name | Email | Url |
-| ---- | ------ | --- |
-| jonandernovella | <novella.uu@gmail.com> |  |
-| dwhitena | <whitenack.daniel@gmail.com> |  |
-| jdoliner | <jdoliner@pachyderm.io> |  |
-
-## Source Code
-
-* <https://github.com/pachyderm/pachyderm>
 
 ## Values
 

@@ -1,19 +1,12 @@
 # cubejs
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.31.6](https://img.shields.io/badge/AppVersion-0.31.6-informational?style=flat-square)
+### version: 0.3.0<!-- x-release-please-version -->
+
+![AppVersion: 0.31.6](https://img.shields.io/badge/AppVersion-0.31.6-informational?style=flat-square)
 
 A Helm chart for Cubejs
 
 ## Maintainers
-
-| Name | Email | Url |
-| ---- | ------ | --- |
-| Luc Vauvillier | <luc.vauvillier@gmail.com> |  |
-| Emmanuel Gomez | <emmanuel@pelo.tech> |  |
-
-## Source Code
-
-* <https://github.com/cube-js/cube.js>
 
 ## Values
 
