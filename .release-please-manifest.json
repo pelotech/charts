@@ -1,7 +1,7 @@
 {
   "charts/backstage": "0.3.0",
   "charts/cube-stack": "0.3.0",
-  "charts/cubejs": "0.2.0",
+  "charts/cubejs": "0.3.0",
   "charts/cubestore": "0.2.0",
   "charts/lrsql": "0.2.0",
   "charts/mutating-webhook": "0.1.1",
