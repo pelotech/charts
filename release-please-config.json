@@ -6,6 +6,13 @@
   "release-type": "helm",
   "separate-pull-requests": true,
   "packages": {
-    "charts/backstage": {}
+    "charts/backstage": {},
+    "charts/cube-stack": {},
+    "charts/cubejs": {},
+    "charts/cubestore": {},
+    "charts/lrsql": {},
+    "charts/mutating-webhook": {},
+    "charts/nodejs": {},
+    "charts/pachyderm": {}
   }
 }
