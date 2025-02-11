@@ -1,0 +1,74 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release-output: ${{ steps.set-output.outputs.result }}
+      paths_released: ${{ steps.release.outputs.paths_released }}
+      releases_created: ${{ steps.release.outputs.releases_created }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+      - uses: actions/github-script@v7
+        id: set-output
+        env:
+          RELEASE_OUTPUTS: ${{ toJson(steps.release.outputs) }}
+        with:
+          result-encoding: 'string'
+          script: |
+            return JSON.stringify(JSON.parse(process.env.RELEASE_OUTPUTS));
+
+  publish:
+    if: ${{ fromJSON(needs.release-please.outputs.releases_created) }}
+    runs-on: ubuntu-latest
+    needs: [release-please]
+    strategy:
+      matrix:
+        path: ${{ fromJSON(needs.release-please.outputs.paths_released) }}
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/github-script@v7
+        id: release
+        env:
+          RELEASE_OUTPUTS: ${{ needs.release-please.outputs.release-output }}
+        with:
+          script: |
+            var release = JSON.parse(process.env.RELEASE_OUTPUTS);
+            var chartPath = '${{ matrix.path }}';
+            var chartName = chartPath.split('/')[1];
+            var chartVersion = release[`${chartPath}--version`];
+            core.setOutput('chart-path', chartPath)
+            core.setOutput('chart-name',chartName);
+            core.setOutput('chart-version',chartVersion)
+      - uses: actions/checkout@v4
+      - name: Build dependencies Helm - ${{ steps.release.outputs.chart-name }}
+        uses: WyriHaximus/github-action-helm3@v4
+        with:
+          exec: |
+            helm repo add bitnami https://charts.bitnami.com/bitnami
+            helm dependency build ${{matrix.path}}
+      - name: Chart | Push - ${{ steps.release.outputs.chart-name }}
+        uses: appany/helm-oci-chart-releaser@v0.4.2
+        with:
+          name: ${{ steps.release.outputs.chart-name }}
+          repository: pelotech/charts
+          tag: ${{ steps.release.outputs.chart-version }}
+          registry: ghcr.io
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.github_token }}
