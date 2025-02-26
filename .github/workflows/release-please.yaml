@@ -53,9 +53,11 @@ jobs:
             var chartPath = '${{ matrix.path }}';
             var chartName = chartPath.split('/')[1];
             var chartVersion = release[`${chartPath}--version`];
+            var gitTag = release[`${chartPath}--tag_name`]
             core.setOutput('chart-path', chartPath)
             core.setOutput('chart-name',chartName);
             core.setOutput('chart-version',chartVersion)
+            core.setOutput('chart-git-tag', gitTag)
       - uses: actions/checkout@v4
       - name: Build dependencies Helm - ${{ steps.release.outputs.chart-name }}
         uses: WyriHaximus/github-action-helm3@v4
@@ -72,3 +74,7 @@ jobs:
           registry: ghcr.io
           registry_username: ${{ github.actor }}
           registry_password: ${{ secrets.github_token }}
+      - uses: imjasonh/setup-crane@v0.4
+      - name: update docker images with annotations
+        run: |
+          crane mutate -a org.opencontainers.image.revision=${{ steps.release.outputs.chart-git-tag }},org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY ghcr.io/pelotech/charts/${{ steps.release.outputs.chart-name }}:${{ steps.release.outputs.chart-version }}
