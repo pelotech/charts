@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   registry: docker.io
   repository: yetanalytics/lrsql
-  tag: v0.7.14
+  tag: v0.8.4
   digest: ""
   pullPolicy: IfNotPresent
   pullSecrets: []
