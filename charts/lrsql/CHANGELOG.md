@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/pelotech/charts/compare/lrsql/0.2.0...lrsql/0.2.1) (2025-05-08)
+
+
+### Bug Fixes
+
+* upgrade lrsql version, add default Labels and sample command for postgres ([#50](https://github.com/pelotech/charts/issues/50)) ([b128d31](https://github.com/pelotech/charts/commit/b128d3137c686e7511a711ff00da7106abca8544))
+
 ## [0.2.0](https://github.com/pelotech/charts/compare/lrsql-v0.1.0...lrsql/0.2.0) (2025-02-11)
 
 
