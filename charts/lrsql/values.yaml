@@ -7,14 +7,14 @@ replicaCount: 1
 image:
   registry: docker.io
   repository: yetanalytics/lrsql
-  tag: v0.7.14
+  tag: v0.8.4
   digest: ""
   pullPolicy: IfNotPresent
   pullSecrets: []
   debug: false
 
 ## Command and args for running the container (set to default if not set). Use array form
-## @param command Override default container command (useful when using custom images) ie. ["/lrsql/bin/run_postgres.sh"]
+## @param command Override default container command (useful when using custom images) ie. ["/lrsql/bin/run_postgres.sh", "-XX:MaxRAMPercentage=80"]
 ## @param args Override default container args (useful when using custom images)
 ##
 command: ["/lrsql/bin/run_sqlite.sh"]
@@ -49,13 +49,15 @@ extraEnvVarsSecret: ""
 
 containerPorts:
   http: 8080
-#  https: 8383
 
 nameOverride: ""
 fullnameOverride: ""
 
 podAnnotations: {}
-podLabels: {}
+podLabels:
+  app.kubernetes.io/name: lrsql
+#  app.kubernetes.io/instance: lrsql
+  app.kubernetes.io/component: lrs
 
 podSecurityContext: {}
   # fsGroup: 2000
