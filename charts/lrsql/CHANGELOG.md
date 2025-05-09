@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/pelotech/charts/compare/lrsql/0.2.1...lrsql/0.2.2) (2025-05-09)
+
+
+### Bug Fixes
+
+* add the ability to set commonAnnotations on the deployment ([e19bc89](https://github.com/pelotech/charts/commit/e19bc89128033614e1ededbea560cb42cd516d30))
+
 ## [0.2.1](https://github.com/pelotech/charts/compare/lrsql/0.2.0...lrsql/0.2.1) (2025-05-08)
 
 
