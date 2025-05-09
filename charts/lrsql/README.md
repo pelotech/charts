@@ -19,6 +19,7 @@ SQL LRS/lrsql helm chart
 | affinity | object | `{}` |  |
 | args | list | `[]` |  |
 | command[0] | string | `"/lrsql/bin/run_sqlite.sh"` |  |
+| commonAnnotations | object | `{}` |  |
 | containerPorts.http | int | `8080` |  |
 | extraEnvVarsCM | string | `""` |  |
 | extraEnvVarsSecret | string | `""` |  |

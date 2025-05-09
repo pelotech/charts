@@ -44,8 +44,9 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
 extraEnvVarsSecret: ""
-
-## TODO add customization of /lrsql/config/lrsql.json via configmap/secret
+## @param commonAnnotations Annotations to add to the deployment
+##
+commonAnnotations: {}
 
 containerPorts:
   http: 8080

@@ -4,6 +4,10 @@ metadata:
   name: {{ include "lrsql.fullname" . }}
   labels:
     {{- include "lrsql.labels" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations:
+    {{- toYaml .Values.commonAnnotations | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
