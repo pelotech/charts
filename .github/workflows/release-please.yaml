@@ -58,7 +58,7 @@ jobs:
             core.setOutput('chart-name',chartName);
             core.setOutput('chart-version',chartVersion)
             core.setOutput('chart-git-tag', gitTag)
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Build dependencies Helm - ${{ steps.release.outputs.chart-name }}
         uses: WyriHaximus/github-action-helm3@v4
         with:
