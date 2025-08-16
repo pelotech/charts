@@ -1,6 +1,6 @@
 {
   "charts/backstage": "0.3.0",
-  "charts/cube-stack": "0.3.0",
+  "charts/cube-stack": "0.3.1",
   "charts/cubejs": "0.3.0",
   "charts/cubestore": "0.3.0",
   "charts/lrsql": "0.2.2",
