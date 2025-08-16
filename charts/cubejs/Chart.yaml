@@ -3,7 +3,7 @@ name: cubejs
 description: A Helm chart for Cubejs
 type: application
 appVersion: "0.31.6"
-version: 0.3.0
+version: 0.3.1
 keywords:
   - cubejs
 maintainers:
