@@ -6,5 +6,6 @@
   "charts/lrsql": "0.2.2",
   "charts/mutating-webhook": "0.2.0",
   "charts/nodejs": "0.3.0",
-  "charts/pachyderm": "0.3.0"
+  "charts/pachyderm": "0.3.0",
+  "charts/justworks-demo": "0.1.0"
 }
