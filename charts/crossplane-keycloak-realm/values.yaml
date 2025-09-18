@@ -39,3 +39,8 @@ userFederation:
         #     attributeName: "gidNumber"
         #     attributeValue: "99999999"
         #     name: "hardcode-gidNumber"
+
+# users: []
+users:
+  - username: emmanuel.gomez
+    email: emmanuel@pelo.tech

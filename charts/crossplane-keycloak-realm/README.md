@@ -27,4 +27,6 @@ Define a Keycloak Realm via Crossplane
 | userFederation.ldap.forProvider.validatePasswordPolicy | bool | `false` |  |
 | userFederation.ldap.mappers.hardcodedAttributeMappers | list | `[]` |  |
 | userFederation.ldap.mappers.userAttributeMappers | list | `[]` |  |
+| users[0].email | string | `"emmanuel@pelo.tech"` |  |
+| users[0].username | string | `"emmanuel.gomez"` |  |
 
