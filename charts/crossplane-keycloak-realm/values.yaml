@@ -1,5 +1,6 @@
-provider:
+providerConfig:
   name: test-provider
+  secretName: "{{ }}"
 
 realm:
   name: test-realm
@@ -8,12 +9,20 @@ realm:
     loginWithEmailAllowed: true
     resetPasswordAllowed: true
 
+builtinObjects:
+  spec:
+    builtinClients: []
+    builtinRealmRoles: []
+    builtinAuthenticationFlows: []
+
+roles: []
+
 userFederation:
   ldap:
     enabled: false
     forProvider:
       realmIdRef:
-        name: "{{ .Values.realm.name }}--realm"
+        name: "{{ tpl .Values.realm.name $ }}--realm"
       name: ldap
       deleteDefaultMappers: true
       editMode: "WRITABLE"
@@ -26,21 +35,6 @@ userFederation:
       validatePasswordPolicy: false
     mappers:
       userAttributeMappers: []
-        # - name: "{{ .Values.realm.name }}--freeipa-givenname"
-        #   forProvider:
-        #     isBinaryAttribute: false
-        #     isMandatoryInLdap: true
-        #     ldapAttribute: "givenName"
-        #     name: "firstName <-> givenName"
-        #     userModelAttribute: "firstName"
       hardcodedAttributeMappers: []
-        # - name: "{{ .Values.realm.name }}--freeipa-gidnumber"
-        #   forProvider:
-        #     attributeName: "gidNumber"
-        #     attributeValue: "99999999"
-        #     name: "hardcode-gidNumber"
 
-# users: []
-users:
-  - username: emmanuel.gomez
-    email: emmanuel@pelo.tech
+users: []

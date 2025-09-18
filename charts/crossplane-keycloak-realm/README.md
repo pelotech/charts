@@ -8,17 +8,22 @@ Define a Keycloak Realm via Crossplane
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| provider.name | string | `"test-provider"` |  |
+| builtinObjects.spec.builtinAuthenticationFlows | list | `[]` |  |
+| builtinObjects.spec.builtinClients | list | `[]` |  |
+| builtinObjects.spec.builtinRealmRoles | list | `[]` |  |
+| providerConfig.name | string | `"test-provider"` |  |
+| providerConfig.secretName | string | `"{{ }}"` |  |
 | realm.forProvider.defaultSignatureAlgorithm | string | `"RS256"` |  |
 | realm.forProvider.loginWithEmailAllowed | bool | `true` |  |
 | realm.forProvider.resetPasswordAllowed | bool | `true` |  |
 | realm.name | string | `"test-realm"` |  |
+| roles | list | `[]` |  |
 | userFederation.ldap.enabled | bool | `false` |  |
 | userFederation.ldap.forProvider.deleteDefaultMappers | bool | `true` |  |
 | userFederation.ldap.forProvider.editMode | string | `"WRITABLE"` |  |
 | userFederation.ldap.forProvider.importEnabled | bool | `true` |  |
 | userFederation.ldap.forProvider.name | string | `"ldap"` |  |
-| userFederation.ldap.forProvider.realmIdRef.name | string | `"{{ .Values.realm.name }}--realm"` |  |
+| userFederation.ldap.forProvider.realmIdRef.name | string | `"{{ tpl .Values.realm.name $ }}--realm"` |  |
 | userFederation.ldap.forProvider.startTls | bool | `false` |  |
 | userFederation.ldap.forProvider.syncRegistrations | bool | `true` |  |
 | userFederation.ldap.forProvider.trustEmail | bool | `false` |  |
@@ -27,6 +32,5 @@ Define a Keycloak Realm via Crossplane
 | userFederation.ldap.forProvider.validatePasswordPolicy | bool | `false` |  |
 | userFederation.ldap.mappers.hardcodedAttributeMappers | list | `[]` |  |
 | userFederation.ldap.mappers.userAttributeMappers | list | `[]` |  |
-| users[0].email | string | `"emmanuel@pelo.tech"` |  |
-| users[0].username | string | `"emmanuel.gomez"` |  |
+| users | list | `[]` |  |
 

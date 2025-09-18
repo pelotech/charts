@@ -1,14 +1,12 @@
+{{- $providerConfigName := tpl .Values.providerConfig.name $ | required ".Values.providerConfig.name is required" }}
+{{- $realmName := tpl .Values.realm.name $ | printf "%s--realm" }}
 ---
 apiVersion: keycloak.crossplane.io/v1alpha1
 kind: XBuiltinObjects
 metadata:
-  name: "keycloak-builtin-objects-{{ .Values.realm.name }}"
+  name: "{{ $realmName }}-keycloak-builtin-objects"
 spec:
-  providerConfigName: "{{ .Values.provider.name }}"
-  providerSecretName: "{{ .Values.realm.name }}--keycloak-provider-credentials"
-  realm: "{{ .Values.realm.name }}"
-  builtinClients:
-    - realm-management
-    - account
-  builtinRealmRoles: []
-  builtinAuthenticationFlows: []
+  providerConfigName: "{{ $providerConfigName }}"
+  providerSecretName: "{{ $realmName }}--keycloak-provider-credentials"
+  realm: "{{ $realmName }}"
+  {{- tpl (.Values.builtinObjects.spec | toYaml) $ | nindent 2 }}
