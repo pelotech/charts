@@ -1,0 +1,14 @@
+---
+apiVersion: keycloak.crossplane.io/v1alpha1
+kind: XBuiltinObjects
+metadata:
+  name: "keycloak-builtin-objects-{{ .Values.realm.name }}"
+spec:
+  providerConfigName: "{{ .Values.provider.name }}"
+  providerSecretName: "{{ .Values.realm.name }}--keycloak-provider-credentials"
+  realm: "{{ .Values.realm.name }}"
+  builtinClients:
+    - realm-management
+    - account
+  builtinRealmRoles: []
+  builtinAuthenticationFlows: []

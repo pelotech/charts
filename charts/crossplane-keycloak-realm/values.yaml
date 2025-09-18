@@ -1,0 +1,41 @@
+provider:
+  name: test-provider
+
+realm:
+  name: test-realm
+  forProvider:
+    defaultSignatureAlgorithm: "RS256"
+    loginWithEmailAllowed: true
+    resetPasswordAllowed: true
+
+userFederation:
+  ldap:
+    enabled: false
+    forProvider:
+      realmIdRef:
+        name: "{{ .Values.realm.name }}--realm"
+      name: ldap
+      deleteDefaultMappers: true
+      editMode: "WRITABLE"
+      importEnabled: true
+      startTls: false
+      syncRegistrations: true
+      trustEmail: false
+      usePasswordModifyExtendedOp: false
+      useTruststoreSpi: "ONLY_FOR_LDAPS"
+      validatePasswordPolicy: false
+    mappers:
+      userAttributeMappers: []
+        # - name: "{{ .Values.realm.name }}--freeipa-givenname"
+        #   forProvider:
+        #     isBinaryAttribute: false
+        #     isMandatoryInLdap: true
+        #     ldapAttribute: "givenName"
+        #     name: "firstName <-> givenName"
+        #     userModelAttribute: "firstName"
+      hardcodedAttributeMappers: []
+        # - name: "{{ .Values.realm.name }}--freeipa-gidnumber"
+        #   forProvider:
+        #     attributeName: "gidNumber"
+        #     attributeValue: "99999999"
+        #     name: "hardcode-gidNumber"

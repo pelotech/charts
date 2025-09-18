@@ -1,0 +1,138 @@
+provider:
+  name: ~
+
+realm:
+  name: test-realm
+  forProvider:
+    defaultSignatureAlgorithm: "RS256"
+    loginWithEmailAllowed: true
+    resetPasswordAllowed: true
+
+userFederation:
+  ldap:
+    enabled: false
+    forProvider:
+      realmIdRef:
+        name: "{{ .Values.realm.name }}--realm"
+      name: ldap
+      deleteDefaultMappers: true
+      editMode: "WRITABLE"
+      importEnabled: true
+      startTls: false
+      syncRegistrations: true
+      trustEmail: false
+      usePasswordModifyExtendedOp: false
+      useTruststoreSpi: "ONLY_FOR_LDAPS"
+      validatePasswordPolicy: false
+    mappers:
+      userAttributeMappers:
+        - name: "{{ .Values.realm.name }}--freeipa-givenname"
+          forProvider:
+            name: "firstName <-> givenName"
+            ldapAttribute: "givenName"
+            userModelAttribute: "firstName"
+            isBinaryAttribute: false
+            isMandatoryInLdap: true
+        - name: "{{ $.Release.Name }}--freeipa-givenname"
+          forProvider:
+            name: "firstName <-> givenName"
+            ldapAttribute: "givenName"
+            userModelAttribute: "firstName"
+            isBinaryAttribute: false
+            isMandatoryInLdap: true
+        - name: "{{ $.Release.Name }}--freeipa-orgpath"
+          forProvider:
+            name: "orgpath"
+            ldapAttribute: "orgpath"
+            userModelAttribute: "orgPath"
+            isBinaryAttribute: false
+        - name: "{{ $.Release.Name }}--freeipa-krbprincipal"
+          forProvider:
+            name: "krbPrincipalName"
+            ldapAttribute: "krbPrincipalName"
+            userModelAttribute: "email"
+            isBinaryAttribute: false
+            isMandatoryInLdap: true
+        - name: "{{ $.Release.Name }}--freeipa-creationdate"
+          forProvider:
+            name: "create timestamp"
+            ldapAttribute: "createTimestamp"
+            userModelAttribute: "createTimestamp"
+            isBinaryAttribute: false
+            isMandatoryInLdap: false
+        - name: "{{ $.Release.Name }}--freeipa-email"
+          forProvider:
+            name: "email"
+            ldapAttribute: "mail"
+            userModelAttribute: "email"
+            alwaysReadValueFromLdap: true
+            isBinaryAttribute: false
+            isMandatoryInLdap: true
+        - name: "{{ $.Release.Name }}--freeipa-firstname"
+          forProvider:
+            name: "first name"
+            ldapAttribute: "cn"
+            userModelAttribute: "firstName"
+            isBinaryAttribute: false
+            isMandatoryInLdap: true
+        - name: "{{ $.Release.Name }}--freeipa-lastname"
+          forProvider:
+            name: "last name"
+            ldapAttribute: "sn"
+            userModelAttribute: "lastName"
+            isBinaryAttribute: false
+            isMandatoryInLdap: true
+        - name: "{{ $.Release.Name }}--freeipa-modifydate"
+          forProvider:
+            name: "modify date"
+            ldapAttribute: "modifyTimestamp"
+            userModelAttribute: "modifyTimestamp"
+            isBinaryAttribute: false
+            isMandatoryInLdap: false
+        - name: "{{ $.Release.Name }}--freeipa-username"
+          forProvider:
+            name: "username"
+            ldapAttribute: "uid"
+            userModelAttribute: "username"
+            isBinaryAttribute: false
+            isMandatoryInLdap: true
+        - name: "{{ $.Release.Name }}--freeipa-ltabyuser"
+          forProvider:
+            name: "ltabyuser"
+            ldapAttribute: "ltabyuser"
+            userModelAttribute: "ltaByUser"
+            alwaysReadValueFromLdap: true
+            isBinaryAttribute: false
+            isMandatoryInLdap: false
+        - name: "{{ $.Release.Name }}--freeipa-sponsoredbyuser"
+          forProvider:
+            name: "sponsoredbyuser"
+            ldapAttribute: "sponsoredbyuser"
+            userModelAttribute: "sponsoredByUser"
+            alwaysReadValueFromLdap: true
+            isBinaryAttribute: false
+            isMandatoryInLdap: false
+
+      hardcodedAttributeMappers:
+        - name: "{{ .Values.realm.name }}--freeipa-gidnumber"
+          forProvider:
+            name: "hardcode-gidNumber"
+            attributeName: "gidNumber"
+            attributeValue: "99999999"
+        - name: "{{ .Values.realm.name }}--freeipa-ipantsecurity"
+          forProvider:
+            name: "hardcode-ipantsecurityidentifier"
+            attributeName: "ipantsecurityidentifier"
+            attributeValue: "JUNK_VALUE"
+        - name: "{{ .Values.realm.name }}--freeipa-homedirectory"
+          forProvider:
+            name: "hardcode-homeDirectory"
+            attributeName: "homeDirectory"
+            attributeValue: "/home/temp"
+        - name: "{{ .Values.realm.name }}--freeipa-uidnumber"
+          forProvider:
+            name: "hardcode-uidNumber"
+            attributeName: "uidNumber"
+            attributeValue: "99999999"
+
+users: []

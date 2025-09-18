@@ -1,0 +1,52 @@
+{{- if .Values.userFederation.ldap.enabled }}
+{{- $providerName := tpl .Values.provider.name $ | required ".Values.provider.name is required" }}
+{{- $realmName := tpl .Values.realm.name $ | printf "%s--realm" }}
+{{- $userFederationName := tpl .Values.realm.name $ | printf "%s--ldap-user-federation" }}
+---
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: UserFederation
+metadata:
+  name: "{{ $userFederationName }}"
+spec:
+  providerConfigRef:
+    name: "{{ $providerName }}"
+  forProvider:
+    realmIdRef:
+      name: "{{ $realmName }}"
+    {{- tpl (.Values.userFederation.ldap.forProvider | toYaml) $ | nindent 4 }}
+
+{{- range $mapper := .Values.userFederation.ldap.mappers.userAttributeMappers }}
+---
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: UserAttributeMapper
+metadata:
+  name: "{{ $mapper.name | tpl . $ }}"
+spec:
+  providerConfigRef:
+    name: "{{ $providerName }}"
+  forProvider:
+    realmIdRef:
+      name: "{{ $realmName }}"
+    ldapUserFederationIdRef:
+      name: "{{ $userFederationName }}"
+    {{- $mapper.forProvider | toYaml | tpl . $ | nindent 4 }}
+{{- end }}
+
+{{- range $mapper := .Values.userFederation.ldap.mappers.hardcodedAttributeMappers }}
+---
+apiVersion: ldap.keycloak.crossplane.io/v1alpha1
+kind: HardcodedAttributeMapper
+metadata:
+  name: "{{ $mapper.name | tpl . $ }}"
+spec:
+  providerConfigRef:
+    name: "{{ $providerName }}"
+  forProvider:
+    realmIdRef:
+      name: "{{ $realmName }}"
+    ldapUserFederationIdRef:
+      name: "{{ $userFederationName }}"
+    {{- $mapper.forProvider | toYaml | tpl . $ | nindent 4 }}
+{{- end }}
+
+{{- end }}
