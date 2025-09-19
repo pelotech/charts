@@ -86,97 +86,97 @@ clients:
             - basic
 
 roles:
-  - name: "{{ .Values.realm.name }}--administrator"
+  - name: "{{ tpl .Values.realm.name $ }}--administrator"
     forProvider:
       name: Administrator
       description: "Administrator role"
       compositeRolesRefs:
-        - name: "builtin-{{ .Values.realm.name }}-create-client"
-        - name: "builtin-{{ .Values.realm.name }}-impersonation"
-        - name: "builtin-{{ .Values.realm.name }}-manage-authorization"
-        - name: "builtin-{{ .Values.realm.name }}-manage-clients"
-        - name: "builtin-{{ .Values.realm.name }}-manage-events"
-        - name: "builtin-{{ .Values.realm.name }}-manage-identity-providers"
-        - name: "builtin-{{ .Values.realm.name }}-manage-users"
-        - name: "builtin-{{ .Values.realm.name }}-query-clients"
-        - name: "builtin-{{ .Values.realm.name }}-query-groups"
-        - name: "builtin-{{ .Values.realm.name }}-query-realms"
-        - name: "builtin-{{ .Values.realm.name }}-query-users"
-        - name: "builtin-{{ .Values.realm.name }}-realm-admin"
-        - name: "builtin-{{ .Values.realm.name }}-view-authorization"
-        - name: "builtin-{{ .Values.realm.name }}-view-clients"
-        - name: "builtin-{{ .Values.realm.name }}-view-events"
-        - name: "builtin-{{ .Values.realm.name }}-view-identity-providers"
-        - name: "builtin-{{ .Values.realm.name }}-view-realm"
-        - name: "builtin-{{ .Values.realm.name }}-view-users"
-        - name: "builtin-{{ .Values.realm.name }}-delete-account"
-        - name: "builtin-{{ .Values.realm.name }}-manage-account"
-        - name: "builtin-{{ .Values.realm.name }}-manage-account-links"
-        - name: "builtin-{{ .Values.realm.name }}-manage-consent"
-        - name: "builtin-{{ .Values.realm.name }}-view-applications"
-        - name: "builtin-{{ .Values.realm.name }}-view-consent"
-        - name: "builtin-{{ .Values.realm.name }}-view-groups"
-        - name: "builtin-{{ .Values.realm.name }}-view-profile"
-  - name: "{{ .Values.realm.name }}--approved"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-create-client"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-impersonation"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-manage-authorization"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-manage-clients"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-manage-events"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-manage-identity-providers"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-manage-users"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-query-clients"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-query-groups"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-query-realms"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-query-users"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-realm-admin"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-authorization"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-clients"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-events"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-identity-providers"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-realm"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-users"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-delete-account"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-manage-account"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-manage-account-links"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-manage-consent"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-applications"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-consent"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-groups"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-profile"
+  - name: "{{ tpl .Values.realm.name $ }}--approved"
     forProvider:
       name: Approved
       description: "Identifies approved users"
-  - name: "{{ .Values.realm.name }}--opendash-admins"
+  - name: "{{ tpl .Values.realm.name $ }}--opendash-admins"
     forProvider:
       name: opendash_admins
       description: "newer Administrator role"
       compositeRolesRefs:
-        - name: "builtin-{{ .Values.realm.name }}-create-client"
-        - name: "builtin-{{ .Values.realm.name }}-impersonation"
-        - name: "builtin-{{ .Values.realm.name }}-manage-authorization"
-        - name: "builtin-{{ .Values.realm.name }}-manage-clients"
-        - name: "builtin-{{ .Values.realm.name }}-manage-events"
-        - name: "builtin-{{ .Values.realm.name }}-manage-identity-providers"
-        - name: "builtin-{{ .Values.realm.name }}-manage-users"
-        - name: "builtin-{{ .Values.realm.name }}-query-clients"
-        - name: "builtin-{{ .Values.realm.name }}-query-groups"
-        - name: "builtin-{{ .Values.realm.name }}-query-realms"
-        - name: "builtin-{{ .Values.realm.name }}-query-users"
-        - name: "builtin-{{ .Values.realm.name }}-realm-admin"
-        - name: "builtin-{{ .Values.realm.name }}-view-authorization"
-        - name: "builtin-{{ .Values.realm.name }}-view-clients"
-        - name: "builtin-{{ .Values.realm.name }}-view-events"
-        - name: "builtin-{{ .Values.realm.name }}-view-identity-providers"
-        - name: "builtin-{{ .Values.realm.name }}-view-realm"
-        - name: "builtin-{{ .Values.realm.name }}-view-users"
-        - name: "builtin-{{ .Values.realm.name }}-delete-account"
-        - name: "builtin-{{ .Values.realm.name }}-manage-account"
-        - name: "builtin-{{ .Values.realm.name }}-manage-account-links"
-        - name: "builtin-{{ .Values.realm.name }}-manage-consent"
-        - name: "builtin-{{ .Values.realm.name }}-view-applications"
-        - name: "builtin-{{ .Values.realm.name }}-view-consent"
-        - name: "builtin-{{ .Values.realm.name }}-view-groups"
-        - name: "builtin-{{ .Values.realm.name }}-view-profile"
-  - name: "{{ .Values.realm.name }}--opendash-assessor"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-create-client"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-impersonation"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-manage-authorization"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-manage-clients"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-manage-events"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-manage-identity-providers"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-manage-users"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-query-clients"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-query-groups"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-query-realms"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-query-users"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-realm-admin"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-authorization"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-clients"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-events"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-identity-providers"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-realm"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-users"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-delete-account"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-manage-account"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-manage-account-links"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-manage-consent"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-applications"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-consent"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-groups"
+        - name: "builtin-{{ tpl .Values.realm.name $ }}-view-profile"
+  - name: "{{ tpl .Values.realm.name $ }}--opendash-assessor"
     forProvider:
       name: opendash_assessor
       description: "Assessor Role"
-  - name: "{{ .Values.realm.name }}--opendash-lms-admins"
+  - name: "{{ tpl .Values.realm.name $ }}--opendash-lms-admins"
     forProvider:
       name: opendash_lms_admins
       description: "LMS Role"
-  - name: "{{ .Values.realm.name }}--opendash-quiz-author"
+  - name: "{{ tpl .Values.realm.name $ }}--opendash-quiz-author"
     forProvider:
       name: opendash_quiz_author
       description: "Quiz Author Role"
-  - name: "{{ .Values.realm.name }}--opendash-resource-manager"
+  - name: "{{ tpl .Values.realm.name $ }}--opendash-resource-manager"
     forProvider:
       name: opendash_resource_manager
       description: "Opendash Resource Manager"
-  - name: "{{ .Values.realm.name }}--opendash-training-certifier"
+  - name: "{{ tpl .Values.realm.name $ }}--opendash-training-certifier"
     forProvider:
       name: opendash_training_certifier
       description: "Training Certifier role"
-  - name: "{{ .Values.realm.name }}--opendash-workforce-manager"
+  - name: "{{ tpl .Values.realm.name $ }}--opendash-workforce-manager"
     forProvider:
       name: opendash_workforce_manager
       description: "Workforce manager role"
-  - name: "{{ .Values.realm.name }}--opendash-integration"
+  - name: "{{ tpl .Values.realm.name $ }}--opendash-integration"
     forProvider:
       name: opendash_integration
       description: "Role for use by external partners"
@@ -217,34 +217,34 @@ userFederation:
 
     mappers:
       userAttributeMappers:
-        - name: "{{ .Values.realm.name }}--freeipa-givenname"
+        - name: "{{ tpl .Values.realm.name $ }}--freeipa-givenname"
           forProvider:
             name: "firstName <-> givenName"
             ldapAttribute: "givenName"
             userModelAttribute: "firstName"
             isBinaryAttribute: false
             isMandatoryInLdap: true
-        - name: "{{ .Values.realm.name }}--freeipa-orgpath"
+        - name: "{{ tpl .Values.realm.name $ }}--freeipa-orgpath"
           forProvider:
             name: "orgpath"
             ldapAttribute: "orgpath"
             userModelAttribute: "orgPath"
             isBinaryAttribute: false
-        - name: "{{ .Values.realm.name }}--freeipa-krbprincipal"
+        - name: "{{ tpl .Values.realm.name $ }}--freeipa-krbprincipal"
           forProvider:
             name: "krbPrincipalName"
             ldapAttribute: "krbPrincipalName"
             userModelAttribute: "email"
             isBinaryAttribute: false
             isMandatoryInLdap: true
-        - name: "{{ .Values.realm.name }}--freeipa-creationdate"
+        - name: "{{ tpl .Values.realm.name $ }}--freeipa-creationdate"
           forProvider:
             name: "create timestamp"
             ldapAttribute: "createTimestamp"
             userModelAttribute: "createTimestamp"
             isBinaryAttribute: false
             isMandatoryInLdap: false
-        - name: "{{ .Values.realm.name }}--freeipa-email"
+        - name: "{{ tpl .Values.realm.name $ }}--freeipa-email"
           forProvider:
             name: "email"
             ldapAttribute: "mail"
@@ -252,35 +252,35 @@ userFederation:
             alwaysReadValueFromLdap: true
             isBinaryAttribute: false
             isMandatoryInLdap: true
-        - name: "{{ .Values.realm.name }}--freeipa-firstname"
+        - name: "{{ tpl .Values.realm.name $ }}--freeipa-firstname"
           forProvider:
             name: "first name"
             ldapAttribute: "cn"
             userModelAttribute: "firstName"
             isBinaryAttribute: false
             isMandatoryInLdap: true
-        - name: "{{ .Values.realm.name }}--freeipa-lastname"
+        - name: "{{ tpl .Values.realm.name $ }}--freeipa-lastname"
           forProvider:
             name: "last name"
             ldapAttribute: "sn"
             userModelAttribute: "lastName"
             isBinaryAttribute: false
             isMandatoryInLdap: true
-        - name: "{{ .Values.realm.name }}--freeipa-modifydate"
+        - name: "{{ tpl .Values.realm.name $ }}--freeipa-modifydate"
           forProvider:
             name: "modify date"
             ldapAttribute: "modifyTimestamp"
             userModelAttribute: "modifyTimestamp"
             isBinaryAttribute: false
             isMandatoryInLdap: false
-        - name: "{{ .Values.realm.name }}--freeipa-username"
+        - name: "{{ tpl .Values.realm.name $ }}--freeipa-username"
           forProvider:
             name: "username"
             ldapAttribute: "uid"
             userModelAttribute: "username"
             isBinaryAttribute: false
             isMandatoryInLdap: true
-        - name: "{{ .Values.realm.name }}--freeipa-ltabyuser"
+        - name: "{{ tpl .Values.realm.name $ }}--freeipa-ltabyuser"
           forProvider:
             name: "ltabyuser"
             ldapAttribute: "ltabyuser"
@@ -288,7 +288,7 @@ userFederation:
             alwaysReadValueFromLdap: true
             isBinaryAttribute: false
             isMandatoryInLdap: false
-        - name: "{{ .Values.realm.name }}--freeipa-sponsoredbyuser"
+        - name: "{{ tpl .Values.realm.name $ }}--freeipa-sponsoredbyuser"
           forProvider:
             name: "sponsoredbyuser"
             ldapAttribute: "sponsoredbyuser"
@@ -298,27 +298,31 @@ userFederation:
             isMandatoryInLdap: false
 
       hardcodedAttributeMappers:
-        - name: "{{ .Values.realm.name }}--freeipa-gidnumber"
+        - name: "{{ tpl .Values.realm.name $ }}--freeipa-gidnumber"
           forProvider:
             name: "hardcode-gidNumber"
             attributeName: "gidNumber"
             attributeValue: "99999999"
-        - name: "{{ .Values.realm.name }}--freeipa-ipantsecurity"
+        - name: "{{ tpl .Values.realm.name $ }}--freeipa-ipantsecurity"
           forProvider:
             name: "hardcode-ipantsecurityidentifier"
             attributeName: "ipantsecurityidentifier"
             attributeValue: "JUNK_VALUE"
-        - name: "{{ .Values.realm.name }}--freeipa-homedirectory"
+        - name: "{{ tpl .Values.realm.name $ }}--freeipa-homedirectory"
           forProvider:
             name: "hardcode-homeDirectory"
             attributeName: "homeDirectory"
             attributeValue: "/home/temp"
-        - name: "{{ .Values.realm.name }}--freeipa-uidnumber"
+        - name: "{{ tpl .Values.realm.name $ }}--freeipa-uidnumber"
           forProvider:
             name: "hardcode-uidNumber"
             attributeName: "uidNumber"
             attributeValue: "99999999"
 
 users:
-  - username: emmanuel.gomez
-    email: emmanuel@pelo.tech
+  - forProvider:
+      username: emmanuel.gomez
+      email: emmanuel@pelo.tech
+    roles:
+      names:
+        - '{{ printf "%s--opendash-admins" (tpl .Values.realm.name $) }}'
