@@ -18,7 +18,7 @@ spec:
       name: '{{ $realmResourceName }}'
     {{- tpl ($client.forProvider | toYaml) $ | nindent 4 }}
 
-{{- if (and $client.protocolMappers $client.scope.name) }}
+{{- if (and $client.scope.mappers $client.scope.name) }}
 {{- $clientScopeResourceName := tpl $client.scope.name $ }}
 ---
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
@@ -32,6 +32,7 @@ spec:
     realmIdRef:
       name: "{{ $realmResourceName }}"
     {{- tpl ($client.scope.forProvider | toYaml) $ | nindent 4 }}
+
 {{- range $mapper := $client.scope.mappers }}
 ---
 apiVersion: client.keycloak.crossplane.io/v1alpha1
@@ -50,7 +51,9 @@ spec:
     protocolMapper: oidc-usermodel-attribute-mapper
     {{- tpl ($mapper.forProvider | toYaml) $ | nindent 4 }}
 {{- end }}
+
 {{- end }}
+
 {{- if $client.defaultScope }}
 ---
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
@@ -67,53 +70,5 @@ spec:
       name: "{{ $clientName }}"
     {{- tpl ($client.defaultScope.forProvider | toYaml) $ | nindent 4 }}
 {{- end }}
----
-apiVersion: client.keycloak.crossplane.io/v1alpha1
-kind: ProtocolMapper
-metadata:
-  name: '{{ $.Release.Name }}--'
-spec:
-  providerConfigRef:
-    name: '{{ $.Release.Name }}--keycloak'
-  forProvider:
-    realmIdRef:
-      name: '{{ $.Release.Name }}--realm'
-    clientScopeIdRef:
-      name: '{{ $.Release.Name }}--od360'
-    name: sponsoredbyuser
-    protocol: openid-connect
-    protocolMapper: oidc-usermodel-attribute-mapper
-    config:
-      access.token.claim: 'true'
-      aggregate.attrs: 'false'
-      claim.name: 'od360.sponsoredByUser'
-      id.token.claim: 'true'
-      jsonType.label: 'String'
-      multivalued: 'false'
-      user.attribute: 'sponsoredByUser'
-      userinfo.token.claim: 'true'
----
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: ClientDefaultScopes
-metadata:
-  name: '{{ $.Release.Name }}--opendash360-public'
-spec:
-  providerConfigRef:
-    name: '{{ $.Release.Name }}--keycloak'
-  forProvider:
-    realmIdRef:
-      name: '{{ $.Release.Name }}--realm'
-    clientIdRef:
-      name: '{{ $.Release.Name }}--opendash360-public'
-    defaultScopes:
-      - od360
-      - roles
-      - web-origins
-      - profile
-      - acr
-      - email
-      - basic
-
-
 
 {{- end }}

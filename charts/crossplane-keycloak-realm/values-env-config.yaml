@@ -5,13 +5,33 @@ provider:
 realm:
   name: od360-sandbox
   forProvider:
+    enabled: true
     defaultSignatureAlgorithm: "RS256"
     loginWithEmailAllowed: true
     resetPasswordAllowed: true
+    registrationAllowed: false
+    verifyEmail: false
+    accessCodeLifespanUserAction: "15m0s"
+    smtpServer:
+    - auth:
+      - passwordSecretRef:
+          key: KEYCLOAK_OD360_SMTP_PASSWORD
+          name: keycloak-smtp-config
+          namespace: "{{ tpl .Values.realm.name $ }}"
+        username: "AKIAQB4RZGLOWCFLPQ5K"
+      envelopeFrom: ''
+      from: "no-reply@opendash360.us"
+      fromDisplayName: ""
+      port: "465"
+      host: "email-smtp.us-gov-west-1.amazonaws.com"
+      replyTo: ""
+      replyToDisplayName: ""
+      ssl: true
+      starttls: true
+
 
 builtinObjects:
   spec:
-    # builtinClients: []
     builtinClients:
       - realm-management
       - account
@@ -184,6 +204,7 @@ roles:
 userFederation:
   ldap:
     enabled: true
+    suffix: "$$ldap.suffix"
     forProvider:
       connectionUrl: "ldap://{{ tpl .Values.realm.name $ }}-freeipa"
       bind:
@@ -192,7 +213,7 @@ userFederation:
           name: keycloak-ldap-bind-creds
           key: KEYCLOAK_LDAP_BIND_PASSWORD
         user: sso.svc
-        dn: 'uid={{ .Values.userFederation.ldap.forProvider.bind.user }},cn=users,cn=accounts,{{ printf "ldap.suffix" }}'
+        dn: "uid={{ .Values.userFederation.ldap.forProvider.bind.user }},cn=users,cn=accounts,{{ tpl .Values.userFederation.ldap.suffix $ }}"
       rdnLdapAttribute: "uid"
       userObjectClasses:
         - top
