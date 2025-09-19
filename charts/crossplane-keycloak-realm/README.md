@@ -13,7 +13,7 @@ Define a Keycloak Realm via Crossplane
 | builtinObjects.spec.builtinRealmRoles | list | `[]` |  |
 | clients.oidc | list | `[]` |  |
 | providerConfig.name | string | `"test-provider"` |  |
-| providerConfig.secretName | string | `"{{ }}"` |  |
+| providerConfig.secretName | string | `"test-provider-credentials"` |  |
 | realm.forProvider.defaultSignatureAlgorithm | string | `"RS256"` |  |
 | realm.forProvider.loginWithEmailAllowed | bool | `true` |  |
 | realm.forProvider.resetPasswordAllowed | bool | `true` |  |

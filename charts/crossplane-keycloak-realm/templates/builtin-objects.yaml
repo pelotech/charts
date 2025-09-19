@@ -7,6 +7,6 @@ metadata:
   name: "{{ $realmName }}-keycloak-builtin-objects"
 spec:
   providerConfigName: "{{ $providerConfigName }}"
-  providerSecretName: "{{ $realmName }}--keycloak-provider-credentials"
+  providerSecretName: "{{ tpl .Values.providerConfig.secretName $ }}"
   realm: "{{ $realmName }}"
   {{- tpl (.Values.builtinObjects.spec | toYaml) $ | nindent 2 }}

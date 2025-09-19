@@ -1,6 +1,6 @@
 providerConfig:
   name: test-provider
-  secretName: "{{ }}"
+  secretName: test-provider-credentials
 
 realm:
   name: test-realm
