@@ -15,6 +15,9 @@ builtinObjects:
     builtinRealmRoles: []
     builtinAuthenticationFlows: []
 
+clients:
+  oidc: []
+
 roles: []
 
 userFederation:

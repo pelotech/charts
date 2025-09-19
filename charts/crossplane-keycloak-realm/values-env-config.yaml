@@ -18,6 +18,73 @@ builtinObjects:
     builtinRealmRoles: []
     builtinAuthenticationFlows: []
 
+clients:
+  oidc:
+    - name: "{{ tpl .Values.realm.name $ }}--opendash360-public"
+      forProvider:
+        accessType: "PUBLIC"
+        clientId: opendash360-public
+        description: "OpenDash360 client opendash360-public"
+        directAccessGrantsEnabled: true
+        enabled: true
+        validRedirectUris: ["*"]
+        standardFlowEnabled: true
+        webOrigins: ["*"]
+      scope:
+        name: "{{ tpl .Values.realm.name $ }}--od360"
+        forProvider:
+          name: od360
+          includeInTokenScope: true
+        mappers:
+          - name: "{{ tpl .Values.realm.name $ }}--orgpath"
+            forProvider:
+              name: orgpath
+              config:
+                access.token.claim: "true"
+                aggregate.attrs: "false"
+                claim.name: "od360.orgpath"
+                id.token.claim: "true"
+                jsonType.label: "String"
+                multivalued: "false"
+                user.attribute: "orgPath"
+                userinfo.token.claim: "true"
+          - name: "{{ tpl .Values.realm.name $ }}--ltabyuser"
+            forProvider:
+              name: ltabyuser
+              config:
+                access.token.claim: "true"
+                aggregate.attrs: "false"
+                claim.name: "od360.ltaByUser"
+                id.token.claim: "true"
+                jsonType.label: "String"
+                multivalued: "false"
+                user.attribute: "ltaByUser"
+                userinfo.token.claim: "true"
+          - name: "{{ tpl .Values.realm.name $ }}--ltabyuser"
+            forProvider:
+              name: ltabyuser
+              config:
+                access.token.claim: "true"
+                aggregate.attrs: "false"
+                claim.name: "od360.ltaByUser"
+                id.token.claim: "true"
+                jsonType.label: "String"
+                multivalued: "false"
+                user.attribute: "ltaByUser"
+                userinfo.token.claim: "true"
+
+      defaultScope:
+        name: "{{ tpl .Values.realm.name $ }}--opendash360-public"
+        forProvider:
+          defaultScopes:
+            - od360
+            - roles
+            - web-origins
+            - profile
+            - acr
+            - email
+            - basic
+
 roles:
   - name: "{{ .Values.realm.name }}--administrator"
     forProvider:
@@ -119,11 +186,13 @@ userFederation:
     enabled: true
     forProvider:
       connectionUrl: "ldap://{{ tpl .Values.realm.name $ }}-freeipa"
-      bindCredentialSecretRef:
-        namespace: "{{ tpl .Values.realm.name $ }}"
-        name: keycloak-ldap-bind-creds
-        key: KEYCLOAK_LDAP_BIND_PASSWORD
-      bindDn: 'uid={{ $bindUser }},cn=users,cn=accounts,{{ printf "ldap.suffix" }}'
+      bind:
+        credentialSecretRef:
+          namespace: "{{ tpl .Values.realm.name $ }}"
+          name: keycloak-ldap-bind-creds
+          key: KEYCLOAK_LDAP_BIND_PASSWORD
+        user: sso.svc
+        dn: 'uid={{ .Values.userFederation.ldap.forProvider.bind.user }},cn=users,cn=accounts,{{ printf "ldap.suffix" }}'
       rdnLdapAttribute: "uid"
       userObjectClasses:
         - top

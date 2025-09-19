@@ -11,6 +11,7 @@ Define a Keycloak Realm via Crossplane
 | builtinObjects.spec.builtinAuthenticationFlows | list | `[]` |  |
 | builtinObjects.spec.builtinClients | list | `[]` |  |
 | builtinObjects.spec.builtinRealmRoles | list | `[]` |  |
+| clients.oidc | list | `[]` |  |
 | providerConfig.name | string | `"test-provider"` |  |
 | providerConfig.secretName | string | `"{{ }}"` |  |
 | realm.forProvider.defaultSignatureAlgorithm | string | `"RS256"` |  |
