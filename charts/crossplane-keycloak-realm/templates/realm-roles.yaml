@@ -8,7 +8,7 @@
 apiVersion: role.keycloak.crossplane.io/v1alpha1
 kind: Role
 metadata:
-  name: "{{ tpl $role.name $ }}"
+  name: "{{ $realmName }}--{{ $role.name }}"
 spec:
   providerConfigRef:
     name: "{{ $providerConfigName }}"

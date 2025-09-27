@@ -3,13 +3,14 @@
 {{- $realmResourceName := $realmName | printf "%s--realm" }}
 
 {{- range $client := .Values.clients.oidc }}
-{{- $clientName := tpl $client.name $ | required "$client.*.name is required" }}
-{{- $clientDescription := $client.forProvider.description | required (printf "$client.%s.forProvider.description is required" $client.name) }}
+{{- $clientName := tpl $client.name $ | required ".Values.clients.oidc[*].name is required" }}
+{{- $clientResourceName := printf "%s--%s" $realmName $clientName }}
+{{- $clientDescription := $client.forProvider.description | required (printf ".Values.clients.oidc[*].%s.forProvider.description is required" $client.name) }}
 ---
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: Client
 metadata:
-  name: "{{ $clientName }}"
+  name: "{{ $clientResourceName }}"
 spec:
   providerConfigRef:
     name: '{{ $realmName }}--keycloak'
@@ -19,7 +20,7 @@ spec:
     {{- tpl ($client.forProvider | toYaml) $ | nindent 4 }}
 
 {{- if (and $client.scope.mappers $client.scope.name) }}
-{{- $clientScopeResourceName := tpl $client.scope.name $ }}
+{{- $clientScopeResourceName := printf "%s--%s" $realmName $client.scope.name }}
 ---
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientScope
@@ -38,7 +39,7 @@ spec:
 apiVersion: client.keycloak.crossplane.io/v1alpha1
 kind: ProtocolMapper
 metadata:
-  name: "{{ tpl $mapper.name $ }}"
+  name: "{{ $realmName }}--{{ $mapper.name }}"
 spec:
   providerConfigRef:
     name: "{{ $providerConfigName }}"
@@ -59,7 +60,7 @@ spec:
 apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
 kind: ClientDefaultScopes
 metadata:
-  name: "{{ tpl $client.defaultScope.name $ }}"
+  name: "{{ $clientResourceName }}"
 spec:
   providerConfigRef:
     name: "{{ $providerConfigName }}"
@@ -67,7 +68,7 @@ spec:
     realmIdRef:
       name: "{{ $realmResourceName }}"
     clientIdRef:
-      name: "{{ $clientName }}"
+      name: "{{ $clientResourceName }}"
     {{- tpl ($client.defaultScope.forProvider | toYaml) $ | nindent 4 }}
 {{- end }}
 

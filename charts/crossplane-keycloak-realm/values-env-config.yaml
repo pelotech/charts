@@ -13,22 +13,21 @@ realm:
     verifyEmail: false
     accessCodeLifespanUserAction: "15m0s"
     smtpServer:
-    - auth:
-      - passwordSecretRef:
-          key: KEYCLOAK_OD360_SMTP_PASSWORD
-          name: keycloak-smtp-config
-          namespace: "{{ tpl .Values.realm.name $ }}"
-        username: "AKIAQB4RZGLOWCFLPQ5K"
-      envelopeFrom: ''
-      from: "no-reply@opendash360.us"
-      fromDisplayName: ""
-      port: "465"
-      host: "email-smtp.us-gov-west-1.amazonaws.com"
-      replyTo: ""
-      replyToDisplayName: ""
-      ssl: true
-      starttls: true
-
+      - auth:
+          - passwordSecretRef:
+              key: KEYCLOAK_OD360_SMTP_PASSWORD
+              name: keycloak-smtp-config
+              namespace: "{{ tpl .Values.realm.name $ }}"
+            username: "AKIAQB4RZGLOWCFLPQ5K"
+        envelopeFrom: ""
+        from: "no-reply@opendash360.us"
+        fromDisplayName: ""
+        port: "465"
+        host: "email-smtp.us-gov-west-1.amazonaws.com"
+        replyTo: ""
+        replyToDisplayName: ""
+        ssl: true
+        starttls: true
 
 builtinObjects:
   spec:
@@ -40,7 +39,7 @@ builtinObjects:
 
 clients:
   oidc:
-    - name: "{{ tpl .Values.realm.name $ }}--opendash360-public"
+    - name: "opendash360-public"
       forProvider:
         accessType: "PUBLIC"
         clientId: opendash360-public
@@ -51,12 +50,12 @@ clients:
         standardFlowEnabled: true
         webOrigins: ["*"]
       scope:
-        name: "{{ tpl .Values.realm.name $ }}--od360"
+        name: "od360"
         forProvider:
           name: od360
           includeInTokenScope: true
         mappers:
-          - name: "{{ tpl .Values.realm.name $ }}--orgpath"
+          - name: "orgpath"
             forProvider:
               name: orgpath
               config:
@@ -68,7 +67,7 @@ clients:
                 multivalued: "false"
                 user.attribute: "orgPath"
                 userinfo.token.claim: "true"
-          - name: "{{ tpl .Values.realm.name $ }}--ltabyuser"
+          - name: "ltabyuser"
             forProvider:
               name: ltabyuser
               config:
@@ -80,7 +79,7 @@ clients:
                 multivalued: "false"
                 user.attribute: "ltaByUser"
                 userinfo.token.claim: "true"
-          - name: "{{ tpl .Values.realm.name $ }}--ltabyuser"
+          - name: "ltabyuser"
             forProvider:
               name: ltabyuser
               config:
@@ -94,7 +93,7 @@ clients:
                 userinfo.token.claim: "true"
 
       defaultScope:
-        name: "{{ tpl .Values.realm.name $ }}--opendash360-public"
+        name: "opendash360-public"
         forProvider:
           defaultScopes:
             - od360
@@ -106,7 +105,7 @@ clients:
             - basic
 
 roles:
-  - name: "{{ tpl .Values.realm.name $ }}--administrator"
+  - name: "administrator"
     forProvider:
       name: Administrator
       description: "Administrator role"
@@ -137,11 +136,11 @@ roles:
         - name: "builtin-{{ tpl .Values.realm.name $ }}-view-consent"
         - name: "builtin-{{ tpl .Values.realm.name $ }}-view-groups"
         - name: "builtin-{{ tpl .Values.realm.name $ }}-view-profile"
-  - name: "{{ tpl .Values.realm.name $ }}--approved"
+  - name: "approved"
     forProvider:
       name: Approved
       description: "Identifies approved users"
-  - name: "{{ tpl .Values.realm.name $ }}--opendash-admins"
+  - name: "opendash-admins"
     forProvider:
       name: opendash_admins
       description: "newer Administrator role"
@@ -172,31 +171,31 @@ roles:
         - name: "builtin-{{ tpl .Values.realm.name $ }}-view-consent"
         - name: "builtin-{{ tpl .Values.realm.name $ }}-view-groups"
         - name: "builtin-{{ tpl .Values.realm.name $ }}-view-profile"
-  - name: "{{ tpl .Values.realm.name $ }}--opendash-assessor"
+  - name: "opendash-assessor"
     forProvider:
       name: opendash_assessor
       description: "Assessor Role"
-  - name: "{{ tpl .Values.realm.name $ }}--opendash-lms-admins"
+  - name: "opendash-lms-admins"
     forProvider:
       name: opendash_lms_admins
       description: "LMS Role"
-  - name: "{{ tpl .Values.realm.name $ }}--opendash-quiz-author"
+  - name: "opendash-quiz-author"
     forProvider:
       name: opendash_quiz_author
       description: "Quiz Author Role"
-  - name: "{{ tpl .Values.realm.name $ }}--opendash-resource-manager"
+  - name: "opendash-resource-manager"
     forProvider:
       name: opendash_resource_manager
       description: "Opendash Resource Manager"
-  - name: "{{ tpl .Values.realm.name $ }}--opendash-training-certifier"
+  - name: "opendash-training-certifier"
     forProvider:
       name: opendash_training_certifier
       description: "Training Certifier role"
-  - name: "{{ tpl .Values.realm.name $ }}--opendash-workforce-manager"
+  - name: "opendash-workforce-manager"
     forProvider:
       name: opendash_workforce_manager
       description: "Workforce manager role"
-  - name: "{{ tpl .Values.realm.name $ }}--opendash-integration"
+  - name: "opendash-integration"
     forProvider:
       name: opendash_integration
       description: "Role for use by external partners"
@@ -204,16 +203,17 @@ roles:
 userFederation:
   ldap:
     enabled: true
+    name: "freeipa"
     suffix: "$$ldap.suffix"
+    bind:
+      user: sso.svc
+      dn: "uid={{ .Values.userFederation.ldap.bind.user }},cn=users,cn=accounts,{{ tpl .Values.userFederation.ldap.suffix $ }}"
     forProvider:
       connectionUrl: "ldap://{{ tpl .Values.realm.name $ }}-freeipa"
-      bind:
-        credentialSecretRef:
-          namespace: "{{ tpl .Values.realm.name $ }}"
-          name: keycloak-ldap-bind-creds
-          key: KEYCLOAK_LDAP_BIND_PASSWORD
-        user: sso.svc
-        dn: "uid={{ .Values.userFederation.ldap.forProvider.bind.user }},cn=users,cn=accounts,{{ tpl .Values.userFederation.ldap.suffix $ }}"
+      bindCredentialSecretRef:
+        namespace: "{{ tpl .Values.realm.name $ }}"
+        name: keycloak-ldap-bind-creds
+        key: KEYCLOAK_LDAP_BIND_PASSWORD
       rdnLdapAttribute: "uid"
       userObjectClasses:
         - top
@@ -232,40 +232,40 @@ userFederation:
         - mepOriginEntry
         - ipantuserattrs
       usernameLdapAttribute: "uid"
-      usersDn: 'cn=users,cn=accounts,{{ printf "$$ldap.suffix" }}'
+      usersDn: "cn=users,cn=accounts,{{ tpl .Values.userFederation.ldap.suffix $ }}"
       uuidLdapAttribute: "uid"
       vendor: "RHDS"
 
     mappers:
       userAttributeMappers:
-        - name: "{{ tpl .Values.realm.name $ }}--freeipa-givenname"
+        - name: givenname
           forProvider:
             name: "firstName <-> givenName"
             ldapAttribute: "givenName"
             userModelAttribute: "firstName"
             isBinaryAttribute: false
             isMandatoryInLdap: true
-        - name: "{{ tpl .Values.realm.name $ }}--freeipa-orgpath"
+        - name: orgpath
           forProvider:
             name: "orgpath"
             ldapAttribute: "orgpath"
             userModelAttribute: "orgPath"
             isBinaryAttribute: false
-        - name: "{{ tpl .Values.realm.name $ }}--freeipa-krbprincipal"
+        - name: krbprincipal
           forProvider:
             name: "krbPrincipalName"
             ldapAttribute: "krbPrincipalName"
             userModelAttribute: "email"
             isBinaryAttribute: false
             isMandatoryInLdap: true
-        - name: "{{ tpl .Values.realm.name $ }}--freeipa-creationdate"
+        - name: creationdate
           forProvider:
             name: "create timestamp"
             ldapAttribute: "createTimestamp"
             userModelAttribute: "createTimestamp"
             isBinaryAttribute: false
             isMandatoryInLdap: false
-        - name: "{{ tpl .Values.realm.name $ }}--freeipa-email"
+        - name: email
           forProvider:
             name: "email"
             ldapAttribute: "mail"
@@ -273,35 +273,35 @@ userFederation:
             alwaysReadValueFromLdap: true
             isBinaryAttribute: false
             isMandatoryInLdap: true
-        - name: "{{ tpl .Values.realm.name $ }}--freeipa-firstname"
+        - name: firstname
           forProvider:
             name: "first name"
             ldapAttribute: "cn"
             userModelAttribute: "firstName"
             isBinaryAttribute: false
             isMandatoryInLdap: true
-        - name: "{{ tpl .Values.realm.name $ }}--freeipa-lastname"
+        - name: lastname
           forProvider:
             name: "last name"
             ldapAttribute: "sn"
             userModelAttribute: "lastName"
             isBinaryAttribute: false
             isMandatoryInLdap: true
-        - name: "{{ tpl .Values.realm.name $ }}--freeipa-modifydate"
+        - name: modifydate
           forProvider:
             name: "modify date"
             ldapAttribute: "modifyTimestamp"
             userModelAttribute: "modifyTimestamp"
             isBinaryAttribute: false
             isMandatoryInLdap: false
-        - name: "{{ tpl .Values.realm.name $ }}--freeipa-username"
+        - name: username
           forProvider:
             name: "username"
             ldapAttribute: "uid"
             userModelAttribute: "username"
             isBinaryAttribute: false
             isMandatoryInLdap: true
-        - name: "{{ tpl .Values.realm.name $ }}--freeipa-ltabyuser"
+        - name: ltabyuser
           forProvider:
             name: "ltabyuser"
             ldapAttribute: "ltabyuser"
@@ -309,7 +309,7 @@ userFederation:
             alwaysReadValueFromLdap: true
             isBinaryAttribute: false
             isMandatoryInLdap: false
-        - name: "{{ tpl .Values.realm.name $ }}--freeipa-sponsoredbyuser"
+        - name: sponsoredbyuser
           forProvider:
             name: "sponsoredbyuser"
             ldapAttribute: "sponsoredbyuser"
@@ -319,22 +319,22 @@ userFederation:
             isMandatoryInLdap: false
 
       hardcodedAttributeMappers:
-        - name: "{{ tpl .Values.realm.name $ }}--freeipa-gidnumber"
+        - name: gidnumber
           forProvider:
             name: "hardcode-gidNumber"
             attributeName: "gidNumber"
             attributeValue: "99999999"
-        - name: "{{ tpl .Values.realm.name $ }}--freeipa-ipantsecurity"
+        - name: ipantsecurity
           forProvider:
             name: "hardcode-ipantsecurityidentifier"
             attributeName: "ipantsecurityidentifier"
             attributeValue: "JUNK_VALUE"
-        - name: "{{ tpl .Values.realm.name $ }}--freeipa-homedirectory"
+        - name: homedirectory
           forProvider:
             name: "hardcode-homeDirectory"
             attributeName: "homeDirectory"
             attributeValue: "/home/temp"
-        - name: "{{ tpl .Values.realm.name $ }}--freeipa-uidnumber"
+        - name: uidnumber
           forProvider:
             name: "hardcode-uidNumber"
             attributeName: "uidNumber"

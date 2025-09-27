@@ -21,20 +21,19 @@ spec:
     realmIdRef:
       name: "{{ $realmResourceName }}"
     {{- tpl ($user.forProvider | toYaml) $ | nindent 4 }}
-{{- if (and $user.roles $user.roles.names) }}
+{{- if (and $user.roles $user.roles.forProvider) }}
 ---
 apiVersion: user.keycloak.crossplane.io/v1alpha1
 kind: Roles
+metadata:
+  name: "{{ $userResourceName }}--roles"
 spec:
   forProvider:
     realmIdRef:
       name: "{{ $realmResourceName }}"
     userIdRef:
       name: "{{ $userResourceName }}"
-    roleIdsRefs:
-      {{- range $roleName := $user.roles.names }}
-      - name: "{{ tpl $roleName $ }}"
-      {{- end }}
+    {{- tpl ($user.roles.forProvider | toYaml) $ | nindent 4 }}
 
 {{- end }}
 {{- end }}

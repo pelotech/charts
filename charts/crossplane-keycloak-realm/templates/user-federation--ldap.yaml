@@ -1,52 +1,51 @@
 {{- if .Values.userFederation.ldap.enabled }}
 {{- $providerConfigName := tpl .Values.providerConfig.name $ | required ".Values.providerConfig.name is required" }}
-{{- $realmName := tpl .Values.realm.name $ | printf "%s--realm" }}
-{{- $userFederationName := tpl .Values.realm.name $ | printf "%s--ldap-user-federation" }}
+{{- $realmName := tpl .Values.realm.name $ }}
+{{- $realmResourceName := $realmName | printf "%s--realm" }}
+{{- $userFederationName := .Values.userFederation.ldap.name }}
+{{- $userFederationResourceName := printf "%s--%s" (tpl .Values.realm.name $) $userFederationName }}
 ---
 apiVersion: ldap.keycloak.crossplane.io/v1alpha1
 kind: UserFederation
 metadata:
-  name: "{{ $userFederationName }}"
+  name: "{{ $userFederationResourceName }}"
 spec:
   providerConfigRef:
     name: "{{ $providerConfigName }}"
   forProvider:
     realmIdRef:
-      name: "{{ $realmName }}"
+      name: "{{ $realmResourceName }}"
     {{- tpl (.Values.userFederation.ldap.forProvider | toYaml) $ | nindent 4 }}
-
 {{- range $mapper := .Values.userFederation.ldap.mappers.userAttributeMappers }}
 ---
 apiVersion: ldap.keycloak.crossplane.io/v1alpha1
 kind: UserAttributeMapper
 metadata:
-  name: "{{ tpl $mapper.name $ }}"
+  name: "{{ $realmName}}--{{ $userFederationName }}-{{ $mapper.name }}"
 spec:
   providerConfigRef:
     name: "{{ $providerConfigName }}"
   forProvider:
     realmIdRef:
-      name: "{{ $realmName }}"
+      name: "{{ $realmResourceName }}"
     ldapUserFederationIdRef:
-      name: "{{ $userFederationName }}"
+      name: "{{ $userFederationResourceName }}"
     {{- tpl ($mapper.forProvider | toYaml) $ | nindent 4 }}
 {{- end }}
-
 {{- range $mapper := .Values.userFederation.ldap.mappers.hardcodedAttributeMappers }}
 ---
 apiVersion: ldap.keycloak.crossplane.io/v1alpha1
 kind: HardcodedAttributeMapper
 metadata:
-  name: "{{ tpl $mapper.name $ }}"
+  name: "{{ $realmName}}--{{ $userFederationName }}-{{ $mapper.name }}"
 spec:
   providerConfigRef:
     name: "{{ $providerConfigName }}"
   forProvider:
     realmIdRef:
-      name: "{{ $realmName }}"
+      name: "{{ $realmResourceName }}"
     ldapUserFederationIdRef:
-      name: "{{ $userFederationName }}"
+      name: "{{ $userFederationResourceName }}"
     {{- tpl ($mapper.forProvider | toYaml) $ | nindent 4 }}
 {{- end }}
-
 {{- end }}

@@ -10,5 +10,4 @@ spec:
     name: "{{ $providerConfigName }}"
   forProvider:
     realm: "{{ $realmName }}"
-    enabled: true
     {{- tpl (.Values.realm.forProvider | toYaml) $ | nindent 4 }}

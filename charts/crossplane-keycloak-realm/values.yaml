@@ -23,9 +23,9 @@ roles: []
 userFederation:
   ldap:
     enabled: false
+    name: "ldap-user-federation"
+    suffix: "$$ldap.suffix"
     forProvider:
-      realmIdRef:
-        name: "{{ tpl .Values.realm.name $ }}--realm"
       name: ldap
       deleteDefaultMappers: true
       editMode: "WRITABLE"
