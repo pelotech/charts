@@ -346,4 +346,4 @@ users:
       email: emmanuel@pelo.tech
     roles:
       names:
-        - '{{ printf "%s--opendash-admins" (tpl .Values.realm.name $) }}'
+        - opendash-admins

@@ -1,51 +1,58 @@
 {{- $providerConfigName := tpl .Values.providerConfig.name $ | required ".Values.providerConfig.name is required" }}
 {{- $realmName := tpl .Values.realm.name $ }}
 {{- $realmResourceName := $realmName | printf "%s--realm" }}
+{{- $realmNamespace := .Release.Namespace }}
 
 {{- range $client := .Values.clients.oidc }}
 {{- $clientName := tpl $client.name $ | required ".Values.clients.oidc[*].name is required" }}
 {{- $clientResourceName := printf "%s--%s" $realmName $clientName }}
 {{- $clientDescription := $client.forProvider.description | required (printf ".Values.clients.oidc[*].%s.forProvider.description is required" $client.name) }}
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
 kind: Client
 metadata:
   name: "{{ $clientResourceName }}"
+  namespace: "{{ $realmNamespace }}"
 spec:
   providerConfigRef:
-    name: '{{ $realmName }}--keycloak'
+    name: "{{ $providerConfigName }}"
   forProvider:
     realmIdRef:
       name: '{{ $realmResourceName }}'
+      namespace: '{{ $realmNamespace }}'
     {{- tpl ($client.forProvider | toYaml) $ | nindent 4 }}
 
 {{- if (and $client.scope.mappers $client.scope.name) }}
 {{- $clientScopeResourceName := printf "%s--%s" $realmName $client.scope.name }}
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
 kind: ClientScope
 metadata:
   name: "{{ $clientScopeResourceName }}"
+  namespace: "{{ $realmNamespace }}"
 spec:
   providerConfigRef:
     name: "{{ $providerConfigName }}"
   forProvider:
     realmIdRef:
       name: "{{ $realmResourceName }}"
+      namespace: "{{ $realmNamespace }}"
     {{- tpl ($client.scope.forProvider | toYaml) $ | nindent 4 }}
 
 {{- range $mapper := $client.scope.mappers }}
 ---
-apiVersion: client.keycloak.crossplane.io/v1alpha1
+apiVersion: client.keycloak.m.crossplane.io/v1alpha1
 kind: ProtocolMapper
 metadata:
   name: "{{ $realmName }}--{{ $mapper.name }}"
+  namespace: "{{ $realmNamespace }}"
 spec:
   providerConfigRef:
     name: "{{ $providerConfigName }}"
   forProvider:
     realmIdRef:
       name: "{{ $realmResourceName }}"
+      namespace: "{{ $realmNamespace }}"
     clientScopeIdRef:
       name: "{{ $clientScopeResourceName }}"
     protocol: openid-connect
@@ -57,16 +64,18 @@ spec:
 
 {{- if $client.defaultScope }}
 ---
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+apiVersion: openidclient.keycloak.m.crossplane.io/v1alpha1
 kind: ClientDefaultScopes
 metadata:
   name: "{{ $clientResourceName }}"
+  namespace: "{{ $realmNamespace }}"
 spec:
   providerConfigRef:
     name: "{{ $providerConfigName }}"
   forProvider:
     realmIdRef:
       name: "{{ $realmResourceName }}"
+      namespace: "{{ $realmNamespace }}"
     clientIdRef:
       name: "{{ $clientResourceName }}"
     {{- tpl ($client.defaultScope.forProvider | toYaml) $ | nindent 4 }}
