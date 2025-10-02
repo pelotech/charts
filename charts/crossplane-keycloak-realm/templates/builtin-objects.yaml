@@ -1,0 +1,13 @@
+{{- $providerConfigName := tpl .Values.providerConfig.name $ | required ".Values.providerConfig.name is required" }}
+{{- $providerConfigSecretName := tpl .Values.providerConfig.secretName $ | required ".Values.providerConfig.secretName is required" }}
+{{- $realmName := tpl .Values.realm.name $ }}
+---
+apiVersion: keycloak.crossplane.io/v1alpha1
+kind: XBuiltinObjects
+metadata:
+  name: "keycloak-builtin-objects-{{ $realmName }}"
+spec:
+  providerConfigName: "{{ $providerConfigName }}"
+  providerSecretName: "{{ $providerConfigSecretName }}"
+  realm: "{{ $realmName }}"
+  {{- tpl (.Values.builtinObjects.spec | toYaml) $ | nindent 2 }}

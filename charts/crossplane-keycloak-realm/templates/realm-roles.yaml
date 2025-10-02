@@ -1,0 +1,19 @@
+{{- $providerConfigName := tpl .Values.providerConfig.name $ | required ".Values.providerConfig.name is required" }}
+{{- $realmName := tpl .Values.realm.name $ | printf "%s--realm" }}
+
+{{- range $role := .Values.roles }}
+{{- $roleName := tpl $role.forProvider.name $ | required "$role.*.forProvider.name is required" }}
+{{- $roleDescription := $role.forProvider.description | required (printf "$role.%s.description is required" $role.name) }}
+---
+apiVersion: role.keycloak.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: "{{ $realmName }}--{{ $role.name }}"
+spec:
+  providerConfigRef:
+    name: "{{ $providerConfigName }}"
+  forProvider:
+    realmIdRef:
+      name: "{{ $realmName }}"
+    {{- tpl ($role.forProvider | toYaml) $ | nindent 4 }}
+{{- end }}

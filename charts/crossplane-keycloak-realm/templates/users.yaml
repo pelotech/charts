@@ -1,0 +1,39 @@
+{{- $providerConfigName := tpl .Values.providerConfig.name $ | required ".Values.providerConfig.name is required" }}
+{{- $realmName := tpl .Values.realm.name $ | required ".Values.realm.name is required" }}
+{{- $realmResourceName := printf "%s--realm" $realmName }}
+
+{{- range $user := .Values.users }}
+
+{{- $tmp := $user.forProvider.username | required "$user.forProvider.username is required" }}
+{{- $safeShortUserName := $user.forProvider.username | replace "." "-" }}
+{{- $userResourceName := printf "%s--%s" $realmName $safeShortUserName }}
+{{- $tmp2 := $user.forProvider.email | required (printf "$user.forProvider.%s.email is required" $safeShortUserName) }}
+---
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: "{{ $userResourceName }}"
+spec:
+  deletionPolicy: Delete
+  providerConfigRef:
+    name: "{{ $providerConfigName }}"
+  forProvider:
+    realmIdRef:
+      name: "{{ $realmResourceName }}"
+    {{- tpl ($user.forProvider | toYaml) $ | nindent 4 }}
+{{- if (and $user.roles $user.roles.forProvider) }}
+---
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: Roles
+metadata:
+  name: "{{ $userResourceName }}--roles"
+spec:
+  forProvider:
+    realmIdRef:
+      name: "{{ $realmResourceName }}"
+    userIdRef:
+      name: "{{ $userResourceName }}"
+    {{- tpl ($user.roles.forProvider | toYaml) $ | nindent 4 }}
+
+{{- end }}
+{{- end }}

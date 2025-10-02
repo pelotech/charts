@@ -1,0 +1,43 @@
+providerConfig:
+  name: test-provider
+  secretName: test-provider-credentials
+
+realm:
+  name: test-realm
+  forProvider:
+    defaultSignatureAlgorithm: "RS256"
+    loginWithEmailAllowed: true
+    resetPasswordAllowed: true
+
+builtinObjects:
+  spec:
+    builtinClients: []
+    builtinRealmRoles: []
+    builtinAuthenticationFlows: []
+
+clients:
+  oidc: []
+
+roles: []
+
+userFederation:
+  ldap:
+    enabled: false
+    name: "ldap-user-federation"
+    suffix: "$$ldap.suffix"
+    forProvider:
+      name: ldap
+      deleteDefaultMappers: true
+      editMode: "WRITABLE"
+      importEnabled: true
+      startTls: false
+      syncRegistrations: true
+      trustEmail: false
+      usePasswordModifyExtendedOp: false
+      useTruststoreSpi: "ONLY_FOR_LDAPS"
+      validatePasswordPolicy: false
+    mappers:
+      userAttributeMappers: []
+      hardcodedAttributeMappers: []
+
+users: []
