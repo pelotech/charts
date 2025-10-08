@@ -10,6 +10,7 @@ Define a Keycloak Realm via Crossplane
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| builtinObjects.enabled | bool | `false` |  |
 | builtinObjects.spec.builtinAuthenticationFlows | list | `[]` |  |
 | builtinObjects.spec.builtinClients | list | `[]` |  |
 | builtinObjects.spec.builtinRealmRoles | list | `[]` |  |
