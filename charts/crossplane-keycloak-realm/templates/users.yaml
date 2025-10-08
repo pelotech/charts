@@ -43,7 +43,7 @@ spec:
       name: "{{ $userResourceName }}"
     roleIdsRefs:
 {{- range ($user.roles.names | default (list)) }}
-      - name:  {{ printf "%s--%s" $realmName . | quote }}
+      - name:  {{ tpl . $ | quote }}
 {{- end }}
 {{- if $hasOverrides }}
 {{ tpl ($user.roles.forProvider | toYaml) $ | nindent 4 }}

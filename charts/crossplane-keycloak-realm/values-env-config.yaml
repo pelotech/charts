@@ -17,7 +17,7 @@ realm:
           - passwordSecretRef:
               key: KEYCLOAK_OD360_SMTP_PASSWORD
               name: keycloak-smtp-config
-              namespace: "{{ tpl .Values.realm.name $ }}"
+              namespace: "{{ .Release.Namespace }}"
             username: "AKIAQB4RZGLOWCFLPQ5K"
         envelopeFrom: ""
         from: "no-reply@opendash360.us"
@@ -211,7 +211,7 @@ userFederation:
     forProvider:
       connectionUrl: "ldap://{{ tpl .Values.realm.name $ }}-freeipa"
       bindCredentialSecretRef:
-        namespace: "{{ tpl .Values.realm.name $ }}"
+        namespace: "{{ .Release.Namespace }}"
         name: keycloak-ldap-bind-creds
         key: KEYCLOAK_LDAP_BIND_PASSWORD
       rdnLdapAttribute: "uid"
@@ -346,4 +346,4 @@ users:
       email: emmanuel@pelo.tech
     roles:
       names:
-        - opendash-admins
+        - "{{ tpl .Values.realm.name $ }}--opendash-admins"
