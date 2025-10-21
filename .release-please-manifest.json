@@ -1,5 +1,6 @@
 {
   "charts/backstage": "0.3.0",
+  "charts/crossplane-keycloak-realm": "0.1.0",
   "charts/cube-stack": "0.3.0",
   "charts/cubejs": "0.3.0",
   "charts/cubestore": "0.3.0",
