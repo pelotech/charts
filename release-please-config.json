@@ -9,6 +9,9 @@
     "charts/backstage": {
       "extra-files": ["README.md"]
     },
+    "charts/crossplane-keycloak-realm": {
+      "extra-files": ["README.md"]
+    },
     "charts/cube-stack": {
       "extra-files": ["README.md"]
     },
