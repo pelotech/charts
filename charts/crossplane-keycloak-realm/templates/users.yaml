@@ -1,6 +1,7 @@
 {{- $providerConfigName := tpl .Values.providerConfig.name $ | required ".Values.providerConfig.name is required" }}
 {{- $realmName := tpl .Values.realm.name $ | required ".Values.realm.name is required" }}
 {{- $realmResourceName := printf "%s--realm" $realmName }}
+{{- $realmNamespace := .Release.Namespace }}
 
 {{- range $user := .Values.users }}
 
@@ -8,11 +9,13 @@
 {{- $safeShortUserName := $user.forProvider.username | replace "." "-" }}
 {{- $userResourceName := printf "%s--%s" $realmName $safeShortUserName }}
 {{- $tmp2 := $user.forProvider.email | required (printf "$user.forProvider.%s.email is required" $safeShortUserName) }}
+
 ---
-apiVersion: user.keycloak.crossplane.io/v1alpha1
+apiVersion: user.keycloak.m.crossplane.io/v1alpha1
 kind: User
 metadata:
   name: "{{ $userResourceName }}"
+  namespace: "{{ $realmNamespace }}"
 spec:
   deletionPolicy: Delete
   providerConfigRef:
@@ -20,20 +23,30 @@ spec:
   forProvider:
     realmIdRef:
       name: "{{ $realmResourceName }}"
+      namespace: "{{ $realmNamespace }}"
     {{- tpl ($user.forProvider | toYaml) $ | nindent 4 }}
-{{- if (and $user.roles $user.roles.forProvider) }}
+
+{{- $hasNames := and $user.roles (gt (len ($user.roles.names | default (list))) 0) }}
+{{- $hasOverrides := and $user.roles $user.roles.forProvider }}
+{{- if or $hasNames $hasOverrides }}
 ---
-apiVersion: user.keycloak.crossplane.io/v1alpha1
+apiVersion: user.keycloak.m.crossplane.io/v1alpha1
 kind: Roles
 metadata:
   name: "{{ $userResourceName }}--roles"
+  namespace: "{{ $realmNamespace }}"
 spec:
   forProvider:
     realmIdRef:
       name: "{{ $realmResourceName }}"
     userIdRef:
       name: "{{ $userResourceName }}"
-    {{- tpl ($user.roles.forProvider | toYaml) $ | nindent 4 }}
-
+    roleIdsRefs:
+{{- range ($user.roles.names | default (list)) }}
+      - name:  {{ tpl . $ | quote }}
+{{- end }}
+{{- if $hasOverrides }}
+{{ tpl ($user.roles.forProvider | toYaml) $ | nindent 4 }}
+{{- end }}
 {{- end }}
 {{- end }}
