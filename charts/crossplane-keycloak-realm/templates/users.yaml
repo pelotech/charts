@@ -17,9 +17,9 @@ metadata:
   name: "{{ $userResourceName }}"
   namespace: "{{ $realmNamespace }}"
 spec:
-  deletionPolicy: Delete
   providerConfigRef:
     name: "{{ $providerConfigName }}"
+    kind: ProviderConfig
   forProvider:
     realmIdRef:
       name: "{{ $realmResourceName }}"

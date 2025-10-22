@@ -13,6 +13,7 @@ metadata:
   namespace: "{{ $realmNamespace }}"
 spec:
   providerConfigRef:
+    kind: ProviderConfig
     name: "{{ $providerConfigName }}"
   forProvider:
     realmIdRef:
@@ -28,6 +29,7 @@ metadata:
   namespace: "{{ $realmNamespace }}"
 spec:
   providerConfigRef:
+    kind: ProviderConfig
     name: "{{ $providerConfigName }}"
   forProvider:
     realmIdRef:
@@ -46,6 +48,7 @@ metadata:
   namespace: "{{ $realmNamespace }}"
 spec:
   providerConfigRef:
+    kind: ProviderConfig
     name: "{{ $providerConfigName }}"
   forProvider:
     realmIdRef:
