@@ -9,7 +9,7 @@ metadata:
   namespace: "{{ $realmNamespace }}"
 spec:
   providerConfigRef:
-    name: "{{ $providerConfigName }}-{{ $realmNamespace }}"
+    name: "{{ $providerConfigName }}"
     kind: ProviderConfig
   forProvider:
     realm: "{{ $realmName }}"
