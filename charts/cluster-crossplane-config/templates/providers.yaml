@@ -1,0 +1,11 @@
+{{- range $providerName, $provider := .Values.providers }}
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: "provider-{{ $providerName }}"
+spec:
+  package: "{{ $provider.package.name }}:{{ $provider.package.tag }}"
+  runtimeConfigRef:
+    {{- tpl ($provider.runtimeConfigRef | toYaml) $ | nindent 4 }}
+{{- end }}

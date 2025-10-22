@@ -1,0 +1,12 @@
+{{- range $functionName, $function := .Values.functions }}
+---
+apiVersion: pkg.crossplane.io/v1beta1
+kind: Function
+metadata:
+  name: "function-{{ $functionName }}"
+spec:
+  package: "{{ $function.package.name }}:{{ $function.package.tag }}"
+  {{- if $function.packagePullPolicy }}
+  packagePullPolicy: "{{ $function.packagePullPolicy }}"
+  {{- end }}
+{{- end }}
