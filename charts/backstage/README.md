@@ -1,6 +1,6 @@
 # backstage
 
-### version: 0.3.0<!-- x-release-please-version -->
+### version: 0.3.1<!-- x-release-please-version -->
 
 ![AppVersion: v0.1.1-alpha.23](https://img.shields.io/badge/AppVersion-v0.1.1--alpha.23-informational?style=flat-square)
 
