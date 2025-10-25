@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/pelotech/charts/compare/lrsql/0.2.2...lrsql/0.2.3) (2025-10-25)
+
+
+### Bug Fixes
+
+* update to latest lrsql v0.9.0 ([e069565](https://github.com/pelotech/charts/commit/e0695654e373bcb553e0767bf6640aa6e4b995ef))
+
 ## [0.2.2](https://github.com/pelotech/charts/compare/lrsql/0.2.1...lrsql/0.2.2) (2025-05-09)
 
 
