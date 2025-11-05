@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/pelotech/charts/compare/lrsql/0.2.3...lrsql/0.2.4) (2025-11-05)
+
+
+### Chores
+
+* **deps:** update docker.io/yetanalytics/lrsql docker tag to v0.9.2 ([#58](https://github.com/pelotech/charts/issues/58)) ([ce8c902](https://github.com/pelotech/charts/commit/ce8c902081bed89a58db1eb87bb1e275dc0d7cef))
+
 ## [0.2.3](https://github.com/pelotech/charts/compare/lrsql/0.2.2...lrsql/0.2.3) (2025-10-25)
 
 

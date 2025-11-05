@@ -5,7 +5,7 @@
   "charts/cube-stack": "0.3.0",
   "charts/cubejs": "0.3.0",
   "charts/cubestore": "0.3.0",
-  "charts/lrsql": "0.2.3",
+  "charts/lrsql": "0.2.4",
   "charts/mutating-webhook": "0.2.0",
   "charts/nodejs": "0.3.0",
   "charts/pachyderm": "0.3.0",
