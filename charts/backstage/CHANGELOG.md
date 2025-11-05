@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.1](https://github.com/pelotech/charts/compare/backstage/0.3.0...backstage/0.3.1) (2025-11-05)
+
+
+### Chores
+
+* enable updating doc version via release please ([faf992e](https://github.com/pelotech/charts/commit/faf992e8f2e2fa9725870f4069568ee215b8e04e))
+* remove left over header ([e6132ff](https://github.com/pelotech/charts/commit/e6132ff0efcc9a232fbe470d541e7c2a3d7cd9f4))
+
 ## [0.3.0](https://github.com/pelotech/charts/compare/backstage-0.2.3...backstage/0.3.0) (2025-02-11)
 
 
