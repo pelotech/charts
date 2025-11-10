@@ -48,6 +48,9 @@ extraEnvVarsSecret: ""
 ##
 commonAnnotations: {}
 
+commonLabels:
+  app.kubernetes.io/component: lrs
+
 containerPorts:
   http: 8080
 
@@ -55,11 +58,6 @@ nameOverride: ""
 fullnameOverride: ""
 
 podAnnotations: {}
-podLabels:
-  app.kubernetes.io/name: lrsql
-#  app.kubernetes.io/instance: lrsql
-  app.kubernetes.io/component: lrs
-
 podSecurityContext: {}
   # fsGroup: 2000
 
@@ -75,7 +73,7 @@ service:
   type: ClusterIP
   ports:
     http: 80
-#    https: 443
+  # https: 443
   targetPort:
     http: http
 #    https: https
@@ -189,7 +187,6 @@ readinessProbe:
   httpGet:
     path: /
     port: http
-
 
 # Additional volumes on the output Deployment definition.
 volumes: []
