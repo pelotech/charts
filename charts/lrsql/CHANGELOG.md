@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.5](https://github.com/pelotech/charts/compare/lrsql/0.2.4...lrsql/0.2.5) (2025-11-11)
+
+
+### Bug Fixes
+
+* **lrsql:** quote final value for `image:` ([#88](https://github.com/pelotech/charts/issues/88)) ([e32a96a](https://github.com/pelotech/charts/commit/e32a96a5d3b8df3dd6e14a4ea2783be5713aa222))
+* small fixes on `lrsql` chart ([#87](https://github.com/pelotech/charts/issues/87)) ([a39d9c7](https://github.com/pelotech/charts/commit/a39d9c7fdfd3e0696411a34d89e9fab63fb3d08f))
+
 ## [0.2.4](https://github.com/pelotech/charts/compare/lrsql/0.2.3...lrsql/0.2.4) (2025-11-05)
 
 
