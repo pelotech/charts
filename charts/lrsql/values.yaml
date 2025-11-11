@@ -48,9 +48,6 @@ extraEnvVarsSecret: ""
 ##
 commonAnnotations: {}
 
-commonLabels:
-  app.kubernetes.io/component: lrs
-
 containerPorts:
   http: 8080
 

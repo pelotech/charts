@@ -20,7 +20,6 @@ SQL LRS/lrsql helm chart
 | args | list | `[]` |  |
 | command[0] | string | `"/lrsql/bin/run_sqlite.sh"` |  |
 | commonAnnotations | object | `{}` |  |
-| commonLabels."app.kubernetes.io/component" | string | `"lrs"` |  |
 | containerPorts.http | int | `8080` |  |
 | extraEnvVarsCM | string | `""` |  |
 | extraEnvVarsSecret | string | `""` |  |
