@@ -1,7 +1,5 @@
 {{- if .Values.userFederation.ldap.enabled }}
-{{- $providerConfigName := tpl .Values.providerConfig.name $ | required ".Values.providerConfig.name is required" }}
 {{- $realmName := tpl .Values.realm.name $ }}
-{{- $realmNamespace := .Release.Namespace }}
 {{- $realmResourceName := $realmName | printf "%s--realm" }}
 {{- $userFederationName := .Values.userFederation.ldap.name }}
 {{- $userFederationResourceName := printf "%s--%s" (tpl .Values.realm.name $) $userFederationName }}
@@ -10,15 +8,13 @@ apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
 kind: UserFederation
 metadata:
   name: "{{ $userFederationResourceName }}"
-  namespace: "{{ $realmNamespace }}"
+  namespace: "{{ .Release.Namespace }}"
 spec:
-  providerConfigRef:
-    kind: ProviderConfig
-    name: "{{ $providerConfigName }}"
+  providerConfigRef: {{- pick (required ".Values.providerConfig is required" .Values.providerConfig) "name" "kind" | toYaml | nindent 4}}
   forProvider:
     realmIdRef:
       name: "{{ $realmResourceName }}"
-      namespace: "{{ $realmNamespace }}"
+      namespace: "{{ .Release.Namespace }}"
     {{- tpl (.Values.userFederation.ldap.forProvider | toYaml) $ | nindent 4 }}
 {{- range $mapper := .Values.userFederation.ldap.mappers.userAttributeMappers }}
 ---
@@ -26,15 +22,13 @@ apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
 kind: UserAttributeMapper
 metadata:
   name: "{{ $realmName}}--{{ $userFederationName }}-{{ $mapper.name }}"
-  namespace: "{{ $realmNamespace }}"
+  namespace: "{{ .Release.Namespace }}"
 spec:
-  providerConfigRef:
-    kind: ProviderConfig
-    name: "{{ $providerConfigName }}"
+  providerConfigRef: {{- pick (required ".Values.providerConfig is required" .Values.providerConfig) "name" "kind" | toYaml | nindent 4}}
   forProvider:
     realmIdRef:
       name: "{{ $realmResourceName }}"
-      namespace: "{{ $realmNamespace }}"
+      namespace: "{{ .Release.Namespace }}"
     ldapUserFederationIdRef:
       name: "{{ $userFederationResourceName }}"
     {{- tpl ($mapper.forProvider | toYaml) $ | nindent 4 }}
@@ -45,15 +39,13 @@ apiVersion: ldap.keycloak.m.crossplane.io/v1alpha1
 kind: HardcodedAttributeMapper
 metadata:
   name: "{{ $realmName}}--{{ $userFederationName }}-{{ $mapper.name }}"
-  namespace: "{{ $realmNamespace }}"
+  namespace: "{{ .Release.Namespace }}"
 spec:
-  providerConfigRef:
-    kind: ProviderConfig
-    name: "{{ $providerConfigName }}"
+  providerConfigRef: {{- pick (required ".Values.providerConfig is required" .Values.providerConfig) "name" "kind" | toYaml | nindent 4}}
   forProvider:
     realmIdRef:
       name: "{{ $realmResourceName }}"
-      namespace: "{{ $realmNamespace }}"
+      namespace: "{{ .Release.Namespace }}"
     ldapUserFederationIdRef:
       name: "{{ $userFederationResourceName }}"
     {{- tpl ($mapper.forProvider | toYaml) $ | nindent 4 }}
