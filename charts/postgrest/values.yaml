@@ -1,0 +1,126 @@
+imagePullSecrets:
+
+application:
+  schemas: public  # PSQL schemas (comma separated) for api usage
+  anon: anon       # PSQL role to grant anonymous api usage
+  jwt:
+    claim:
+      selector: ".postgrest.role"
+
+database:
+  connection:
+    username: postgrest  # application username for PSQL connection
+    password: postgrest  # application password for PSQL connection
+    database: postgrest  # application database for PSQL connection
+    hostname: postgrest-cluster-rw  # application hostname for PSQL connection
+
+  migrations:
+    username: goose      # superuser username for PSQL connection
+    password: goose      # superuser password for PSQL connection
+    database: postgrest  # superuser database for PSQL connection
+    hostname: postgrest-cluster-rw  # superuser hostname for PSQL connection
+    image: ghcr.io/pelotech/images/goose
+    tag: latest
+    enabled: true
+
+cluster:
+  enabled: true
+  type: postgresql
+  mode: standalone
+  cluster:
+    instances: 3
+    storage:
+      size: 1Gi
+    roles:
+      - name: goose
+        ensure: present
+        login: true
+        superuser: true
+        passwordSecret:
+          name: migrations
+
+      # no JWT required
+      - name: anon
+        ensure: present
+        login: false
+
+      # short-lived JWT issued by keyserver
+      - name: peek
+        ensure: present
+        login: false
+
+      # authenticated JWT issued by OIDC
+      - name: view
+        ensure: present
+        login: false
+
+      # authenticated JWT issued by OIDC
+      - name: edit
+        ensure: present
+        login: false
+
+      - name: postgrest
+        ensure: present
+        login: true
+        superuser: false
+        passwordSecret:
+          name: connection
+        inRoles:
+          - anon
+          - peek
+          - view
+          - edit
+
+  databases:
+    - name: postgrest
+      owner: goose
+      schemas:
+        - name: public
+          owner: goose
+          ensure: present
+
+keyserver:
+  image: ghcr.io/pelotech/images/keyserver
+  tag: latest
+  api:
+    key: a-string-secret-at-least-256-bits-long
+  jwt:
+    alg: RS256
+    iss: https://auth.app.localhost
+    aud: postgrest
+    exp: 5 minutes
+    claims:
+      postgrest:
+        role: peek
+    origin: https://jwt.io,https://app.localhost
+    trust: https://sso.localhost/auth/realms/example/protocol/openid-connect/certs
+    jwks_uri: https://auth.app.localhost/jwks
+
+ingress:
+  enabled: true
+  tls:
+    - hosts:
+        - 'auth.app.localhost'
+        - 'data.app.localhost'
+      secretName: 'app.localhost-tls'
+  rules:
+    - host: 'auth.app.localhost'
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: postgrest
+                port:
+                  name: keyserver
+    - host: 'data.app.localhost'
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: postgrest
+                port:
+                  name: postgrest

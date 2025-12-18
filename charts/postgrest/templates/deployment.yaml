@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgrest
+  namespace: "{{ .Release.Namespace }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: postgrest
+      app.kubernetes.io/instance: "{{ .Release.Namespace }}"
+      app.kubernetes.io/name: postgrest
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: postgrest
+        app.kubernetes.io/instance: "{{ .Release.Namespace }}"
+        app.kubernetes.io/name: postgrest
+    spec:
+      imagePullSecrets: {{ default ("[]" | toJson) (.Values.imagePullSecrets | toJson) }}
+      initContainers:
+        - name: keyserver
+          image: {{ .Values.keyserver.image }}:{{ .Values.keyserver.tag }}
+          imagePullPolicy: IfNotPresent
+          restartPolicy: Always
+          ports:
+            - name: keyserver
+              containerPort: 8000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/opt/postgrest/certificates
+              name: certificates
+          envFrom:
+            - configMapRef:
+                name: keyserver
+          env:
+            - name: PGRST_JWT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: postgrest
+                  key: PGRST_JWT_SECRET
+            - name: PGRST_CLIENT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: keyserver
+                  key: PGRST_CLIENT_KEY
+        - name: wait
+          image: alpine:3.23.2
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - |
+              apk add --no-cache postgresql-client
+
+              while ! psql "$CONNECTION" -c "SELECT 1;" 2>/dev/null; do
+                echo "awaiting connection - retrying in 5 seconds"
+                sleep 5
+              done
+              echo "connection succeeded"
+          env:
+            - name: CONNECTION
+              valueFrom:
+                secretKeyRef:
+                  name: migrations
+                  key: connection
+        - name: goose
+          image: {{ .Values.database.migrations.image }}:{{ .Values.database.migrations.tag }}
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/goose
+            - {{ .Values.database.migrations.enabled | ternary "up" "status" }}
+          envFrom:
+            - configMapRef:
+                name: goose
+          env:
+            - name: GOOSE_DBSTRING
+              valueFrom:
+                secretKeyRef:
+                  key: connection
+                  name: migrations
+      containers:
+        - name: postgrest
+          image: postgrest/postgrest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: postgrest
+              containerPort: 3000
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: postgrest
+          env:
+            - name: PGRST_DB_URI
+              valueFrom:
+                secretKeyRef:
+                  key: PGRST_DB_URI
+                  name: connection
+          volumeMounts:
+            - mountPath: /etc/opt/postgrest/certificates
+              name: certificates
+      volumes:
+        - name: certificates
+          emptyDir:
+            sizeLimit: 1Mi
