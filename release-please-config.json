@@ -33,6 +33,9 @@
     "charts/nodejs": {
       "extra-files": ["README.md"]
     },
+    "charts/openldap": {
+      "extra-files": ["README.md"]
+    },
     "charts/pachyderm": {
       "extra-files": ["README.md"]
     },
