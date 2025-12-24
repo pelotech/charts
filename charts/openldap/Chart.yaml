@@ -1,0 +1,13 @@
+apiVersion: v2
+name: openldap
+type: application
+# home: https://www.openldap.org
+version: 1.2.6
+appVersion: 2.4.48
+description: This chart was forked from the now-deprecated Helm Charts repository.
+icon: http://www.openldap.org/images/headers/LDAPworm.gif
+keywords:
+  - ldap
+  - openldap
+sources:
+  - https://github.com/helm/charts
