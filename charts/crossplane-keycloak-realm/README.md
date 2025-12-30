@@ -13,7 +13,6 @@ Define a Keycloak Realm via Crossplane
 | adminUser.email | string | `"realm-admin@pelo.tech"` |  |
 | adminUser.enabled | bool | `true` |  |
 | adminUser.username | string | `"realm-admin"` |  |
-| builtinObjects | string | `nil` |  |
 | clients.oidc | list | `[]` |  |
 | providerConfig.kind | string | `"ProviderConfig"` |  |
 | providerConfig.name | string | `"test-provider"` |  |
