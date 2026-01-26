@@ -1,5 +1,6 @@
 providerConfig:
   name: test-provider
+  kind: ProviderConfig # Namespaced provider config (ProviderConfig) / Cluster scoped provider config (ClusterProviderConfig)
   secretName: test-provider-credentials
 
 realm:
@@ -9,12 +10,13 @@ realm:
     loginWithEmailAllowed: true
     resetPasswordAllowed: true
 
-builtinObjects:
-  enabled: false
-  spec:
-    builtinClients: []
-    builtinRealmRoles: []
-    builtinAuthenticationFlows: []
+adminUser:
+  enabled: true
+  username: "realm-admin"
+  email: "realm-admin@pelo.tech"
+  # passwordSecretRef:
+  #   name: realm-admin-creds
+  #   key: password
 
 clients:
   oidc: []

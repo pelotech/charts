@@ -10,11 +10,11 @@ Define a Keycloak Realm via Crossplane
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| builtinObjects.enabled | bool | `false` |  |
-| builtinObjects.spec.builtinAuthenticationFlows | list | `[]` |  |
-| builtinObjects.spec.builtinClients | list | `[]` |  |
-| builtinObjects.spec.builtinRealmRoles | list | `[]` |  |
+| adminUser.email | string | `"realm-admin@pelo.tech"` |  |
+| adminUser.enabled | bool | `true` |  |
+| adminUser.username | string | `"realm-admin"` |  |
 | clients.oidc | list | `[]` |  |
+| providerConfig.kind | string | `"ProviderConfig"` |  |
 | providerConfig.name | string | `"test-provider"` |  |
 | providerConfig.secretName | string | `"test-provider-credentials"` |  |
 | realm.forProvider.defaultSignatureAlgorithm | string | `"RS256"` |  |
