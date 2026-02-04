@@ -64,12 +64,13 @@ spec:
                 secretKeyRef:
                   name: migrations
                   key: connection
+        {{- if .Values.database.migrations.enabled }}
         - name: goose
           image: {{ .Values.database.migrations.image }}:{{ .Values.database.migrations.tag }}
           imagePullPolicy: IfNotPresent
           command:
             - /bin/goose
-            - {{ .Values.database.migrations.enabled | ternary "up" "status" }}
+            - up
           envFrom:
             - configMapRef:
                 name: goose
@@ -79,6 +80,7 @@ spec:
                 secretKeyRef:
                   key: connection
                   name: migrations
+        {{- end }}
       containers:
         - name: postgrest
           image: postgrest/postgrest

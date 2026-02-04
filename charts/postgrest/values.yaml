@@ -21,7 +21,7 @@ database:
     hostname: postgrest-cluster-rw  # superuser hostname for PSQL connection
     image: ghcr.io/pelotech/images/goose
     tag: latest
-    enabled: true
+    enabled: false
 
 cluster:
   enabled: true

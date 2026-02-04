@@ -58,14 +58,14 @@ Helm chart for a PostgREST data api
 | database.connection.password | string | `"postgrest"` |  |
 | database.connection.username | string | `"postgrest"` |  |
 | database.migrations.database | string | `"postgrest"` |  |
-| database.migrations.enabled | bool | `true` |  |
+| database.migrations.enabled | bool | `false` |  |
 | database.migrations.hostname | string | `"postgrest-cluster-rw"` |  |
 | database.migrations.image | string | `"ghcr.io/pelotech/images/goose"` |  |
 | database.migrations.password | string | `"goose"` |  |
 | database.migrations.tag | string | `"latest"` |  |
 | database.migrations.username | string | `"goose"` |  |
 | imagePullSecrets | string | `nil` |  |
-| ingress.enabled | bool | `true` |  |
+| ingress.enabled | bool | `false` |  |
 | ingress.rules[0].host | string | `"auth.app.localhost"` |  |
 | ingress.rules[0].http.paths[0].backend.service.name | string | `"postgrest"` |  |
 | ingress.rules[0].http.paths[0].backend.service.port.name | string | `"keyserver"` |  |

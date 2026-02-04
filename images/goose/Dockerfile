@@ -2,7 +2,7 @@ FROM golang:1.25-alpine AS builder
 
 LABEL authors="Jared Davis <jared.davis@pelo.tech>"
 
-RUN addgroup --system goose --gid 1001 && \
+RUN addgroup --system goose --gid 10001 && \
     adduser --system -G goose goose
 
 WORKDIR /github.com/pressly
@@ -13,7 +13,7 @@ RUN git clone -b v3.26.0 https://github.com/pressly/goose
 
 WORKDIR /github.com/pressly/goose
 
-RUN go mod tidy && go build -ldflags="-s -w" -tags='no_sqlite no_clickhouse no_mssql no_mysql' -o /bin/goose ./cmd/goose
+RUN go mod tidy && go build -ldflags="-s -w" -tags='no_sqlite no_sqlite3 no_clickhouse no_mssql no_mysql no_vertica no_ydb' -o /bin/goose ./cmd/goose
 
 
 FROM scratch
