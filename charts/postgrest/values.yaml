@@ -97,7 +97,7 @@ keyserver:
     jwks_uri: https://auth.app.localhost/jwks
 
 ingress:
-  enabled: true
+  enabled: false
   tls:
     - hosts:
         - 'auth.app.localhost'
