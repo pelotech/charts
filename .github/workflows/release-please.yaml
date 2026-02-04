@@ -74,7 +74,7 @@ jobs:
           registry: ghcr.io
           registry_username: ${{ github.actor }}
           registry_password: ${{ secrets.github_token }}
-      - uses: imjasonh/setup-crane@v0.4
+      - uses: imjasonh/setup-crane@v0.5
       - name: update docker images with annotations
         run: |
           crane mutate -a org.opencontainers.image.revision=${{ steps.release.outputs.chart-git-tag }},org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY ghcr.io/pelotech/charts/${{ steps.release.outputs.chart-name }}:${{ steps.release.outputs.chart-version }}
