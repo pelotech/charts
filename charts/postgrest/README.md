@@ -1,21 +1,14 @@
 # postgrest
 
-![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square)
+### version: 0.4.0<!-- x-release-please-version -->
 
 Helm chart for a PostgREST data api
-
-## Maintainers
-
-| Name | Email | Url |
-| ---- | ------ | --- |
-| jared-prime | <jared.davis@pelo.tech> |  |
 
 ## Requirements
 
 | Repository | Name | Version |
 |------------|------|---------|
 | https://cloudnative-pg.io/charts | cluster | 0.5.0 |
-| https://kubernetes.github.io/ingress-nginx | ingress-nginx | 4.14.1 |
 
 ## Values
 
