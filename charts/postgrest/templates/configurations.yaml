@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: goose
+  namespace: {{ .Release.Namespace }}
 data:
   GOOSE_DRIVER: "postgres"
 
@@ -11,6 +12,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: keyserver
+  namespace: {{ .Release.Namespace }}
 data:
   PGRST_JWT_ALG: {{ .Values.keyserver.jwt.alg | quote }}
   PGRST_JWT_ISS: {{ .Values.keyserver.jwt.iss | quote }}
@@ -26,6 +28,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: postgrest
+  namespace: {{ .Release.Namespace }}
 data:
   PGRST_DB_ANON_ROLE: {{ .Values.application.anon | quote }}
   PGRST_DB_SCHEMAS: {{ .Values.application.schemas | quote }}

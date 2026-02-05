@@ -22,6 +22,7 @@ database:
     image: ghcr.io/pelotech/images/goose
     tag: latest
     enabled: false
+    loadFromConfigMap: false
 
 cluster:
   enabled: true

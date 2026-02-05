@@ -71,6 +71,11 @@ spec:
           command:
             - /bin/goose
             - up
+          {{- if .Values.database.migrations.loadFromConfigMap }}
+          volumeMounts:
+            - name: migrations
+              mountPath: /migrations
+          {{- end}}
           envFrom:
             - configMapRef:
                 name: goose
@@ -80,6 +85,10 @@ spec:
                 secretKeyRef:
                   key: connection
                   name: migrations
+            {{- if .Values.database.migrations.loadFromConfigMap }}
+            - name: GOOSE_MIGRATION_DIR
+              value: /migrations
+            {{- end }}
         {{- end }}
       containers:
         - name: postgrest
@@ -105,3 +114,8 @@ spec:
         - name: certificates
           emptyDir:
             sizeLimit: 1Mi
+        {{- if .Values.database.migrations.loadFromConfigMap }}
+        - name: migrations
+          configMap:
+            name: migrations
+        {{- end}}

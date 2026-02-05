@@ -61,6 +61,7 @@ Helm chart for a PostgREST data api
 | database.migrations.enabled | bool | `false` |  |
 | database.migrations.hostname | string | `"postgrest-cluster-rw"` |  |
 | database.migrations.image | string | `"ghcr.io/pelotech/images/goose"` |  |
+| database.migrations.loadFromConfigMap | bool | `false` |  |
 | database.migrations.password | string | `"goose"` |  |
 | database.migrations.tag | string | `"latest"` |  |
 | database.migrations.username | string | `"goose"` |  |
