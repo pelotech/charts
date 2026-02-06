@@ -35,9 +35,6 @@
     },
     "charts/pachyderm": {
       "extra-files": ["README.md"]
-    },
-    "charts/justworks-demo": {
-      "extra-files": ["README.md"]
     }
   },
   "changelog-sections": [
