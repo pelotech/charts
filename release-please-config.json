@@ -38,7 +38,7 @@
     },
     "charts/postgrest": {
       "extra-files": ["README.md"]
-    },
+    }
   },
   "changelog-sections": [
     {
