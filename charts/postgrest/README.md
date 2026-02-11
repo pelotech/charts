@@ -91,4 +91,3 @@ Helm chart for a PostgREST data api
 | keyserver.jwt.origin | string | `"https://jwt.io,https://app.localhost"` |  |
 | keyserver.jwt.trust | string | `"https://sso.localhost/auth/realms/example/protocol/openid-connect/certs"` |  |
 | keyserver.tag | string | `"latest"` |  |
-
