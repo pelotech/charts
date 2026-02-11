@@ -1,6 +1,6 @@
 # openldap
 
-### version: 1.2.6<!-- x-release-please-version -->
+### version: 1.3.0<!-- x-release-please-version -->
 
 ![AppVersion: 2.4.48](https://img.shields.io/badge/AppVersion-2.4.48-informational?style=flat-square)
 
