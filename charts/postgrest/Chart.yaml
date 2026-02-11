@@ -5,7 +5,7 @@ version: 0.5.0
 maintainers:
   - name: jared-prime
     email: jared.davis@pelo.tech
-description: Helm chart for a PostgREST data api
+description: Helm chart for a PostgREST data api.
 
 dependencies:
   - name: cluster
