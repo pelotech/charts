@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: migrations
+  namespace: {{ .Release.Namespace }}
+data:
+  00001_noop.sql: |
+    -- +goose up
+    SELECT 1;
+
+---
