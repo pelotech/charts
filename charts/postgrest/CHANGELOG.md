@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/pelotech/charts/compare/postgrest/0.5.1...postgrest/0.5.2) (2026-02-12)
+
+
+### Bug Fixes
+
+* **postgrest:** tag images with commit hash ([#112](https://github.com/pelotech/charts/issues/112)) ([98f93df](https://github.com/pelotech/charts/commit/98f93dfbdde18476d3099dded93fa873dafa595d))
+
 ## [0.5.1](https://github.com/pelotech/charts/compare/postgrest/0.5.0...postgrest/0.5.1) (2026-02-11)
 
 
