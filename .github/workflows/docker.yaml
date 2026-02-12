@@ -25,7 +25,7 @@ jobs:
           - keyserver
     steps:
       - uses: actions/checkout@v6.0.2
-      - uses: sigstore/cosign-installer@v3.5.0
+      - uses: sigstore/cosign-installer@v3.10.1
         with:
           cosign-release: 'v2.2.4'
       - uses: docker/setup-qemu-action@v3
