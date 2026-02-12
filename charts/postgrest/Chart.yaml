@@ -5,6 +5,8 @@ version: 0.5.1
 maintainers:
   - name: jared-prime
     email: jared.davis@pelo.tech
+  - name: apkatsikas
+    email: andrew.katsikas@pelo.tech
 description: Helm chart for a PostgREST data api.
 
 dependencies:
