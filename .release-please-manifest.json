@@ -6,7 +6,7 @@
   "charts/cubejs": "0.3.0",
   "charts/cubestore": "0.3.0",
   "charts/lrsql": "0.2.6",
-  "charts/mutating-webhook": "0.2.0",
+  "charts/mutating-webhook": "0.2.1",
   "charts/nodejs": "0.3.1",
   "charts/pachyderm": "0.3.0",
   "charts/postgrest": "0.5.1",
