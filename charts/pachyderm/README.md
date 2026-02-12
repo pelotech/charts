@@ -1,6 +1,6 @@
 # pachyderm
 
-### version: 0.3.0<!-- x-release-please-version -->
+### version: 0.3.1<!-- x-release-please-version -->
 
 ![AppVersion: 1.8.6](https://img.shields.io/badge/AppVersion-1.8.6-informational?style=flat-square)
 
