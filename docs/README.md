@@ -1,5 +1,7 @@
+![docker](https://github.com/pelotech/charts/actions/workflows/docker.yaml/badge.svg)
+![pr-title](https://github.com/pelotech/charts/actions/workflows/pr-title.yaml/badge.svg)
 ![pre-commit](https://github.com/pelotech/charts/actions/workflows/pre-commit.yaml/badge.svg)
-![helm charts](https://github.com/pelotech/charts/actions/workflows/main.yaml/badge.svg)
+![release-please](https://github.com/pelotech/charts/actions/workflows/release-please.yaml/badge.svg)
 
 # Pelotech Charts
 
@@ -11,5 +13,5 @@
 
 ## Contributing
 
-* We're staring to add the use of [pre-commit](https://pre-commit.com/)
+* We're starting to add the use of [pre-commit](https://pre-commit.com/)
 * `pre-commit run -a` to run - we'll eventually add the pre-commit hooks to run on commit
