@@ -73,7 +73,7 @@ etcd:
  ## For available images please check: https://hub.docker.com/r/pachyderm/etcd/tags or: https://quay.io/repository/coreos/etcd?tag=latest&tab=tags
  image:
   repository: quay.io/coreos/etcd
-  tag: v3.3.5
+  tag: v3.6.8
   pullPolicy: IfNotPresent
   ## Enable persistence using Persistent Volume Claims
   ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
