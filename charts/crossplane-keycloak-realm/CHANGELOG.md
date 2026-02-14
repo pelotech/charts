@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0](https://github.com/pelotech/charts/compare/crossplane-keycloak-realm/0.2.0...crossplane-keycloak-realm/0.3.0) (2026-02-12)
+
+
+### Features
+
+* update builtinObjects to crossplane v2 import feature ([#94](https://github.com/pelotech/charts/issues/94)) ([2d9e22e](https://github.com/pelotech/charts/commit/2d9e22e00464d2aa8800df3761e99955f64333fc))
+
+
+### Chores
+
+* remove extraneous values file ([#83](https://github.com/pelotech/charts/issues/83)) ([3d7b106](https://github.com/pelotech/charts/commit/3d7b106e441173e4ddf4e1689cfbe46e4f52525d))
+
 ## [0.2.0](https://github.com/pelotech/charts/compare/crossplane-keycloak-realm/0.1.0...crossplane-keycloak-realm/0.2.0) (2025-10-22)
 
 
