@@ -1,47 +1,38 @@
-{{- if .Values.httpRoute.listenerSet.enabled }}
+{{- if and .Values.gateway.enabled .Values.gateway.listenerSet.enabled }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: ListenerSet
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-  {{- if or .Values.httpRoute.listenerSet.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.httpRoute.listenerSet.annotations .Values.commonAnnotations ) "context" . ) }}
+  {{- if or .Values.gateway.listenerSet.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.gateway.listenerSet.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   parentRef:
-    group: {{ .Values.httpRoute.gateway.group }}
-    kind: {{ .Values.httpRoute.gateway.kind }}
-    name: {{ .Values.httpRoute.gateway.name | required "httpRoute.gateway.name is required when httpRoute.listenerSet is enabled" }}
-    namespace: {{ .Values.httpRoute.gateway.namespace | quote }}
-  listeners:
-    {{- if .Values.httpRoute.listenerSet.listeners }}
-    {{- range .Values.httpRoute.listenerSet.listeners }}
-    - name: {{ .name }}
-      protocol: {{ .protocol }}
-      port: {{ .port }}
-      hostname: {{ $.Values.httpRoute.hostname | required "httpRoute.hostname is required when httpRoute.listenerSet is enabled" | quote }}
-      {{- if .tls }}
-      tls: {{- toYaml .tls | nindent 8 }}
-      {{- end }}
-      allowedRoutes:
-        namespaces:
-          from: Same
+    group: gateway.networking.k8s.io
+    kind: Gateway
+    name: {{ .Values.gateway.listenerSet.gatewayName | required "gateway.listenerSet.gatewayName is required when gateway.listenerSet.enabled is true" }}
+    {{- if .Values.gateway.listenerSet.gatewayNamespace }}
+    namespace: {{ .Values.gateway.listenerSet.gatewayNamespace }}
     {{- end }}
-    {{- else if .Values.httpRoute.listenerSet.https.enabled }}
+  listeners:
+    {{- if .Values.gateway.listenerSet.listeners }}
+    {{- toYaml .Values.gateway.listenerSet.listeners | nindent 4 }}
+    {{- else if .Values.gateway.listenerSet.https.enabled }}
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: {{ .Values.httpRoute.hostname | required "httpRoute.hostname is required when httpRoute.listenerSet is enabled" | quote }}
+      hostname: {{ .Values.gateway.hostname | required "gateway.hostname is required when gateway.listenerSet.enabled is true" | quote }}
       tls:
         mode: Terminate
         certificateRefs:
-          - name: {{ default (printf "%s-tls" .Values.httpRoute.hostname) .Values.httpRoute.listenerSet.https.secretName | quote }}
+          - name: {{ default (printf "%s-tls" .Values.gateway.hostname) .Values.gateway.listenerSet.https.secretName | quote }}
       allowedRoutes:
         namespaces:
           from: Same
     {{- else }}
-    {{- fail "httpRoute.listenerSet requires either https.enabled or a non-empty listeners list" }}
+    {{- fail "gateway.listenerSet requires either gateway.listenerSet.https.enabled or a non-empty gateway.listenerSet.listeners" }}
     {{- end }}
 {{- end }}
