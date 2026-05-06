@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/pelotech/charts/compare/lrsql/0.2.6...lrsql/0.3.0) (2026-05-06)
+
+
+### Features
+
+* add Gateway support for LRSQL chart ([#114](https://github.com/pelotech/charts/issues/114)) ([8b7cba5](https://github.com/pelotech/charts/commit/8b7cba543f5bf8f87a30fd07cfa411a99e8cc479))
+
 ## [0.2.6](https://github.com/pelotech/charts/compare/lrsql/0.2.5...lrsql/0.2.6) (2025-11-17)
 
 
