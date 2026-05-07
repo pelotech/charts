@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/pelotech/charts/compare/lrsql/0.3.0...lrsql/0.3.1) (2026-05-07)
+
+
+### Bug Fixes
+
+* update field path in docstring ([#116](https://github.com/pelotech/charts/issues/116)) ([a5c4916](https://github.com/pelotech/charts/commit/a5c49166e13f2a449cec1907ce7b17b489737b8b))
+
 ## [0.3.0](https://github.com/pelotech/charts/compare/lrsql/0.2.6...lrsql/0.3.0) (2026-05-06)
 
 
