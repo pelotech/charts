@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/pelotech/charts/compare/postgrest/0.5.2...postgrest/0.6.0) (2026-05-07)
+
+
+### Features
+
+* include realm access pre request settings - [DEL-2776] ([#118](https://github.com/pelotech/charts/issues/118)) ([fec7606](https://github.com/pelotech/charts/commit/fec7606de6a785e4213c8fb2f0508b0e035625c0))
+
 ## [0.5.2](https://github.com/pelotech/charts/compare/postgrest/0.5.1...postgrest/0.5.2) (2026-02-12)
 
 
