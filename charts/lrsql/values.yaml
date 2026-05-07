@@ -136,7 +136,7 @@ gateway:
       ##
       secretName: ""
     annotations: {}
-    ## @param gateway.listenerSet.listeners Full listeners override. If empty, auto-generates from gateway.https.
+    ## @param gateway.listenerSet.listeners Full listeners override. If empty, auto-generates from gateway.listenerSet.https.
     ##
     listeners: []
 ingress:
