@@ -32,6 +32,9 @@ metadata:
 data:
   PGRST_DB_ANON_ROLE: {{ .Values.application.anon | quote }}
   PGRST_DB_SCHEMAS: {{ .Values.application.schemas | quote }}
+  {{- if .Values.application.preRequest }}
+  PGRST_DB_PRE_REQUEST: {{ .Values.application.preRequest | quote }}
+  {{- end }}
   PGRST_JWT_ROLE_CLAIM_KEY: {{ .Values.application.jwt.claim.selector | quote }}
   PGRST_JWT_SECRET: "@/etc/opt/postgrest/certificates/jwks.json"
 

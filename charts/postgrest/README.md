@@ -15,7 +15,8 @@ Helm chart for a PostgREST data api.
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | application.anon | string | `"anon"` |  |
-| application.jwt.claim.selector | string | `".postgrest.role"` |  |
+| application.jwt.claim.selector | string | `".postgrest"` |  |
+| application.preRequest | string | `""` |  |
 | application.schemas | string | `"public"` |  |
 | cluster.cluster.instances | int | `3` |  |
 | cluster.cluster.roles[0].ensure | string | `"present"` |  |
@@ -84,7 +85,7 @@ Helm chart for a PostgREST data api.
 | keyserver.image | string | `"ghcr.io/pelotech/images/keyserver"` |  |
 | keyserver.jwt.alg | string | `"RS256"` |  |
 | keyserver.jwt.aud | string | `"postgrest"` |  |
-| keyserver.jwt.claims.postgrest.role | string | `"peek"` |  |
+| keyserver.jwt.claims.postgrest | string | `"peek"` |  |
 | keyserver.jwt.exp | string | `"5 minutes"` |  |
 | keyserver.jwt.iss | string | `"https://auth.app.localhost"` |  |
 | keyserver.jwt.jwks_uri | string | `"https://auth.app.localhost/jwks"` |  |
