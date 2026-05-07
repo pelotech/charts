@@ -3,7 +3,7 @@ imagePullSecrets:
 application:
   schemas: public  # PSQL schemas (comma separated) for api usage
   anon: anon       # PSQL role to grant anonymous api usage
-  preRequest: "realm.access"   # PSQL function switching into realm authorized role
+  preRequest: ""   # PSQL to run at beginning of each request
   jwt:
     claim:
       selector: ".postgrest"
@@ -41,11 +41,6 @@ cluster:
         passwordSecret:
           name: migrations
 
-      # required static role from a valid JWT from OIDC
-      - name: opendash
-        ensure: present
-        login: false
-
       # default transaction scoped role with valid JWT from OIDC
       - name: anon
         ensure: present
@@ -73,7 +68,6 @@ cluster:
         passwordSecret:
           name: connection
         inRoles:
-          - opendash
           - anon
           - peek
           - view
