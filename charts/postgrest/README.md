@@ -90,6 +90,7 @@ Helm chart for a PostgREST data api.
 | keyserver.jwt.iss | string | `"https://auth.app.localhost"` |  |
 | keyserver.jwt.jwks_uri | string | `"https://auth.app.localhost/jwks"` |  |
 | keyserver.jwt.origin | string | `"https://jwt.io,https://app.localhost"` |  |
+| keyserver.jwt.sub | string | `""` |  |
 | keyserver.jwt.trust | string | `"https://sso.localhost/auth/realms/example/protocol/openid-connect/certs"` |  |
 | keyserver.tag | string | `"latest"` |  |
 
