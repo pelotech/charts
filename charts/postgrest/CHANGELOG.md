@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/pelotech/charts/compare/postgrest/0.6.0...postgrest/0.6.1) (2026-05-14)
+
+
+### Bug Fixes
+
+* **postgrest:** make PGRST_JWT_SUB optional in keyserver ConfigMap ([#120](https://github.com/pelotech/charts/issues/120)) ([dcbed9c](https://github.com/pelotech/charts/commit/dcbed9c53c9e48977267bb6ce4ddcab3860f8945))
+
 ## [0.6.0](https://github.com/pelotech/charts/compare/postgrest/0.5.2...postgrest/0.6.0) (2026-05-07)
 
 
