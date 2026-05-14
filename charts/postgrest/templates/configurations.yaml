@@ -17,7 +17,9 @@ data:
   PGRST_JWT_ALG: {{ .Values.keyserver.jwt.alg | quote }}
   PGRST_JWT_ISS: {{ .Values.keyserver.jwt.iss | quote }}
   PGRST_JWT_EXP: {{ .Values.keyserver.jwt.exp | quote }}
+  {{- if .Values.keyserver.jwt.sub }}
   PGRST_JWT_SUB: {{ .Values.keyserver.jwt.sub | quote }}
+  {{- end }}
   PGRST_CLIENT_ORIGIN: {{ .Values.keyserver.jwt.origin | quote }}
   PGRST_JWK_TRUST: {{ .Values.keyserver.jwt.trust | quote }}
   PGRST_JWT_CLAIMS: {{ .Values.keyserver.jwt.claims | toJson | quote }}
