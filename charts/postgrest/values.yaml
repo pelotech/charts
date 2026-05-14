@@ -96,6 +96,7 @@ keyserver:
     origin: https://jwt.io,https://app.localhost
     trust: https://sso.localhost/auth/realms/example/protocol/openid-connect/certs
     jwks_uri: https://auth.app.localhost/jwks
+    sub: ''
 
 ingress:
   enabled: false
