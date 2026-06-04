@@ -1,6 +1,6 @@
 # postgrest
 
-### version: 0.6.1<!-- x-release-please-version -->
+### version: 0.7.0<!-- x-release-please-version -->
 
 Helm chart for a PostgREST data api.
 
