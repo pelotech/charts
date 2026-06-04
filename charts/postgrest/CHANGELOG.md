@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/pelotech/charts/compare/postgrest/0.6.1...postgrest/0.7.0) (2026-06-04)
+
+
+### Features
+
+* allow configurable postgrest migrations command ([#122](https://github.com/pelotech/charts/issues/122)) ([de44e21](https://github.com/pelotech/charts/commit/de44e2186f2dc560fa5cf4e76e81bb1c5326e1d6))
+
 ## [0.6.1](https://github.com/pelotech/charts/compare/postgrest/0.6.0...postgrest/0.6.1) (2026-05-14)
 
 
