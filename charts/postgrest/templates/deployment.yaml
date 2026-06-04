@@ -69,8 +69,7 @@ spec:
           image: {{ .Values.database.migrations.image }}:{{ .Values.database.migrations.tag }}
           imagePullPolicy: IfNotPresent
           command:
-            - /bin/goose
-            - up
+          {{- toYaml .Values.database.migrations.command | nindent 12 }}
           {{- if .Values.database.migrations.loadFromConfigMap }}
           volumeMounts:
             - name: migrations
