@@ -24,6 +24,9 @@ database:
     tag: latest
     enabled: false
     loadFromConfigMap: false
+    command:
+      - /bin/goose
+      - up
 
 cluster:
   enabled: true

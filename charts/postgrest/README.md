@@ -58,6 +58,8 @@ Helm chart for a PostgREST data api.
 | database.connection.hostname | string | `"postgrest-cluster-rw"` |  |
 | database.connection.password | string | `"postgrest"` |  |
 | database.connection.username | string | `"postgrest"` |  |
+| database.migrations.command[0] | string | `"/bin/goose"` |  |
+| database.migrations.command[1] | string | `"up"` |  |
 | database.migrations.database | string | `"postgrest"` |  |
 | database.migrations.enabled | bool | `false` |  |
 | database.migrations.hostname | string | `"postgrest-cluster-rw"` |  |
