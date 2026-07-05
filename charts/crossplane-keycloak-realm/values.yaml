@@ -9,6 +9,10 @@ realm:
     defaultSignatureAlgorithm: "RS256"
     loginWithEmailAllowed: true
     resetPasswordAllowed: true
+    # When true, Keycloak forces every user's username to equal their email.
+    # The user templates honor this: they emit username == email so the provider
+    # doesn't see permanent drift on the immutable username field.
+    registrationEmailAsUsername: true
 
 adminUser:
   enabled: true
