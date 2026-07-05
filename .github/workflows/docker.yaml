@@ -23,7 +23,7 @@ jobs:
           - goose
           - keyserver
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
       - uses: sigstore/cosign-installer@v4.1.2
         with:
           cosign-release: 'v2.2.4'
