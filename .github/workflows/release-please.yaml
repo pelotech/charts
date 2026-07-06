@@ -17,13 +17,13 @@ jobs:
       paths_released: ${{ steps.release.outputs.paths_released }}
       releases_created: ${{ steps.release.outputs.releases_created }}
     steps:
-      - uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
-      - uses: actions/github-script@v8
+      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         id: set-output
         env:
           RELEASE_OUTPUTS: ${{ toJson(steps.release.outputs) }}
@@ -43,7 +43,7 @@ jobs:
       packages: write
       contents: read
     steps:
-      - uses: actions/github-script@v8
+      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         id: release
         env:
           RELEASE_OUTPUTS: ${{ needs.release-please.outputs.release-output }}
@@ -58,16 +58,16 @@ jobs:
             core.setOutput('chart-name',chartName);
             core.setOutput('chart-version',chartVersion)
             core.setOutput('chart-git-tag', gitTag)
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
       - name: Build dependencies Helm - ${{ steps.release.outputs.chart-name }}
-        uses: WyriHaximus/github-action-helm3@v4
+        uses: WyriHaximus/github-action-helm3@e3894d973c282349e3d41d3347767f2b2545b583 # v4
         with:
           exec: |
             helm repo add bitnami https://charts.bitnami.com/bitnami
             helm repo add cloudnative-pg https://cloudnative-pg.io/charts
             helm dependency build ${{matrix.path}}
       - name: Chart | Push - ${{ steps.release.outputs.chart-name }}
-        uses: appany/helm-oci-chart-releaser@v0.5.0
+        uses: appany/helm-oci-chart-releaser@d94988c92bed2e09c6113981f15f8bb495d10943 # v0.5.0
         with:
           name: ${{ steps.release.outputs.chart-name }}
           repository: pelotech/charts
@@ -75,7 +75,7 @@ jobs:
           registry: ghcr.io
           registry_username: ${{ github.actor }}
           registry_password: ${{ secrets.github_token }}
-      - uses: imjasonh/setup-crane@v0.5
+      - uses: imjasonh/setup-crane@6da1ae018866400525525ce74ff892880c099987 # v0.5
       - name: update docker images with annotations
         run: |
           crane mutate -a org.opencontainers.image.revision=${{ steps.release.outputs.chart-git-tag }},org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY ghcr.io/pelotech/charts/${{ steps.release.outputs.chart-name }}:${{ steps.release.outputs.chart-version }}
