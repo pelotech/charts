@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.7.1](https://github.com/pelotech/charts/compare/postgrest/0.7.0...postgrest/0.7.1) (2026-07-07)
+
+
+### Chores
+
+* **deps:** pin dependencies ([#127](https://github.com/pelotech/charts/issues/127)) ([59318f2](https://github.com/pelotech/charts/commit/59318f21bc528edcd1617079337a3b9242fad8d4))
+* **deps:** update dorny/paths-filter action to v4 ([#148](https://github.com/pelotech/charts/issues/148)) ([8479e02](https://github.com/pelotech/charts/commit/8479e02156cedf87c7bff471832ec9433ab47a4e))
+* **deps:** update ghcr.io/pelotech/images/goose docker digest to afee303 ([#144](https://github.com/pelotech/charts/issues/144)) ([140e832](https://github.com/pelotech/charts/commit/140e83248a7a93566cb31e0a627d7be1ed506696))
+* **deps:** update ghcr.io/pelotech/images/keyserver docker digest to a128a2b ([#147](https://github.com/pelotech/charts/issues/147)) ([2f687e0](https://github.com/pelotech/charts/commit/2f687e0088cb16c4c91b0ab40005caec135cb88e))
+* **deps:** update helm release cluster to v0.7.0 ([#125](https://github.com/pelotech/charts/issues/125)) ([aad5d07](https://github.com/pelotech/charts/commit/aad5d07a2b73e2b165dbb6d2ba641c11bbf34084))
+
 ## [0.7.0](https://github.com/pelotech/charts/compare/postgrest/0.6.1...postgrest/0.7.0) (2026-06-04)
 
 
