@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/pelotech/charts/compare/crossplane-keycloak-realm/0.3.0...crossplane-keycloak-realm/0.3.1) (2026-07-07)
+
+
+### Bug Fixes
+
+* keycloak realm email as username ([#126](https://github.com/pelotech/charts/issues/126)) ([1338233](https://github.com/pelotech/charts/commit/1338233a642513077c914aec99000bc6fc487ce2))
+
 ## [0.3.0](https://github.com/pelotech/charts/compare/crossplane-keycloak-realm/0.2.0...crossplane-keycloak-realm/0.3.0) (2026-06-04)
 
 
