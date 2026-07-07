@@ -22,7 +22,7 @@ frontend:
     # frontend.image.repository -- The repository where the frontend image is hosted.
     repository: martinaif/backstage-k8s-demo-frontend
     # frontend.image.tag -- The tag to pull from the repository for the frontend image.
-    tag: test1
+    tag: test1@sha256:f07fbe15e5b5908d079a31becafa14de1f45ec00f6bc480f6ce5c8d3613f2f3b
     # frontend.image.pullPolicy -- The ImagePullPolicy to apply to the frontend deployment.
     pullPolicy: IfNotPresent
   # frontend.containerPort -- The port the frontend is listening on inside the container.
@@ -48,7 +48,7 @@ backend:
     # backend.image.repository -- The repository where the backend image is hosted.
     repository: martinaif/backstage-k8s-demo-backend
     # backend.image.tag -- The tag to pull from the repository for the backend image.
-    tag: test1
+    tag: test1@sha256:43bc40a3da0e2d134b9d41aaff0d777a095c95a143a6bac656cf17cb39751ccb
     # backend.image.pullPolicy -- The ImagePullPolicy to apply to the backend deployment.
     pullPolicy: IfNotPresent
   # backend.containerPort -- The port the backend is listening on insie the container.
