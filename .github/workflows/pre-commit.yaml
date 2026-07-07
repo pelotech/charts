@@ -20,5 +20,48 @@ jobs:
         with:
           exec: helm dependency build charts/lrsql
 
+      # Commit back changes that often show up in renovate changes for versions
+      - name: Regenerate docs
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        run: pre-commit run helm-docs-built --all-files || true
+
+      - name: Check for docs changes
+        id: docs
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          if git diff --quiet -- ':(glob)**/README.md'; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Runs on every event and is the required status check. On the docs commit
+      # (run #2) this re-runs and lands a green check on the head SHA. Untrusted
+      # hooks run here, BEFORE any write-capable token exists.
       - name: pre-commit
         run: pre-commit run --all-files --show-diff-on-failure
+
+      - name: Generate app token
+        id: app-token
+        if: >-
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name == github.repository &&
+          steps.docs.outputs.changed == 'true'
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3
+        with:
+          app-id: ${{ vars.ORG_RELEASE_PLEASE_CLIENT_ID }}
+          private-key: ${{ secrets.ORG_RELEASE_PLEASE_PRIVATE_KEY }}
+
+      - name: Commit docs changes back to PR branch (signed)
+        if: >-
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name == github.repository &&
+          steps.docs.outputs.changed == 'true'
+        uses: planetscale/ghcommit-action@a6b150b81dca5dd027baa898604418eec9e11465 # v0.2.22
+        with:
+          commit_message: "docs: regenerate docs"
+          repo: ${{ github.repository }}
+          branch: ${{ github.head_ref }}
+          file_pattern: ':(glob)**/README.md'
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}

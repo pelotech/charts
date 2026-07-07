@@ -17,13 +17,13 @@ jobs:
       paths_released: ${{ steps.release.outputs.paths_released }}
       releases_created: ${{ steps.release.outputs.releases_created }}
     steps:
-      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
-      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         id: set-output
         env:
           RELEASE_OUTPUTS: ${{ toJson(steps.release.outputs) }}
@@ -43,7 +43,7 @@ jobs:
       packages: write
       contents: read
     steps:
-      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         id: release
         env:
           RELEASE_OUTPUTS: ${{ needs.release-please.outputs.release-output }}
@@ -60,7 +60,7 @@ jobs:
             core.setOutput('chart-git-tag', gitTag)
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: Build dependencies Helm - ${{ steps.release.outputs.chart-name }}
-        uses: WyriHaximus/github-action-helm3@e3894d973c282349e3d41d3347767f2b2545b583 # v4
+        uses: WyriHaximus/github-action-helm3@e3894d973c282349e3d41d3347767f2b2545b583 # v4.0.2
         with:
           exec: |
             helm repo add bitnami https://charts.bitnami.com/bitnami
