@@ -8,7 +8,7 @@ Helm chart for a PostgREST data api.
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://cloudnative-pg.io/charts | cluster | 0.5.0 |
+| https://cloudnative-pg.io/charts | cluster | 0.7.0 |
 
 ## Values
 
