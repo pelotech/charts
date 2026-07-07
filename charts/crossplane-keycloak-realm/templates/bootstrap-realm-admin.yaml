@@ -54,7 +54,7 @@ metadata:
 spec:
   providerConfigRef: {{- pick (required ".Values.providerConfig is required" .Values.providerConfig) "name" "kind" | toYaml | nindent 4}}
   forProvider:
-    username: "{{ .Values.adminUser.username }}"
+    username: "{{ if .Values.realm.forProvider.registrationEmailAsUsername }}{{ .Values.adminUser.email }}{{ else }}{{ .Values.adminUser.username }}{{ end }}"
     email: "{{ .Values.adminUser.email }}"
     realmIdRef:
       name: "{{ $realmResourceName }}"

@@ -8,7 +8,7 @@ Helm chart for a PostgREST data api.
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://cloudnative-pg.io/charts | cluster | 0.5.0 |
+| https://cloudnative-pg.io/charts | cluster | 0.7.0 |
 
 ## Values
 
@@ -63,7 +63,7 @@ Helm chart for a PostgREST data api.
 | database.migrations.database | string | `"postgrest"` |  |
 | database.migrations.enabled | bool | `false` |  |
 | database.migrations.hostname | string | `"postgrest-cluster-rw"` |  |
-| database.migrations.image | string | `"ghcr.io/pelotech/images/goose"` |  |
+| database.migrations.image | string | `"ghcr.io/pelotech/images/goose@sha256:e323123b0a33dbc21585d6c719c13f53a50e688979c33a7d7698ad5ca23b0a0a"` |  |
 | database.migrations.loadFromConfigMap | bool | `false` |  |
 | database.migrations.password | string | `"goose"` |  |
 | database.migrations.tag | string | `"latest"` |  |
@@ -84,7 +84,7 @@ Helm chart for a PostgREST data api.
 | ingress.tls[0].hosts[1] | string | `"data.app.localhost"` |  |
 | ingress.tls[0].secretName | string | `"app.localhost-tls"` |  |
 | keyserver.api.key | string | `"a-string-secret-at-least-256-bits-long"` |  |
-| keyserver.image | string | `"ghcr.io/pelotech/images/keyserver"` |  |
+| keyserver.image | string | `"ghcr.io/pelotech/images/keyserver@sha256:d107f18dad3a919029dad3eb61a69bfbde1ca6876df4979e1b853c88c4148250"` |  |
 | keyserver.jwt.alg | string | `"RS256"` |  |
 | keyserver.jwt.aud | string | `"postgrest"` |  |
 | keyserver.jwt.claims.postgrest | string | `"peek"` |  |

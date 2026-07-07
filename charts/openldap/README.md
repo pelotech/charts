@@ -21,7 +21,7 @@ This chart was forked from the now-deprecated Helm Charts repository.
 | extraLabels | object | `{}` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"osixia/openldap"` |  |
-| image.tag | string | `"1.2.4"` |  |
+| image.tag | string | `"1.5.0@sha256:18742e9c449c9c1afe129d3f2f3ee15fb34cc43e5f940a20f3399728f41d7c28"` |  |
 | initResources | object | `{}` |  |
 | logLevel | string | `"info"` |  |
 | nodeSelector | object | `{}` |  |

@@ -20,7 +20,7 @@ database:
     password: goose      # superuser password for PSQL connection
     database: postgrest  # superuser database for PSQL connection
     hostname: postgrest-cluster-rw  # superuser hostname for PSQL connection
-    image: ghcr.io/pelotech/images/goose
+    image: ghcr.io/pelotech/images/goose@sha256:afee303f0172bf7ed4db97180ce1561d0f1db09222f8e87d3313b2cd1fb184c9
     tag: latest
     enabled: false
     loadFromConfigMap: false
@@ -85,7 +85,7 @@ cluster:
           ensure: present
 
 keyserver:
-  image: ghcr.io/pelotech/images/keyserver
+  image: ghcr.io/pelotech/images/keyserver@sha256:d107f18dad3a919029dad3eb61a69bfbde1ca6876df4979e1b853c88c4148250
   tag: latest
   api:
     key: a-string-secret-at-least-256-bits-long

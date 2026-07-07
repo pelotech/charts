@@ -20,12 +20,12 @@ dependencies:
   - name: cubejs
     condition: global.cubejs.enabled
     repository: oci://ghcr.io/pelotech/charts
-    version: "0.2.0"
+    version: "0.3.0"
   - name: cubestore
     condition: global.cubestore.enabled
     repository: oci://ghcr.io/pelotech/charts
-    version: "0.2.0"
+    version: "0.3.0"
   - name: redis
     condition: global.redis.enabled
     repository: https://charts.bitnami.com/bitnami
-    version: "17.1.*"
+    version: "17.17.*"

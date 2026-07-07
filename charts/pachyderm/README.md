@@ -22,7 +22,7 @@ Pachyderm is a large-scale container-based workflow engine that offers complete 
 | credentials | string | `"local"` |  |
 | etcd.image.pullPolicy | string | `"IfNotPresent"` |  |
 | etcd.image.repository | string | `"quay.io/coreos/etcd"` |  |
-| etcd.image.tag | string | `"v3.3.5"` |  |
+| etcd.image.tag | string | `"v3.6.13@sha256:f5a43614f4a7c74891b9fc3aecd27197af896911e24a203046acd094dd34f8bc"` |  |
 | etcd.persistence.accessMode | string | `"ReadWriteOnce"` |  |
 | etcd.persistence.enabled | bool | `false` |  |
 | etcd.persistence.size | string | `"20G"` |  |
@@ -36,7 +36,7 @@ Pachyderm is a large-scale container-based workflow engine that offers complete 
 | pachd.exposeObjApi | bool | `false` |  |
 | pachd.image.pullPolicy | string | `"Always"` |  |
 | pachd.image.repository | string | `"pachyderm/pachd"` |  |
-| pachd.image.tag | string | `"1.8.6"` |  |
+| pachd.image.tag | string | `"2.12.2@sha256:69e264273bf7e17f254c388a5daa406c9aefdf54a692595cf4dc2f4b841312b1"` |  |
 | pachd.pfsCache | string | `"0G"` |  |
 | pachd.replicaCount | int | `1` |  |
 | pachd.resources.requests.cpu | string | `"250m"` |  |
