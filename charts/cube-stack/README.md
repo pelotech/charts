@@ -11,7 +11,7 @@ Cube Stack is an Umbrella Chart that contains everything needed to run Cube in p
 | Repository | Name | Version |
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | redis | 17.17.* |
-| oci://ghcr.io/pelotech/charts | cubejs | 0.2.0 |
+| oci://ghcr.io/pelotech/charts | cubejs | 0.3.0 |
 | oci://ghcr.io/pelotech/charts | cubestore | 0.3.0 |
 
 ## Values
