@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.2](https://github.com/pelotech/charts/compare/lrsql/0.3.1...lrsql/0.3.2) (2026-07-07)
+
+
+### Chores
+
+* **deps:** pin dependencies ([#127](https://github.com/pelotech/charts/issues/127)) ([59318f2](https://github.com/pelotech/charts/commit/59318f21bc528edcd1617079337a3b9242fad8d4))
+
 ## [0.3.1](https://github.com/pelotech/charts/compare/lrsql/0.3.0...lrsql/0.3.1) (2026-05-07)
 
 
