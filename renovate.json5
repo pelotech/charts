@@ -2,4 +2,10 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   extends: ["config:best-practices",],
   dependencyDashboard: true,
+  // CI regenerates terraform-docs and commits the README back to the PR branch
+  // using a GitHub App token. Without this, Renovate sees a foreign author and
+  // stops auto-rebasing the branch.
+  gitIgnoredAuthors: [
+    '245757523+pt-release-please[bot]@users.noreply.github.com',
+  ]
 }

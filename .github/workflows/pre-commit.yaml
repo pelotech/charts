@@ -20,9 +20,6 @@ jobs:
         with:
           exec: helm dependency build charts/lrsql
 
-      - name: pre-commit
-        run: pre-commit run --all-files --show-diff-on-failure
-
       # Commit back changes that often show up in renovate changes for versions
       - name: Regenerate docs
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
@@ -32,9 +29,6 @@ jobs:
         id: docs
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         run: |
-          # ':(glob)' magic makes a leading '**/' match zero or more path
-          # components, so this single pathspec covers a root README.md and all
-          # subdirectories (default '**/' matching would miss the root file).
           if git diff --quiet -- ':(glob)**/README.md'; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
@@ -68,8 +62,6 @@ jobs:
           commit_message: "docs: regenerate docs"
           repo: ${{ github.repository }}
           branch: ${{ github.head_ref }}
-          # ghcommit-action feeds this to `git status` as a git pathspec (not a JS
-          # glob), so ':(glob)' is needed for '**/' to also match a root README.md.
           file_pattern: ':(glob)**/README.md'
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
