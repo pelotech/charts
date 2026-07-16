@@ -41,6 +41,9 @@
     },
     "charts/postgrest": {
       "extra-files": ["README.md"]
+    },
+    "charts/xapi-lrs": {
+      "extra-files": ["README.md"]
     }
   },
   "changelog-sections": [
