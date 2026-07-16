@@ -7,8 +7,12 @@ replicaCount: 1
 image:
   registry: docker.io
   repository: yetanalytics/lrsql
-  tag: v0.9.3@sha256:46995beb8265df5caeb0b5a8173499cf278c13bd36464e91bbace57ccf1a7512
-  digest: ""
+  ## @param image.tag Image tag. Defaults to the chart appVersion when empty.
+  ##
+  tag: ""
+  ## @param image.digest Image digest (sha256:...). When set, pins the pull and takes precedence over the tag.
+  ##
+  digest: "sha256:97f9dc4b081faf86ccb9b46b9f5c555539105b06c3b2935d890a0a66f8541ef9"
   pullPolicy: IfNotPresent
   pullSecrets: []
   debug: false
@@ -173,8 +177,7 @@ ingress:
   ##
   ingressClassName: ""
   ## @param ingress.tls Enable TLS on the Ingress
-  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## You can use the ingress.secrets parameter to create this TLS secret or rely on cert-manager to create it
+  ## TLS certificates are read from a secret named "<hostname>-tls". Create it yourself or let cert-manager provision it.
   ##
   tls: true
   ## @param ingress.tlsWwwPrefix Adds www subdomain to default cert
@@ -205,21 +208,6 @@ ingress:
   ##   secretName: nginx.local-tls
   ##
   extraTls: []
-  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
-  ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
-  ## It is also possible to create and manage the certificates outside of this helm chart
-  ## Please see README.md for more information
-  ## e.g:
-  ## - name: nginx.local-tls
-  ##   key:
-  ##   certificate:
-  ##
-  secrets: []
   ## @param ingress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
   ## Useful when looking for additional customization, such as using different backend
   ##

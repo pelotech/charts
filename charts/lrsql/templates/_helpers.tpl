@@ -7,10 +7,17 @@ Expand the name of the chart.
 
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Return the proper lrsql image name
+Return the proper lrsql image name.
+Prefers image.digest; otherwise uses image.tag, defaulting to the chart appVersion.
 */}}
 {{- define "lrsql.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- $tag := .Values.image.tag | default .Chart.AppVersion -}}
+{{- $ref := ternary (printf "@%s" .Values.image.digest) (printf ":%s" $tag) (not (empty .Values.image.digest)) -}}
+{{- if .Values.image.registry -}}
+{{- printf "%s/%s%s" .Values.image.registry .Values.image.repository $ref -}}
+{{- else -}}
+{{- printf "%s%s" .Values.image.repository $ref -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
