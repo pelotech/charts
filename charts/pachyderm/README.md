@@ -22,7 +22,7 @@ Pachyderm is a large-scale container-based workflow engine that offers complete 
 | credentials | string | `"local"` |  |
 | etcd.image.pullPolicy | string | `"IfNotPresent"` |  |
 | etcd.image.repository | string | `"quay.io/coreos/etcd"` |  |
-| etcd.image.tag | string | `"v3.6.13@sha256:f5a43614f4a7c74891b9fc3aecd27197af896911e24a203046acd094dd34f8bc"` |  |
+| etcd.image.tag | string | `"v3.7.1@sha256:3c66a5191d37a11af19f50ad49beed162a988bd1752eabc9fe6b164f7ee443e5"` |  |
 | etcd.persistence.accessMode | string | `"ReadWriteOnce"` |  |
 | etcd.persistence.enabled | bool | `false` |  |
 | etcd.persistence.size | string | `"20G"` |  |
