@@ -1,4 +1,4 @@
-FROM denoland/deno:alpine@sha256:437386888b8b5168e5b51a118e06d663c64a274ce1928ebce8c8079cd8a3b303
+FROM denoland/deno:alpine@sha256:13851184d6705150b8b230c5377f26c3bd182865d28700bb72bc0b2c271b504a
 
 LABEL authors="Jared Davis <jared.davis@pelo.tech>"
 
