@@ -3,7 +3,7 @@ name: umami
 description: A Helm chart for deploying Umami analytics to Kubernetes
 type: application
 version: 0.1.0
-appVersion: "2.18.1"
+appVersion: "3.2.0"
 home: https://umami.is/
 sources:
   - https://github.com/umami-software/umami

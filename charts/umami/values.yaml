@@ -15,7 +15,7 @@ image:
   repository: umami-software/umami
   ## @param image.tag Umami image tag
   ##
-  tag: postgresql-v2.18.1
+  tag: 3.2.0
   ## @param image.digest Umami image digest. If set, this overrides the image tag
   ##
   digest: ""

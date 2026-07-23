@@ -2,7 +2,7 @@
 
 ### version: 0.1.0<!-- x-release-please-version -->
 
-![AppVersion: 2.18.1](https://img.shields.io/badge/AppVersion-2.18.1-informational?style=flat-square)
+![AppVersion: 3.2.0](https://img.shields.io/badge/AppVersion-3.2.0-informational?style=flat-square)
 
 A Helm chart for deploying Umami analytics to Kubernetes
 
@@ -32,7 +32,7 @@ A Helm chart for deploying Umami analytics to Kubernetes
 | image.pullSecrets | list | `[]` |  |
 | image.registry | string | `"ghcr.io"` |  |
 | image.repository | string | `"umami-software/umami"` |  |
-| image.tag | string | `"postgresql-v2.18.1"` |  |
+| image.tag | string | `"3.2.0"` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |
 | ingress.enabled | bool | `false` |  |
