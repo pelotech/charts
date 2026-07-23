@@ -1,0 +1,16 @@
+apiVersion: v2
+name: umami
+description: A Helm chart for deploying Umami analytics to Kubernetes
+type: application
+version: 0.1.0
+appVersion: "2.18.1"
+home: https://umami.is/
+sources:
+  - https://github.com/umami-software/umami
+  - https://codeberg.org/vanutp/umami-sso
+dependencies:
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x

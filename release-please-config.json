@@ -41,6 +41,9 @@
     },
     "charts/postgrest": {
       "extra-files": ["README.md"]
+    },
+    "charts/umami": {
+      "extra-files": ["README.md"]
     }
   },
   "changelog-sections": [

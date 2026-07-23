@@ -1,0 +1,277 @@
+# Default values for umami.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+## @param replicaCount Number of Umami replicas to deploy
+##
+replicaCount: 1
+
+image:
+  ## @param image.registry Umami image registry
+  ##
+  registry: ghcr.io
+  ## @param image.repository Umami image repository
+  ##
+  repository: umami-software/umami
+  ## @param image.tag Umami image tag
+  ##
+  tag: postgresql-v2.18.1
+  ## @param image.digest Umami image digest. If set, this overrides the image tag
+  ##
+  digest: ""
+  ## @param image.pullPolicy Umami image pull policy
+  ##
+  pullPolicy: IfNotPresent
+  ## @param image.pullSecrets Umami image pull secrets
+  ##
+  pullSecrets: []
+
+## @param imagePullSecrets Global image pull secrets
+##
+imagePullSecrets: []
+
+## @param nameOverride String to partially override umami.fullname
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override umami.fullname
+##
+fullnameOverride: ""
+
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a service account should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Annotations to add to the service account
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the pod
+  ##
+  automountServiceAccountToken: false
+
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+
+## @param podAnnotations Annotations to add to Umami pods
+##
+podAnnotations: {}
+## @param podLabels Labels to add to Umami pods
+##
+podLabels: {}
+## @param podSecurityContext Security context for Umami pods
+##
+podSecurityContext: {}
+## @param securityContext Security context for the Umami container
+##
+securityContext: {}
+
+containerPorts:
+  ## @param containerPorts.http Umami HTTP container port
+  ##
+  http: 3000
+
+service:
+  ## @param service.type Kubernetes service type
+  ##
+  type: ClusterIP
+  ports:
+    ## @param service.ports.http Umami HTTP service port
+    ##
+    http: 80
+    ## @param service.ports.sso Umami SSO service port
+    ##
+    sso: 8000
+  targetPort:
+    ## @param service.targetPort.http Umami HTTP target port
+    ##
+    http: http
+    ## @param service.targetPort.sso Umami SSO target port
+    ##
+    sso: sso-http
+  nodePorts:
+    ## @param service.nodePorts.http Kubernetes node port for HTTP
+    ##
+    http: ""
+    ## @param service.nodePorts.sso Kubernetes node port for SSO
+    ##
+    sso: ""
+
+ingress:
+  ## @param ingress.enabled Set to true to enable ingress record generation
+  ##
+  enabled: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: Prefix
+  ## @param ingress.hostname Default host for the ingress resource
+  ##
+  hostname: umami.local
+  ## @param ingress.path Default path for the ingress resource
+  ##
+  path: /
+  ## @param ingress.annotations Additional annotations for the Ingress resource
+  ##
+  annotations: {}
+  ## @param ingress.ingressClassName Set the ingressClassName on the ingress record for Kubernetes 1.18+
+  ##
+  ingressClassName: ""
+  ## @param ingress.tls Enable TLS on the Ingress
+  ##
+  tls: false
+  ## @param ingress.extraHosts Additional hosts for the ingress resource
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths Additional paths for the ingress resource
+  ## Extra paths should not duplicate generated /, /login, or /logout routes.
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls Additional TLS configuration for the ingress resource
+  ##
+  extraTls: []
+  ## @param ingress.secrets Custom TLS secrets for the ingress resource
+  ##
+  secrets: []
+  ## @param ingress.extraRules Additional rules for the ingress resource
+  ##
+  extraRules: []
+
+## @param extraEnvVars Extra environment variables to set on the Umami container
+## Use this for DATABASE_URL, APP_SECRET, and valueFrom.secretKeyRef entries from CNPG or external database secrets.
+## E.g:
+## extraEnvVars:
+##   - name: DATABASE_URL
+##     valueFrom:
+##       secretKeyRef:
+##         name: umami-db-app
+##         key: uri
+##   - name: APP_SECRET
+##     valueFrom:
+##       secretKeyRef:
+##         name: umami-app
+##         key: app-secret
+##
+extraEnvVars: []
+## @param extraEnvVarsCM ConfigMap with extra environment variables for the Umami container
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Secret with extra environment variables for the Umami container
+##
+extraEnvVarsSecret: ""
+## @param envFrom Additional envFrom entries for the Umami container
+##
+envFrom: []
+
+## @param resources Resource requests and limits for the Umami container
+##
+resources: {}
+
+## @param livenessProbe Liveness probe for the Umami container
+##
+livenessProbe:
+  httpGet:
+    path: /api/heartbeat
+    port: http
+## @param startupProbe Startup probe for the Umami container
+##
+startupProbe:
+  httpGet:
+    path: /api/heartbeat
+    port: http
+  failureThreshold: 30
+  periodSeconds: 10
+## @param readinessProbe Readiness probe for the Umami container
+##
+readinessProbe:
+  httpGet:
+    path: /api/heartbeat
+    port: http
+
+sso:
+  ## @param sso.enabled Enable the Umami SSO sidecar container
+  ##
+  enabled: false
+  ingress:
+    ## @param sso.ingress.pathType Ingress path type for automatic /login and /logout SSO routes
+    ##
+    pathType: Prefix
+  image:
+    ## @param sso.image.registry Umami SSO image registry
+    ##
+    registry: codeberg.org
+    ## @param sso.image.repository Umami SSO image repository
+    ##
+    repository: vanutp/umami-sso
+    ## @param sso.image.tag Umami SSO image tag. WARNING: production users should set a fixed tag or digest before enabling SSO for rollback reproducibility.
+    # -- Umami SSO image tag. WARNING: production users should set a fixed tag or digest before enabling SSO for rollback/reproducibility.
+    tag: latest
+    ## @param sso.image.digest Umami SSO image digest. If set, this overrides the image tag
+    ##
+    digest: ""
+    ## @param sso.image.pullPolicy Umami SSO image pull policy
+    ##
+    pullPolicy: IfNotPresent
+  containerPorts:
+    ## @param sso.containerPorts.http Umami SSO HTTP container port
+    ##
+    http: 8000
+  ## @param sso.securityContext Security context for the Umami SSO container
+  ##
+  securityContext: {}
+  ## @param sso.extraEnvVars Extra environment variables to set on the Umami SSO container
+  ##
+  extraEnvVars: []
+  ## @param sso.extraEnvVarsCM ConfigMap with extra environment variables for the Umami SSO container
+  ##
+  extraEnvVarsCM: ""
+  ## @param sso.extraEnvVarsSecret Secret with extra environment variables for the Umami SSO container
+  ##
+  extraEnvVarsSecret: ""
+  ## @param sso.envFrom Additional envFrom entries for the Umami SSO container
+  ##
+  envFrom: []
+  ## @param sso.resources Resource requests and limits for the Umami SSO container
+  ##
+  resources: {}
+  ## @param sso.livenessProbe Liveness probe for the Umami SSO container
+  ##
+  livenessProbe:
+    tcpSocket:
+      port: sso-http
+  ## @param sso.startupProbe Startup probe for the Umami SSO container
+  ##
+  startupProbe:
+    tcpSocket:
+      port: sso-http
+    failureThreshold: 30
+    periodSeconds: 10
+  ## @param sso.readinessProbe Readiness probe for the Umami SSO container
+  ##
+  readinessProbe:
+    tcpSocket:
+      port: sso-http
+
+## @param volumes Additional volumes on the output Deployment definition
+##
+volumes: []
+## @param volumeMounts Additional volumeMounts on the Umami container
+##
+volumeMounts: []
+## @param ssoVolumeMounts Additional volumeMounts on the Umami SSO container
+##
+ssoVolumeMounts: []
+
+## @param nodeSelector Node labels for pod assignment
+##
+nodeSelector: {}
+## @param tolerations Tolerations for pod assignment
+##
+tolerations: []
+## @param affinity Affinity for pod assignment
+##
+affinity: {}
