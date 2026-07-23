@@ -20,6 +20,11 @@ jobs:
         with:
           exec: helm dependency build charts/lrsql
 
+      - name: Build dependencies Helm - umami
+        uses: WyriHaximus/github-action-helm3@e3894d973c282349e3d41d3347767f2b2545b583 # v4
+        with:
+          exec: helm dependency build charts/umami
+
       # Commit back changes that often show up in renovate changes for versions
       - name: Regenerate docs
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
