@@ -8,9 +8,4 @@ maintainers:
   - name: apkatsikas
     email: andrew.katsikas@pelo.tech
 description: Helm chart for a PostgREST data api.
-
-dependencies:
-  - name: cluster
-    version: 0.7.0
-    repository: https://cloudnative-pg.io/charts
-    condition: cluster.enabled
+appVersion: "v14.16"

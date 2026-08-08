@@ -4,7 +4,7 @@ metadata:
   name: postgrest
   namespace: "{{ .Release.Namespace }}"
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app.kubernetes.io/component: postgrest
@@ -16,87 +16,119 @@ spec:
         app.kubernetes.io/component: postgrest
         app.kubernetes.io/instance: "{{ .Release.Namespace }}"
         app.kubernetes.io/name: postgrest
+      annotations:
+        # Without these a config or credential change never reaches a running pod.
+        checksum/config: {{ include (print $.Template.BasePath "/configurations.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       imagePullSecrets: {{ default ("[]" | toJson) (.Values.imagePullSecrets | toJson) }}
+      {{- if and .Values.jwks.enabled .Values.jwks.refresh.enabled .Values.jwks.refresh.reload.enabled }}
+      # So the refresh run can signal PostgREST.
+      shareProcessNamespace: true
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.jwks.enabled }}
       initContainers:
-        - name: keyserver
-          image: {{ .Values.keyserver.image }}:{{ .Values.keyserver.tag }}
-          imagePullPolicy: IfNotPresent
-          restartPolicy: Always
-          ports:
-            - name: keyserver
-              containerPort: 8000
-              protocol: TCP
-          volumeMounts:
-            - mountPath: /etc/opt/postgrest/certificates
-              name: certificates
-          envFrom:
-            - configMapRef:
-                name: keyserver
-          env:
-            - name: PGRST_JWT_SECRET
-              valueFrom:
-                configMapKeyRef:
-                  name: postgrest
-                  key: PGRST_JWT_SECRET
-            - name: PGRST_CLIENT_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: keyserver
-                  key: PGRST_CLIENT_KEY
-        - name: wait
-          image: alpine:3.23.2
-          imagePullPolicy: IfNotPresent
+        # Aliased below for the refresh run, which differs only in name, restart
+        # policy and role.
+        - &jwks
+          name: jwks-fetch
+          image: {{ include "postgrest.jwks.image" . }}
+          imagePullPolicy: {{ .Values.jwks.image.pullPolicy }}
           command:
-            - /bin/sh
-            - -c
-            - |
-              apk add --no-cache postgresql-client
-
-              while ! psql "$CONNECTION" -c "SELECT 1;" 2>/dev/null; do
-                echo "awaiting connection - retrying in 5 seconds"
-                sleep 5
-              done
-              echo "connection succeeded"
+            - /usr/bin/sh
+            - /scripts/fetch-jwks.sh
+          args:
+            - once
           env:
-            - name: CONNECTION
-              valueFrom:
-                secretKeyRef:
-                  name: migrations
-                  key: connection
-        {{- if .Values.database.migrations.enabled }}
-        - name: goose
-          image: {{ .Values.database.migrations.image }}:{{ .Values.database.migrations.tag }}
-          imagePullPolicy: IfNotPresent
-          command:
-          {{- toYaml .Values.database.migrations.command | nindent 12 }}
-          {{- if .Values.database.migrations.loadFromConfigMap }}
-          volumeMounts:
-            - name: migrations
-              mountPath: /migrations
-          {{- end}}
-          envFrom:
-            - configMapRef:
-                name: goose
-          env:
-            - name: GOOSE_DBSTRING
-              valueFrom:
-                secretKeyRef:
-                  key: connection
-                  name: migrations
-            {{- if .Values.database.migrations.loadFromConfigMap }}
-            - name: GOOSE_MIGRATION_DIR
-              value: /migrations
+            - name: JWKS_URL
+              value: {{ .Values.jwks.url | required "jwks.url is required when jwks.enabled is true" | quote }}
+            - name: JWKS_TARGET
+              value: {{ include "postgrest.jwks.path" . | quote }}
+            - name: JWKS_TIMEOUT
+              value: {{ .Values.jwks.timeout | quote }}
+            - name: JWKS_RETRY_INTERVAL
+              value: {{ .Values.jwks.retryInterval | quote }}
+            - name: JWKS_MAX_ATTEMPTS
+              value: {{ .Values.jwks.maxAttempts | quote }}
+            - name: JWKS_REQUIRE_KTY
+              value: {{ .Values.jwks.require.kty | quote }}
+            - name: JWKS_REQUIRE_USE
+              value: {{ .Values.jwks.require.use | quote }}
+            - name: JWKS_REQUIRE_KID
+              value: {{ .Values.jwks.require.kid | quote }}
+            - name: JWKS_REFRESH_INTERVAL
+              value: {{ .Values.jwks.refresh.interval | quote }}
+            {{- if .Values.jwks.refresh.reload.enabled }}
+            - name: JWKS_RELOAD_SIGNAL
+              value: {{ .Values.jwks.refresh.reload.signal | quote }}
+            - name: JWKS_RELOAD_PROCESS
+              value: {{ .Values.jwks.refresh.reload.processName | quote }}
             {{- end }}
+          {{- with .Values.jwks.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: certificates
+              mountPath: {{ .Values.jwks.mountPath }}
+            - name: jwks-script
+              mountPath: /scripts
+              readOnly: true
+          {{- with .Values.jwks.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        {{- if .Values.jwks.refresh.enabled }}
+        - <<: *jwks
+          name: jwks-refresh
+          restartPolicy: Always
+          args:
+            - refresh
         {{- end }}
+      {{- end }}
       containers:
         - name: postgrest
-          image: postgrest/postgrest
-          imagePullPolicy: IfNotPresent
+          image: {{ include "postgrest.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           ports:
             - name: postgrest
-              containerPort: 3000
+              containerPort: {{ .Values.containerPorts.http }}
               protocol: TCP
+            {{- if or .Values.probes.startup.enabled .Values.probes.liveness.enabled }}
+            - name: admin
+              containerPort: {{ .Values.containerPorts.admin }}
+              protocol: TCP
+            {{- end }}
+          {{- if .Values.probes.startup.enabled }}
+          # Gates the rollout. Not re-evaluated once it passes, so a later outage
+          # leaves the pod serving 503 rather than dropping out of the Service.
+          startupProbe:
+            httpGet:
+              path: /ready
+              port: admin
+            periodSeconds: {{ .Values.probes.startup.periodSeconds }}
+            failureThreshold: {{ .Values.probes.startup.failureThreshold }}
+          {{- end }}
+          {{- if .Values.probes.liveness.enabled }}
+          # /live stays 200 with the database down, so an outage cannot restart-loop.
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: admin
+            periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
+            failureThreshold: {{ .Values.probes.liveness.failureThreshold }}
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: postgrest
@@ -106,15 +138,22 @@ spec:
                 secretKeyRef:
                   key: PGRST_DB_URI
                   name: connection
+          {{- if .Values.jwks.enabled }}
           volumeMounts:
-            - mountPath: /etc/opt/postgrest/certificates
-              name: certificates
+            - name: certificates
+              mountPath: {{ .Values.jwks.mountPath }}
+              readOnly: true
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- if .Values.jwks.enabled }}
       volumes:
         - name: certificates
           emptyDir:
-            sizeLimit: 1Mi
-        {{- if .Values.database.migrations.loadFromConfigMap }}
-        - name: migrations
+            sizeLimit: {{ .Values.jwks.sizeLimit }}
+        - name: jwks-script
           configMap:
-            name: migrations
-        {{- end}}
+            name: postgrest-jwks
+      {{- end }}
