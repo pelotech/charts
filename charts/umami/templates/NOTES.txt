@@ -1,0 +1,26 @@
+Umami has been deployed.
+
+{{- if .Values.ingress.enabled }}
+Access Umami through Ingress:
+  http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}{{ .Values.ingress.path }}
+{{- else }}
+Access Umami inside the cluster at:
+  http://{{ include "umami.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.ports.http }}
+
+Or port-forward it locally:
+  kubectl --namespace {{ .Release.Namespace }} port-forward svc/{{ include "umami.fullname" . }} 8080:{{ .Values.service.ports.http }}
+  open http://127.0.0.1:8080
+{{- end }}
+
+DATABASE_URL and APP_SECRET must be supplied through env values or Secrets.
+For CNPG or an external database, provide them with extraEnvVars valueFrom.secretKeyRef, extraEnvVarsSecret, or envFrom.
+
+{{- if .Values.sso.enabled }}
+{{- if .Values.ingress.enabled }}
+SSO is enabled. The chart-generated Ingress routes /login and /logout to the SSO sidecar, and required SSO env values must be supplied.
+{{- else }}
+SSO is enabled. The sidecar is exposed on the SSO Service port {{ .Values.service.ports.sso }}, and operators must configure external ingress or proxy path routing for /login and /logout. Required SSO env values must be supplied.
+{{- end }}
+
+{{- end }}
+Operational note: env-based Secret or ConfigMap changes require a pod rollout or restart.
