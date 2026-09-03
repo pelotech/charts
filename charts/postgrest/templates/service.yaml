@@ -4,17 +4,13 @@ metadata:
   name: postgrest
   namespace: "{{ .Release.Namespace }}"
 spec:
-  type: ClusterIP
+  type: {{ .Values.service.type }}
   selector:
     app.kubernetes.io/component: postgrest
     app.kubernetes.io/instance: "{{ .Release.Namespace }}"
     app.kubernetes.io/name: postgrest
   ports:
-    - name: keyserver
-      port: 8000
-      protocol: TCP
-      targetPort: keyserver
     - name: postgrest
-      port: 3000
+      port: {{ .Values.service.port }}
       protocol: TCP
       targetPort: postgrest

@@ -1,124 +1,238 @@
-imagePullSecrets:
+## @param imagePullSecrets Image pull secrets applied to every container in the pod
+## e.g:
+## imagePullSecrets:
+##   - name: my-registry-creds
+##
+imagePullSecrets: []
+
+## @param replicaCount Number of PostgREST replicas
+##
+replicaCount: 1
+
+image:
+  ## @param image.registry PostgREST image registry
+  ##
+  registry: docker.io
+  ## @param image.repository PostgREST image repository
+  ##
+  repository: postgrest/postgrest
+  ## @param image.tag Image tag. Defaults to the chart appVersion when empty.
+  ##
+  tag: ""
+  ## @param image.digest Image digest (sha256:...). When set, pins the pull and takes precedence over the tag.
+  ##
+  digest: "sha256:bea1c76a856fa39d1e542d25911cf95d02fe2bf971992d033044ff209f1504b8"
+  ## @param image.pullPolicy PostgREST image pull policy
+  ##
+  pullPolicy: IfNotPresent
 
 application:
-  schemas: public  # PSQL schemas (comma separated) for api usage
-  anon: anon       # PSQL role to grant anonymous api usage
-  preRequest: ""   # PSQL to run at beginning of each request
+  ## @param application.schemas PSQL schemas (comma separated) exposed by the api
+  ##
+  schemas: public
+  ## @param application.anon PSQL role granted anonymous api usage
+  ##
+  anon: anon
+  ## @param application.preRequest PSQL function to run at the beginning of each request
+  ##
+  preRequest: ""
   jwt:
     claim:
+      ## @param application.jwt.claim.selector JSPath selector for the JWT claim carrying the PSQL role
+      ##
       selector: ".postgrest"
 
 database:
   connection:
-    username: postgrest  # application username for PSQL connection
-    password: postgrest  # application password for PSQL connection
-    database: postgrest  # application database for PSQL connection
-    hostname: postgrest-cluster-rw  # application hostname for PSQL connection
+    ## @param database.connection.username Application username for the PSQL connection
+    ##
+    username: postgrest
+    ## @param database.connection.password Application password for the PSQL connection
+    ##
+    password: postgrest
+    ## @param database.connection.database Application database for the PSQL connection
+    ##
+    database: postgrest
+    ## @param database.connection.hostname Application hostname for the PSQL connection
+    ##
+    hostname: postgrest-cluster-rw
 
-  migrations:
-    username: goose      # superuser username for PSQL connection
-    password: goose      # superuser password for PSQL connection
-    database: postgrest  # superuser database for PSQL connection
-    hostname: postgrest-cluster-rw  # superuser hostname for PSQL connection
-    image: ghcr.io/pelotech/images/goose@sha256:afee303f0172bf7ed4db97180ce1561d0f1db09222f8e87d3313b2cd1fb184c9
-    tag: latest
-    enabled: false
-    loadFromConfigMap: false
-    command:
-      - /bin/goose
-      - up
-
-cluster:
+## Fetches a JWKS to a volume shared with PostgREST, which reads it via PGRST_JWT_SECRET.
+## Runs files/fetch-jwks.sh as an init container that fetches once and exits, so PostgREST
+## does not start until a usable key set is on disk.
+##
+jwks:
+  ## @param jwks.enabled Fetch a JWKS and point PGRST_JWT_SECRET at it.
+  ## When false, no JWT secret is configured and you must supply one yourself.
+  ##
   enabled: true
-  type: postgresql
-  mode: standalone
-  cluster:
-    instances: 3
-    storage:
-      size: 1Gi
-    roles:
-      - name: goose
-        ensure: present
-        login: true
-        superuser: true
-        passwordSecret:
-          name: migrations
+  ## @param jwks.url JWKS endpoint to fetch. Required when jwks.enabled is true.
+  ##
+  url: https://sso.localhost/auth/realms/example/protocol/openid-connect/certs
+  ## @param jwks.mountPath Directory shared with PostgREST
+  ##
+  mountPath: /etc/opt/postgrest/certificates
+  ## @param jwks.filename Filename written into jwks.mountPath
+  ##
+  filename: jwks.json
+  ## @param jwks.timeout Per-attempt curl timeout in seconds
+  ##
+  timeout: 10
+  ## @param jwks.retryInterval Seconds between attempts
+  ##
+  retryInterval: 3
+  ## @param jwks.maxAttempts Attempts before giving up. With the default retryInterval this
+  ## is two minutes of tolerance for an identity provider that is still coming up.
+  ##
+  maxAttempts: 40
+  ## @param jwks.sizeLimit Size limit of the shared emptyDir volume
+  ##
+  sizeLimit: 1Mi
+  ## Extra constraints on a usable key, on top of the structural checks. Empty accepts any,
+  ## since use and kid are optional in RFC 7517. A Keycloak realm can take RSA / sig / kid.
+  ##
+  require:
+    ## @param jwks.require.kty Required key type, e.g. RSA. Empty accepts any.
+    ##
+    kty: ""
+    ## @param jwks.require.use Required key use, e.g. sig. Empty accepts any.
+    ##
+    use: ""
+    ## @param jwks.require.kid Require a non-empty kid. PostgREST matches an incoming
+    ## token's kid header against the set.
+    ##
+    kid: ""
+  ## Re-fetch on an interval, in a resident sidecar. Off by default: only useful where
+  ## signing keys rotate, and a resident container that crashes drops the pod from its
+  ## Service endpoints. Otherwise rotate with `kubectl rollout restart`.
+  ##
+  refresh:
+    ## @param jwks.refresh.enabled Run the script resident, re-checking on an interval
+    ##
+    enabled: false
+    ## @param jwks.refresh.interval Seconds between refresh checks
+    ##
+    interval: 300
+    ## PostgREST does not watch the jwt-secret file, so signal it after a rotation.
+    ## Enables shareProcessNamespace, which also exposes container filesystems to each
+    ## other via /proc/<pid>/root.
+    ##
+    reload:
+      ## @param jwks.refresh.reload.enabled Signal PostgREST after the key set changes
+      ##
+      enabled: true
+      ## @param jwks.refresh.reload.signal SIGUSR2 reloads config, which re-reads the
+      ## jwt-secret file. SIGUSR1 only reloads the schema cache.
+      ##
+      signal: USR2
+      ## @param jwks.refresh.reload.processName Process name to signal, matched exactly
+      ##
+      processName: postgrest
+  image:
+    ## @param jwks.image.registry JWKS image registry
+    ##
+    registry: reg.mini.dev
+    ## @param jwks.image.repository JWKS image repository. Minimus hardened FIPS curl.
+    ##
+    repository: curl-fips
+    ## @param jwks.image.tag JWKS image tag
+    ##
+    tag: "8.21.0"
+    ## @param jwks.image.digest Image digest (sha256:...). When set, pins the pull and takes precedence over the tag.
+    ##
+    digest: "sha256:e318141552c5e6923abff064bd2b8d338c2722bda46cf48d84404b9957bcd814"
+    ## @param jwks.image.pullPolicy JWKS image pull policy
+    ##
+    pullPolicy: IfNotPresent
+  ## @param jwks.securityContext runAsUser must match the PostgREST container's uid (1000
+  ## in postgrest/postgrest) or the refresh run's signal is rejected with EPERM. Change it
+  ## alongside image.repository.
+  ##
+  securityContext:
+    runAsUser: 1000
+  ## @param jwks.resources Resource requests and limits for both JWKS runs
+  ##
+  resources: {}
 
-      # default transaction scoped role with valid JWT from OIDC
-      - name: anon
-        ensure: present
-        login: false
+## @param podSecurityContext fsGroup matches the uid both containers run as, so the shared
+## volume is writable by one and readable by the other.
+##
+podSecurityContext:
+  fsGroup: 1000
 
-      # short-lived JWT issued by keyserver
-      - name: peek
-        ensure: present
-        login: false
+## @param podAnnotations Annotations to add to the pod
+##
+podAnnotations: {}
 
-      # transaction scoped role from realm.access() mapping function
-      - name: view
-        ensure: present
-        login: false
+## @param securityContext Container-level security context for the PostgREST container
+##
+securityContext: {}
 
-      # transaction scoped role from realm.access() mapping function
-      - name: edit
-        ensure: present
-        login: false
+## @param resources Resource requests and limits for the PostgREST container
+##
+resources: {}
 
-      - name: postgrest
-        ensure: present
-        login: true
-        superuser: false
-        passwordSecret:
-          name: connection
-        inRoles:
-          - anon
-          - peek
-          - view
-          - edit
+service:
+  ## @param service.type Kubernetes service type
+  ##
+  type: ClusterIP
+  ## @param service.port Service port for the PostgREST api
+  ##
+  port: 3000
 
-  databases:
-    - name: postgrest
-      owner: goose
-      schemas:
-        - name: public
-          owner: goose
-          ensure: present
+containerPorts:
+  ## @param containerPorts.http Container port PostgREST listens on
+  ##
+  http: 3000
+  ## @param containerPorts.admin PostgREST's admin server, serving /live and /ready for the
+  ## probes below. Not exposed on the Service.
+  ##
+  admin: 3001
 
-keyserver:
-  image: ghcr.io/pelotech/images/keyserver@sha256:a128a2b37ccf00ab6bbbcd9ed0321bc81b1875aff51d0eb3aa412f07e50804d8
-  tag: latest
-  api:
-    key: a-string-secret-at-least-256-bits-long
-  jwt:
-    alg: RS256
-    iss: https://auth.app.localhost
-    aud: postgrest
-    exp: 5 minutes
-    claims:
-      postgrest: peek
-    origin: https://jwt.io,https://app.localhost
-    trust: https://sso.localhost/auth/realms/example/protocol/openid-connect/certs
-    jwks_uri: https://auth.app.localhost/jwks
-    sub: ''
+## Probes against PostgREST's admin server, which reports on the connection pool and schema
+## cache. There is no readiness probe: it would drop the pod from its Service during a
+## database outage, so callers would get a connection refusal instead of PostgREST's 503.
+## The startup probe covers the case that matters, since it gates the rollout. Revisit if
+## you run more than one replica, where readiness would let you shed a single bad pod.
+##
+probes:
+  startup:
+    ## @param probes.startup.enabled Gate rollout on PostgREST reporting ready
+    ##
+    enabled: true
+    ## @param probes.startup.periodSeconds How often to poll /ready during startup
+    ##
+    periodSeconds: 2
+    ## @param probes.startup.failureThreshold Polls before the pod is failed. Two minutes
+    ## at the default period.
+    ##
+    failureThreshold: 60
+  liveness:
+    ## @param probes.liveness.enabled Restart PostgREST if its listener stops answering.
+    ## Targets /live, which stays 200 with the database down, so an outage is not a restart
+    ## loop.
+    ##
+    enabled: true
+    ## @param probes.liveness.periodSeconds How often to poll /live
+    ##
+    periodSeconds: 10
+    ## @param probes.liveness.failureThreshold Failed polls before the container is restarted
+    ##
+    failureThreshold: 3
 
 ingress:
+  ## @param ingress.enabled Set to true to enable ingress record generation
+  ##
   enabled: false
+  ## @param ingress.tls TLS configuration for the ingress
+  ##
   tls:
     - hosts:
-        - 'auth.app.localhost'
         - 'data.app.localhost'
       secretName: 'app.localhost-tls'
+  ## @param ingress.rules Ingress rules
+  ##
   rules:
-    - host: 'auth.app.localhost'
-      http:
-        paths:
-          - pathType: Prefix
-            path: /
-            backend:
-              service:
-                name: postgrest
-                port:
-                  name: keyserver
     - host: 'data.app.localhost'
       http:
         paths:

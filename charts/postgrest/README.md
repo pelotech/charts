@@ -2,13 +2,9 @@
 
 ### version: 0.7.0<!-- x-release-please-version -->
 
+![AppVersion: v14.16](https://img.shields.io/badge/AppVersion-v14.16-informational?style=flat-square)
+
 Helm chart for a PostgREST data api.
-
-## Requirements
-
-| Repository | Name | Version |
-|------------|------|---------|
-| https://cloudnative-pg.io/charts | cluster | 0.7.0 |
 
 ## Values
 
@@ -18,81 +14,60 @@ Helm chart for a PostgREST data api.
 | application.jwt.claim.selector | string | `".postgrest"` |  |
 | application.preRequest | string | `""` |  |
 | application.schemas | string | `"public"` |  |
-| cluster.cluster.instances | int | `3` |  |
-| cluster.cluster.roles[0].ensure | string | `"present"` |  |
-| cluster.cluster.roles[0].login | bool | `true` |  |
-| cluster.cluster.roles[0].name | string | `"goose"` |  |
-| cluster.cluster.roles[0].passwordSecret.name | string | `"migrations"` |  |
-| cluster.cluster.roles[0].superuser | bool | `true` |  |
-| cluster.cluster.roles[1].ensure | string | `"present"` |  |
-| cluster.cluster.roles[1].login | bool | `false` |  |
-| cluster.cluster.roles[1].name | string | `"anon"` |  |
-| cluster.cluster.roles[2].ensure | string | `"present"` |  |
-| cluster.cluster.roles[2].login | bool | `false` |  |
-| cluster.cluster.roles[2].name | string | `"peek"` |  |
-| cluster.cluster.roles[3].ensure | string | `"present"` |  |
-| cluster.cluster.roles[3].login | bool | `false` |  |
-| cluster.cluster.roles[3].name | string | `"view"` |  |
-| cluster.cluster.roles[4].ensure | string | `"present"` |  |
-| cluster.cluster.roles[4].login | bool | `false` |  |
-| cluster.cluster.roles[4].name | string | `"edit"` |  |
-| cluster.cluster.roles[5].ensure | string | `"present"` |  |
-| cluster.cluster.roles[5].inRoles[0] | string | `"anon"` |  |
-| cluster.cluster.roles[5].inRoles[1] | string | `"peek"` |  |
-| cluster.cluster.roles[5].inRoles[2] | string | `"view"` |  |
-| cluster.cluster.roles[5].inRoles[3] | string | `"edit"` |  |
-| cluster.cluster.roles[5].login | bool | `true` |  |
-| cluster.cluster.roles[5].name | string | `"postgrest"` |  |
-| cluster.cluster.roles[5].passwordSecret.name | string | `"connection"` |  |
-| cluster.cluster.roles[5].superuser | bool | `false` |  |
-| cluster.cluster.storage.size | string | `"1Gi"` |  |
-| cluster.databases[0].name | string | `"postgrest"` |  |
-| cluster.databases[0].owner | string | `"goose"` |  |
-| cluster.databases[0].schemas[0].ensure | string | `"present"` |  |
-| cluster.databases[0].schemas[0].name | string | `"public"` |  |
-| cluster.databases[0].schemas[0].owner | string | `"goose"` |  |
-| cluster.enabled | bool | `true` |  |
-| cluster.mode | string | `"standalone"` |  |
-| cluster.type | string | `"postgresql"` |  |
+| containerPorts.admin | int | `3001` |  |
+| containerPorts.http | int | `3000` |  |
 | database.connection.database | string | `"postgrest"` |  |
 | database.connection.hostname | string | `"postgrest-cluster-rw"` |  |
 | database.connection.password | string | `"postgrest"` |  |
 | database.connection.username | string | `"postgrest"` |  |
-| database.migrations.command[0] | string | `"/bin/goose"` |  |
-| database.migrations.command[1] | string | `"up"` |  |
-| database.migrations.database | string | `"postgrest"` |  |
-| database.migrations.enabled | bool | `false` |  |
-| database.migrations.hostname | string | `"postgrest-cluster-rw"` |  |
-| database.migrations.image | string | `"ghcr.io/pelotech/images/goose@sha256:afee303f0172bf7ed4db97180ce1561d0f1db09222f8e87d3313b2cd1fb184c9"` |  |
-| database.migrations.loadFromConfigMap | bool | `false` |  |
-| database.migrations.password | string | `"goose"` |  |
-| database.migrations.tag | string | `"latest"` |  |
-| database.migrations.username | string | `"goose"` |  |
-| imagePullSecrets | string | `nil` |  |
+| image.digest | string | `"sha256:bea1c76a856fa39d1e542d25911cf95d02fe2bf971992d033044ff209f1504b8"` |  |
+| image.pullPolicy | string | `"IfNotPresent"` |  |
+| image.registry | string | `"docker.io"` |  |
+| image.repository | string | `"postgrest/postgrest"` |  |
+| image.tag | string | `""` |  |
+| imagePullSecrets | list | `[]` |  |
 | ingress.enabled | bool | `false` |  |
-| ingress.rules[0].host | string | `"auth.app.localhost"` |  |
+| ingress.rules[0].host | string | `"data.app.localhost"` |  |
 | ingress.rules[0].http.paths[0].backend.service.name | string | `"postgrest"` |  |
-| ingress.rules[0].http.paths[0].backend.service.port.name | string | `"keyserver"` |  |
+| ingress.rules[0].http.paths[0].backend.service.port.name | string | `"postgrest"` |  |
 | ingress.rules[0].http.paths[0].path | string | `"/"` |  |
 | ingress.rules[0].http.paths[0].pathType | string | `"Prefix"` |  |
-| ingress.rules[1].host | string | `"data.app.localhost"` |  |
-| ingress.rules[1].http.paths[0].backend.service.name | string | `"postgrest"` |  |
-| ingress.rules[1].http.paths[0].backend.service.port.name | string | `"postgrest"` |  |
-| ingress.rules[1].http.paths[0].path | string | `"/"` |  |
-| ingress.rules[1].http.paths[0].pathType | string | `"Prefix"` |  |
-| ingress.tls[0].hosts[0] | string | `"auth.app.localhost"` |  |
-| ingress.tls[0].hosts[1] | string | `"data.app.localhost"` |  |
+| ingress.tls[0].hosts[0] | string | `"data.app.localhost"` |  |
 | ingress.tls[0].secretName | string | `"app.localhost-tls"` |  |
-| keyserver.api.key | string | `"a-string-secret-at-least-256-bits-long"` |  |
-| keyserver.image | string | `"ghcr.io/pelotech/images/keyserver@sha256:a128a2b37ccf00ab6bbbcd9ed0321bc81b1875aff51d0eb3aa412f07e50804d8"` |  |
-| keyserver.jwt.alg | string | `"RS256"` |  |
-| keyserver.jwt.aud | string | `"postgrest"` |  |
-| keyserver.jwt.claims.postgrest | string | `"peek"` |  |
-| keyserver.jwt.exp | string | `"5 minutes"` |  |
-| keyserver.jwt.iss | string | `"https://auth.app.localhost"` |  |
-| keyserver.jwt.jwks_uri | string | `"https://auth.app.localhost/jwks"` |  |
-| keyserver.jwt.origin | string | `"https://jwt.io,https://app.localhost"` |  |
-| keyserver.jwt.sub | string | `""` |  |
-| keyserver.jwt.trust | string | `"https://sso.localhost/auth/realms/example/protocol/openid-connect/certs"` |  |
-| keyserver.tag | string | `"latest"` |  |
+| jwks.enabled | bool | `true` |  |
+| jwks.filename | string | `"jwks.json"` |  |
+| jwks.image.digest | string | `"sha256:e318141552c5e6923abff064bd2b8d338c2722bda46cf48d84404b9957bcd814"` |  |
+| jwks.image.pullPolicy | string | `"IfNotPresent"` |  |
+| jwks.image.registry | string | `"reg.mini.dev"` |  |
+| jwks.image.repository | string | `"curl-fips"` |  |
+| jwks.image.tag | string | `"8.21.0"` |  |
+| jwks.maxAttempts | int | `40` |  |
+| jwks.mountPath | string | `"/etc/opt/postgrest/certificates"` |  |
+| jwks.refresh.enabled | bool | `false` |  |
+| jwks.refresh.interval | int | `300` |  |
+| jwks.refresh.reload.enabled | bool | `true` |  |
+| jwks.refresh.reload.processName | string | `"postgrest"` |  |
+| jwks.refresh.reload.signal | string | `"USR2"` |  |
+| jwks.require.kid | string | `""` |  |
+| jwks.require.kty | string | `""` |  |
+| jwks.require.use | string | `""` |  |
+| jwks.resources | object | `{}` |  |
+| jwks.retryInterval | int | `3` |  |
+| jwks.securityContext.runAsUser | int | `1000` |  |
+| jwks.sizeLimit | string | `"1Mi"` |  |
+| jwks.timeout | int | `10` |  |
+| jwks.url | string | `"https://sso.localhost/auth/realms/example/protocol/openid-connect/certs"` |  |
+| podAnnotations | object | `{}` |  |
+| podSecurityContext.fsGroup | int | `1000` |  |
+| probes.liveness.enabled | bool | `true` |  |
+| probes.liveness.failureThreshold | int | `3` |  |
+| probes.liveness.periodSeconds | int | `10` |  |
+| probes.startup.enabled | bool | `true` |  |
+| probes.startup.failureThreshold | int | `60` |  |
+| probes.startup.periodSeconds | int | `2` |  |
+| replicaCount | int | `1` |  |
+| resources | object | `{}` |  |
+| securityContext | object | `{}` |  |
+| service.port | int | `3000` |  |
+| service.type | string | `"ClusterIP"` |  |
 
