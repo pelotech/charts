@@ -37,11 +37,11 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ include "lrsql.image" . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- with .Values.command }}
+          command: {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- if .Values.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- with .Values.args }}
+          args: {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
             {{- if .Values.containerPorts.http }}
@@ -52,18 +52,20 @@ spec:
             - name: LRSQL_SSL_PORT
               value: {{ .Values.containerPorts.https | quote }}
             {{- end }}
-            {{- if .Values.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- with .Values.extraEnvVars }}
+            {{- toYaml . | nindent 12 }}
             {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+                name: {{ .Values.extraEnvVarsCM }}
             {{- end }}
             {{- if .Values.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+                name: {{ .Values.extraEnvVarsSecret }}
             {{- end }}
+          {{- end }}
           ports:
             {{- if .Values.containerPorts.http }}
             - name: http

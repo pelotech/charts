@@ -2,15 +2,9 @@
 
 ### version: 0.3.2<!-- x-release-please-version -->
 
-![AppVersion: v0.7.14](https://img.shields.io/badge/AppVersion-v0.7.14-informational?style=flat-square)
+![AppVersion: v0.9.5](https://img.shields.io/badge/AppVersion-v0.9.5-informational?style=flat-square)
 
 SQL LRS/lrsql helm chart
-
-## Requirements
-
-| Repository | Name | Version |
-|------------|------|---------|
-| oci://registry-1.docker.io/bitnamicharts | common | 2.x |
 
 ## Values
 
@@ -55,12 +49,12 @@ SQL LRS/lrsql helm chart
 | gateway.listenerSet.https.secretName | string | `""` |  |
 | gateway.listenerSet.listeners | list | `[]` |  |
 | image.debug | bool | `false` |  |
-| image.digest | string | `""` |  |
+| image.digest | string | `"sha256:97f9dc4b081faf86ccb9b46b9f5c555539105b06c3b2935d890a0a66f8541ef9"` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.pullSecrets | list | `[]` |  |
 | image.registry | string | `"docker.io"` |  |
 | image.repository | string | `"yetanalytics/lrsql"` |  |
-| image.tag | string | `"v0.9.3@sha256:46995beb8265df5caeb0b5a8173499cf278c13bd36464e91bbace57ccf1a7512"` |  |
+| image.tag | string | `""` |  |
 | ingress.annotations | object | `{}` |  |
 | ingress.apiVersion | string | `""` |  |
 | ingress.enabled | bool | `false` |  |
@@ -72,7 +66,6 @@ SQL LRS/lrsql helm chart
 | ingress.ingressClassName | string | `""` |  |
 | ingress.path | string | `"/"` |  |
 | ingress.pathType | string | `"ImplementationSpecific"` |  |
-| ingress.secrets | list | `[]` |  |
 | ingress.tls | bool | `true` |  |
 | ingress.tlsWwwPrefix | bool | `false` |  |
 | livenessProbe.httpGet.path | string | `"/"` |  |

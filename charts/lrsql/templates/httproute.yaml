@@ -5,20 +5,24 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: {{ include "common.names.fullname" . }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  name: {{ include "lrsql.fullname" . }}
+  labels:
+    {{- include "lrsql.labels" . | nindent 4 }}
   {{- if or .Values.gateway.httpRoute.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.gateway.httpRoute.annotations .Values.commonAnnotations ) "context" . ) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  annotations:
+    {{- with .Values.commonAnnotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with .Values.gateway.httpRoute.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   parentRefs:
     {{- if .Values.gateway.listenerSet.enabled }}
     - group: gateway.networking.k8s.io
       kind: ListenerSet
-      name: {{ include "common.names.fullname" . }}
-      namespace: {{ include "common.names.namespace" . | quote }}
+      name: {{ include "lrsql.fullname" . }}
     {{- else }}
     - group: gateway.networking.k8s.io
       kind: Gateway
@@ -51,7 +55,7 @@ spec:
             type: {{ .Values.gateway.httpRoute.pathType }}
             value: {{ .Values.gateway.httpRoute.path }}
       backendRefs:
-        - name: {{ include "common.names.fullname" . }}
+        - name: {{ include "lrsql.fullname" . }}
           port: {{ .Values.service.ports.http }}
     {{- end }}
 {{- end }}
