@@ -1,0 +1,89 @@
+suite: ingress
+templates:
+  - templates/ingress.yaml
+tests:
+  - it: renders no Ingress when ingresses is empty
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: renders one Ingress per entry
+    set:
+      ingresses:
+        - hostname: lrsql.example.com
+        - hostname: admin.example.com
+    asserts:
+      - hasDocuments:
+          count: 2
+      - isKind:
+          of: Ingress
+      - equal:
+          path: spec.rules[0].host
+          value: admin.example.com
+        documentIndex: 1
+
+  - it: sets ingressClassName when the entry provides one
+    set:
+      ingresses:
+        - hostname: lrsql.example.com
+          ingressClassName: nginx
+    asserts:
+      - equal:
+          path: spec.ingressClassName
+          value: nginx
+
+  - it: omits ingressClassName when the entry does not provide one
+    set:
+      ingresses:
+        - hostname: lrsql.example.com
+    asserts:
+      - notExists:
+          path: spec.ingressClassName
+
+  - it: defaults pathType to ImplementationSpecific
+    set:
+      ingresses:
+        - hostname: lrsql.example.com
+    asserts:
+      - equal:
+          path: spec.rules[0].http.paths[0].pathType
+          value: ImplementationSpecific
+
+  - it: honours an explicit pathType
+    set:
+      ingresses:
+        - hostname: lrsql.example.com
+          pathType: Prefix
+    asserts:
+      - equal:
+          path: spec.rules[0].http.paths[0].pathType
+          value: Prefix
+
+  - it: sets pathType on a hostless rule
+    set:
+      ingresses:
+        - path: /lrsql
+    asserts:
+      - notExists:
+          path: spec.rules[0].host
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: /lrsql
+      - equal:
+          path: spec.rules[0].http.paths[0].pathType
+          value: ImplementationSpecific
+
+  - it: sets pathType on extraHosts paths
+    set:
+      ingresses:
+        - hostname: lrsql.example.com
+          extraHosts:
+            - name: alt.example.com
+              pathType: Exact
+    asserts:
+      - equal:
+          path: spec.rules[1].host
+          value: alt.example.com
+      - equal:
+          path: spec.rules[1].http.paths[0].pathType
+          value: Exact
