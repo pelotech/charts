@@ -4,6 +4,11 @@
 # Most of the configuration can be found at https://yetanalytics.github.io/lrsql/docker.html
 replicaCount: 1
 
+## @param global.imageRegistry Global container image registry, overrides image.registry
+##
+global:
+  imageRegistry: ""
+
 image:
   registry: docker.io
   repository: yetanalytics/lrsql
@@ -44,7 +49,10 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
 extraEnvVarsSecret: ""
-## @param commonAnnotations Annotations to add to the deployment
+## @param commonLabels Labels to add to all deployed resources
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to the deployment, ingress, HTTPRoute and ListenerSet
 ##
 commonAnnotations: {}
 

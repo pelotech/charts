@@ -2,12 +2,13 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: ListenerSet
 metadata:
-  name: {{ include "common.names.fullname" . }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  name: {{ include "lrsql.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "lrsql.labels" . | nindent 4 }}
   {{- if or .Values.gateway.listenerSet.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.gateway.listenerSet.annotations .Values.commonAnnotations ) "context" . ) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  annotations:
+    {{- tpl (merge (dict) .Values.gateway.listenerSet.annotations .Values.commonAnnotations | toYaml) $ | nindent 4 }}
   {{- end }}
 spec:
   parentRef:
