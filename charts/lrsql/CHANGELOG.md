@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.3](https://github.com/pelotech/charts/compare/lrsql/0.3.2...lrsql/0.3.3) (2026-09-17)
+
+
+### Chores
+
+* **deps:** lock file maintenance ([#156](https://github.com/pelotech/charts/issues/156)) ([75daf12](https://github.com/pelotech/charts/commit/75daf121782869cfb049b0bc4bdeacd9408f8ecf))
+* **deps:** update docker.io/yetanalytics/lrsql docker tag to v0.9.8 ([#124](https://github.com/pelotech/charts/issues/124)) ([ab7dd5f](https://github.com/pelotech/charts/commit/ab7dd5fb366d1556124f692c754065a1370b9fff))
+
 ## [0.3.2](https://github.com/pelotech/charts/compare/lrsql/0.3.1...lrsql/0.3.2) (2026-07-07)
 
 
