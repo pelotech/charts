@@ -6,12 +6,6 @@
 
 SQL LRS/lrsql helm chart
 
-## Requirements
-
-| Repository | Name | Version |
-|------------|------|---------|
-| oci://registry-1.docker.io/bitnamicharts | common | 2.x |
-
 ## Values
 
 | Key | Type | Default | Description |
@@ -20,6 +14,7 @@ SQL LRS/lrsql helm chart
 | args | list | `[]` |  |
 | command[0] | string | `"/lrsql/bin/run_sqlite.sh"` |  |
 | commonAnnotations | object | `{}` |  |
+| commonLabels | object | `{}` |  |
 | containerPorts.http | int | `8080` |  |
 | extraEnvVarsCM | string | `""` |  |
 | extraEnvVarsSecret | string | `""` |  |
@@ -54,6 +49,7 @@ SQL LRS/lrsql helm chart
 | gateway.listenerSet.https.enabled | bool | `true` |  |
 | gateway.listenerSet.https.secretName | string | `""` |  |
 | gateway.listenerSet.listeners | list | `[]` |  |
+| global.imageRegistry | string | `""` |  |
 | image.debug | bool | `false` |  |
 | image.digest | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |

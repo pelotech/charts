@@ -1,16 +1,17 @@
 {{- if .Values.ingress.enabled }}
-apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "common.names.fullname" . }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  name: {{ include "lrsql.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "lrsql.labels" . | nindent 4 }}
   {{- if or .Values.ingress.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  annotations:
+    {{- tpl (merge (dict) .Values.ingress.annotations .Values.commonAnnotations | toYaml) $ | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.ingress.ingressClassName }}
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -22,10 +23,12 @@ spec:
           {{- toYaml .Values.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.pathType }}
-            {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" (ternary "http" "https" (not $.Values.containerPorts.https)) "context" $)  | nindent 14 }}
+            backend:
+              service:
+                name: {{ include "lrsql.fullname" $ }}
+                port:
+                  name: {{ ternary "http" "https" (not $.Values.containerPorts.https) }}
     {{- else if .Values.ingress.path }}
     - http:
         paths:
@@ -33,27 +36,32 @@ spec:
           {{- toYaml .Values.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.pathType }}
-            {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" (ternary "http" "https" (not .Values.containerPorts.https)) "context" $)  | nindent 14 }}
+            backend:
+              service:
+                name: {{ include "lrsql.fullname" $ }}
+                port:
+                  name: {{ ternary "http" "https" (not $.Values.containerPorts.https) }}
     {{- end }}
     {{- range .Values.ingress.extraHosts }}
     - host: {{ .name | quote }}
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" (ternary "http" "https" (not $.Values.containerPorts.https)) "context" $) | nindent 14 }}
+            backend:
+              service:
+                name: {{ include "lrsql.fullname" $ }}
+                port:
+                  name: {{ ternary "http" "https" (not $.Values.containerPorts.https) }}
     {{- end }}
     {{- if .Values.ingress.extraRules }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.ingress.extraRules "context" $) | nindent 4 }}
+    {{- tpl (toYaml .Values.ingress.extraRules) $ | nindent 4 }}
     {{- end }}
-  {{- if or (and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.annotations )) (not (empty .Values.ingress.secrets)))) .Values.ingress.extraTls }}
+  {{- $certManager := or (hasKey .Values.ingress.annotations "cert-manager.io/cluster-issuer") (hasKey .Values.ingress.annotations "cert-manager.io/issuer") (hasKey .Values.ingress.annotations "kubernetes.io/tls-acme") }}
+  {{- if or (and .Values.ingress.tls (or $certManager (not (empty .Values.ingress.secrets)))) .Values.ingress.extraTls }}
   tls:
-    {{- if and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.annotations )) (not (empty .Values.ingress.secrets))) }}
+    {{- if and .Values.ingress.tls (or $certManager (not (empty .Values.ingress.secrets))) }}
     - hosts:
         - {{ .Values.ingress.hostname | quote }}
         {{- if or (.Values.ingress.tlsWwwPrefix) (eq (index .Values.ingress.annotations "nginx.ingress.kubernetes.io/from-to-www-redirect") "true" ) }}
@@ -62,7 +70,7 @@ spec:
       secretName: {{ printf "%s-tls" .Values.ingress.hostname }}
     {{- end }}
     {{- if .Values.ingress.extraTls }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.ingress.extraTls "context" $) | nindent 4 }}
+    {{- tpl (toYaml .Values.ingress.extraTls) $ | nindent 4 }}
     {{- end }}
   {{- end }}
 {{- end }}

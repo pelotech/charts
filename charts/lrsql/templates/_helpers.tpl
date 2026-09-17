@@ -10,7 +10,14 @@ Expand the name of the chart.
 Return the proper lrsql image name
 */}}
 {{- define "lrsql.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- $registry := default .Values.image.registry ((.Values.global).imageRegistry) -}}
+{{- $separator := ternary "@" ":" (not (empty .Values.image.digest)) -}}
+{{- $termination := default (toString .Values.image.tag) .Values.image.digest -}}
+{{- if $registry -}}
+{{- printf "%s/%s%s%s" $registry .Values.image.repository $separator $termination -}}
+{{- else -}}
+{{- printf "%s%s%s" .Values.image.repository $separator $termination -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -48,6 +55,9 @@ helm.sh/chart: {{ include "lrsql.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- with .Values.commonLabels }}
+{{ toYaml . }}
+{{- end }}
 {{- end }}
 
 {{/*
