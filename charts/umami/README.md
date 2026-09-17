@@ -32,7 +32,7 @@ A Helm chart for deploying Umami analytics to Kubernetes
 | image.pullSecrets | list | `[]` |  |
 | image.registry | string | `"ghcr.io"` |  |
 | image.repository | string | `"umami-software/umami"` |  |
-| image.tag | string | `"3.2.0"` |  |
+| image.tag | string | `"3.2.0@sha256:8edfe4beaef13f9d1300619fa264ef250a3688df9cc54d24ca830ca31cb475ec"` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |
 | ingress.enabled | bool | `false` |  |
@@ -79,7 +79,7 @@ A Helm chart for deploying Umami analytics to Kubernetes
 | sso.image.pullPolicy | string | `"IfNotPresent"` |  |
 | sso.image.registry | string | `"codeberg.org"` |  |
 | sso.image.repository | string | `"vanutp/umami-sso"` |  |
-| sso.image.tag | string | `"latest"` | Umami SSO image tag. WARNING: production users should set a fixed tag or digest before enabling SSO for rollback/reproducibility. |
+| sso.image.tag | string | `"latest@sha256:a0a4f88aa94cb209c41feddc7a8de3f5b83c8913f767a6814f4beec845ae57d0"` | Umami SSO image tag. WARNING: production users should set a fixed tag or digest before enabling SSO for rollback/reproducibility. |
 | sso.ingress.pathType | string | `"Prefix"` |  |
 | sso.livenessProbe.tcpSocket.port | string | `"sso-http"` |  |
 | sso.readinessProbe.tcpSocket.port | string | `"sso-http"` |  |
