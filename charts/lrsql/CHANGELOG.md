@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.4](https://github.com/pelotech/charts/compare/lrsql/0.3.3...lrsql/0.3.4) (2026-09-17)
+
+
+### Bug Fixes
+
+* **lrsql:** drop bitnami common dependency ([#169](https://github.com/pelotech/charts/issues/169)) ([9ae53ed](https://github.com/pelotech/charts/commit/9ae53edf0047af87c8aacf1a66dd5b921f37db51))
+
 ## [0.3.3](https://github.com/pelotech/charts/compare/lrsql/0.3.2...lrsql/0.3.3) (2026-09-17)
 
 
