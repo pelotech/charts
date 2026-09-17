@@ -12,7 +12,11 @@ global:
 image:
   registry: docker.io
   repository: yetanalytics/lrsql
-  tag: v0.9.8@sha256:3f566dae7f05c5f7745507436de582b4cb12e0eb93b4bc0a3d38861d0ccb9bad
+  ## @param image.tag Image tag. Defaults to the chart appVersion, pinned by digest. A semver tag older than appVersion is rejected.
+  ##
+  tag: ""
+  ## @param image.digest Image digest (sha256:...). Defaults to the chart's pinned digest when image.tag is not set.
+  ##
   digest: ""
   pullPolicy: IfNotPresent
   pullSecrets: []
@@ -154,9 +158,6 @@ ingress:
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
-  ##
-  apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: sample.com
@@ -181,8 +182,7 @@ ingress:
   ##
   ingressClassName: ""
   ## @param ingress.tls Enable TLS on the Ingress
-  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## You can use the ingress.secrets parameter to create this TLS secret or rely on cert-manager to create it
+  ## TLS certificates are read from a secret named "<hostname>-tls". Create it yourself or let cert-manager provision it.
   ##
   tls: true
   ## @param ingress.tlsWwwPrefix Adds www subdomain to default cert
@@ -213,21 +213,6 @@ ingress:
   ##   secretName: nginx.local-tls
   ##
   extraTls: []
-  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or
-  ## -----BEGIN RSA PRIVATE KEY-----
-  ##
-  ## name should line up with a tlsSecret set further up
-  ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
-  ##
-  ## It is also possible to create and manage the certificates outside of this helm chart
-  ## Please see README.md for more information
-  ## e.g:
-  ## - name: nginx.local-tls
-  ##   key:
-  ##   certificate:
-  ##
-  secrets: []
   ## @param ingress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
   ## Useful when looking for additional customization, such as using different backend
   ##

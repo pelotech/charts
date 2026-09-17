@@ -7,17 +7,27 @@ Expand the name of the chart.
 
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Return the proper lrsql image name
+Return the proper lrsql image name.
+The tag defaults to the chart appVersion, pinned to the digest in the chart annotations.
+An overridden semver tag must not be older than appVersion.
 */}}
 {{- define "lrsql.image" -}}
 {{- $registry := default .Values.image.registry ((.Values.global).imageRegistry) -}}
-{{- $separator := ternary "@" ":" (not (empty .Values.image.digest)) -}}
-{{- $termination := default (toString .Values.image.tag) .Values.image.digest -}}
-{{- if $registry -}}
-{{- printf "%s/%s%s%s" $registry .Values.image.repository $separator $termination -}}
-{{- else -}}
-{{- printf "%s%s%s" .Values.image.repository $separator $termination -}}
+{{- $tag := default .Chart.AppVersion .Values.image.tag | toString -}}
+{{- $digest := .Values.image.digest -}}
+{{- if not .Values.image.tag -}}
+{{- $digest = default (index (.Chart.Annotations | default dict) "pelotech.io/image-digest") $digest -}}
+{{- else if and (regexMatch "^v?[0-9]+\\.[0-9]+\\.[0-9]+" $tag) (not (semverCompare (printf ">=%s-0" .Chart.AppVersion) $tag)) -}}
+{{- fail (printf "image.tag %s is older than the minimum supported lrsql version %s" $tag .Chart.AppVersion) -}}
 {{- end -}}
+{{- $image := printf "%s:%s" .Values.image.repository $tag -}}
+{{- if $registry -}}
+{{- $image = printf "%s/%s" $registry $image -}}
+{{- end -}}
+{{- if $digest -}}
+{{- $image = printf "%s@%s" $image $digest -}}
+{{- end -}}
+{{- $image -}}
 {{- end -}}
 
 {{/*

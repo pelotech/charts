@@ -58,10 +58,9 @@ spec:
     {{- if .Values.ingress.extraRules }}
     {{- tpl (toYaml .Values.ingress.extraRules) $ | nindent 4 }}
     {{- end }}
-  {{- $certManager := or (hasKey .Values.ingress.annotations "cert-manager.io/cluster-issuer") (hasKey .Values.ingress.annotations "cert-manager.io/issuer") (hasKey .Values.ingress.annotations "kubernetes.io/tls-acme") }}
-  {{- if or (and .Values.ingress.tls (or $certManager (not (empty .Values.ingress.secrets)))) .Values.ingress.extraTls }}
+  {{- if or (and .Values.ingress.tls .Values.ingress.hostname) .Values.ingress.extraTls }}
   tls:
-    {{- if and .Values.ingress.tls (or $certManager (not (empty .Values.ingress.secrets))) }}
+    {{- if and .Values.ingress.tls .Values.ingress.hostname }}
     - hosts:
         - {{ .Values.ingress.hostname | quote }}
         {{- if or (.Values.ingress.tlsWwwPrefix) (eq (index .Values.ingress.annotations "nginx.ingress.kubernetes.io/from-to-www-redirect") "true" ) }}
