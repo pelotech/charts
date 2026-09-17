@@ -2,7 +2,7 @@
 
 ### version: 0.3.4<!-- x-release-please-version -->
 
-![AppVersion: v0.7.14](https://img.shields.io/badge/AppVersion-v0.7.14-informational?style=flat-square)
+![AppVersion: v0.9.8](https://img.shields.io/badge/AppVersion-v0.9.8-informational?style=flat-square)
 
 SQL LRS/lrsql helm chart
 
@@ -56,9 +56,8 @@ SQL LRS/lrsql helm chart
 | image.pullSecrets | list | `[]` |  |
 | image.registry | string | `"docker.io"` |  |
 | image.repository | string | `"yetanalytics/lrsql"` |  |
-| image.tag | string | `"v0.9.8@sha256:3f566dae7f05c5f7745507436de582b4cb12e0eb93b4bc0a3d38861d0ccb9bad"` |  |
+| image.tag | string | `""` |  |
 | ingress.annotations | object | `{}` |  |
-| ingress.apiVersion | string | `""` |  |
 | ingress.enabled | bool | `false` |  |
 | ingress.extraHosts | list | `[]` |  |
 | ingress.extraPaths | list | `[]` |  |
@@ -68,7 +67,6 @@ SQL LRS/lrsql helm chart
 | ingress.ingressClassName | string | `""` |  |
 | ingress.path | string | `"/"` |  |
 | ingress.pathType | string | `"ImplementationSpecific"` |  |
-| ingress.secrets | list | `[]` |  |
 | ingress.tls | bool | `true` |  |
 | ingress.tlsWwwPrefix | bool | `false` |  |
 | livenessProbe.httpGet.path | string | `"/"` |  |

@@ -7,5 +7,30 @@
   // stops auto-rebasing the branch.
   gitIgnoredAuthors: [
     '245757523+pt-release-please[bot]@users.noreply.github.com',
-  ]
+  ],
+  customManagers: [
+    {
+      // Chart appVersion that doubles as the default image tag, e.g.
+      //   # renovate: datasource=docker depName=docker.io/org/app
+      //   appVersion: "v1.2.3"
+      //   annotations:
+      //     pelotech.io/image-digest: "sha256:..."
+      // The digest annotation is optional; when present it is updated with the version.
+      customType: 'regex',
+      managerFilePatterns: ['/(^|/)Chart\\.yaml$/'],
+      matchStrings: [
+        '# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n+appVersion: "(?<currentValue>[^"]+)"(?:\\n+annotations:(?:\\n+ .*)*?\\n+ +pelotech\\.io/image-digest: "(?<currentDigest>sha256:[a-f0-9]+)")?',
+      ],
+    },
+  ],
+  packageRules: [
+    {
+      // The lrsql image tag in values.yaml is empty and defaults to appVersion,
+      // which the custom manager above keeps up to date.
+      matchManagers: ['helm-values'],
+      matchFileNames: ['charts/lrsql/values.yaml'],
+      matchDepNames: ['docker.io/yetanalytics/lrsql'],
+      enabled: false,
+    },
+  ],
 }

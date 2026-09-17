@@ -17,8 +17,10 @@ type: application
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
 version: 0.3.4
 
-# This is the version number of the application being deployed. This version number should be
-# incremented each time you make changes to the application. Versions are not expected to
-# follow Semantic Versioning. They should reflect the version the application is using.
-# It is recommended to use it with quotes.
-appVersion: "v0.7.14"
+# The lrsql image version. It is the default image tag and the minimum tag the chart accepts.
+# Renovate updates it together with the image digest annotation below.
+# renovate: datasource=docker depName=docker.io/yetanalytics/lrsql
+appVersion: "v0.9.8"
+annotations:
+  # Digest of the appVersion image, pinned when image.tag is not overridden.
+  pelotech.io/image-digest: "sha256:3f566dae7f05c5f7745507436de582b4cb12e0eb93b4bc0a3d38861d0ccb9bad"
