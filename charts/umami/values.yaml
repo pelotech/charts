@@ -15,7 +15,7 @@ image:
   repository: umami-software/umami
   ## @param image.tag Umami image tag
   ##
-  tag: 3.2.0
+  tag: 3.2.0@sha256:8edfe4beaef13f9d1300619fa264ef250a3688df9cc54d24ca830ca31cb475ec
   ## @param image.digest Umami image digest. If set, this overrides the image tag
   ##
   digest: ""
@@ -209,7 +209,7 @@ sso:
     repository: vanutp/umami-sso
     ## @param sso.image.tag Umami SSO image tag. WARNING: production users should set a fixed tag or digest before enabling SSO for rollback reproducibility.
     # -- Umami SSO image tag. WARNING: production users should set a fixed tag or digest before enabling SSO for rollback/reproducibility.
-    tag: latest
+    tag: latest@sha256:a0a4f88aa94cb209c41feddc7a8de3f5b83c8913f767a6814f4beec845ae57d0
     ## @param sso.image.digest Umami SSO image digest. If set, this overrides the image tag
     ##
     digest: ""
