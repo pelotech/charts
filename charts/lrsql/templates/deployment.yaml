@@ -58,6 +58,7 @@ spec:
             {{- if .Values.extraEnvVars }}
             {{- tpl (toYaml .Values.extraEnvVars) $ | nindent 12 }}
             {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
@@ -67,6 +68,7 @@ spec:
             - secretRef:
                 name: {{ tpl .Values.extraEnvVarsSecret $ }}
             {{- end }}
+          {{- end }}
           ports:
             {{- if .Values.containerPorts.http }}
             - name: http
