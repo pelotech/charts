@@ -21,7 +21,7 @@ A Helm chart for Deploying NoodeJS applications to Kubernetes
 | image.pullPolicy | string | `"IfNotPresent"` | The pull policy to use when launching pods for the deployment. |
 | image.registry | string | `"docker.io"` | The registry where the image is hosted. |
 | image.repository | string | `"node"` | The repository to pull images from. |
-| image.tag | string | `"latest@sha256:b46a10d964ad15136ebdf9012142131481caa0697d7a4d4eafe4bbabd818f876"` | The tag of the image to pull from the repository. |
+| image.tag | string | `"latest@sha256:fa271c47a5d81dc321f4a45be01362f5b3de7559edc7e76b8c4089be1e50d866"` | The tag of the image to pull from the repository. |
 | ingress.annotations | object | `{}` | Annotations to apply to the ingress. |
 | ingress.enabled | bool | `false` | Whether to enable ingress to the application. |
 | ingress.hosts | list | `[{"host":"chart-example.local","paths":["/"]}]` | Host and path configurations to route to the service |
