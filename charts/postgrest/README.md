@@ -84,7 +84,7 @@ Helm chart for a PostgREST data api.
 | ingress.tls[0].hosts[1] | string | `"data.app.localhost"` |  |
 | ingress.tls[0].secretName | string | `"app.localhost-tls"` |  |
 | keyserver.api.key | string | `"a-string-secret-at-least-256-bits-long"` |  |
-| keyserver.image | string | `"ghcr.io/pelotech/images/keyserver@sha256:a128a2b37ccf00ab6bbbcd9ed0321bc81b1875aff51d0eb3aa412f07e50804d8"` |  |
+| keyserver.image | string | `"ghcr.io/pelotech/images/keyserver@sha256:1556674693a6b27161fa914201ef251534fca5dd56ccbc343c4d11fda76badf8"` |  |
 | keyserver.jwt.alg | string | `"RS256"` |  |
 | keyserver.jwt.aud | string | `"postgrest"` |  |
 | keyserver.jwt.claims.postgrest | string | `"peek"` |  |
