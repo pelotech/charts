@@ -13,7 +13,7 @@ image:
   # image.pullPolicy -- The pull policy to use when launching pods for the deployment.
   pullPolicy: IfNotPresent
   # image.tag -- The tag of the image to pull from the repository.
-  tag: latest@sha256:b46a10d964ad15136ebdf9012142131481caa0697d7a4d4eafe4bbabd818f876
+  tag: latest@sha256:32fa97f3363975684b08bf4e8a68a47c7905175cc20275b50b974bbd02aba731
 
 # service -- Service configurations.
 service:
