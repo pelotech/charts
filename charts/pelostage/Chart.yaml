@@ -5,7 +5,7 @@ type: application
 home: https://github.com/pelotech/pelostage
 
 # chart version, managed by release-please
-version: 0.1.0
+version: 0.2.0
 
 # pelostage image tag (ghcr.io/pelotech/pelostage), kept current by renovate
 appVersion: v0.2.0
