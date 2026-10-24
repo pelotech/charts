@@ -1,0 +1,165 @@
+{{- $usePostgres := include "pelostage.usePostgres" . }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pelostage.fullname" . }}
+  labels:
+    {{- include "pelostage.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "pelostage.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "pelostage.selectorLabels" . | nindent 8 }}
+        {{- with .Values.commonLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      annotations:
+        # roll the pod when generated config or inline secrets change
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "pelostage.serviceAccountName" . }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if $usePostgres }}
+      {{- $dbHost := ternary (printf "%s-rw" (include "pelostage.cnpgClusterName" .)) .Values.database.external.host .Values.cnpgCluster.enabled }}
+      {{- $dbPort := ternary 5432 (int .Values.database.external.port) .Values.cnpgCluster.enabled }}
+      initContainers:
+        # backstage plugin initialization hangs if postgres is unreachable at startup
+        - name: wait-for-database
+          image: "{{ .Values.utilityImage.repository }}:{{ .Values.utilityImage.tag }}"
+          command:
+            - sh
+            - -c
+            - until nc -z -w 2 {{ $dbHost }} {{ $dbPort }}; do echo waiting for {{ $dbHost }}:{{ $dbPort }}; sleep 2; done
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+      {{- end }}
+      containers:
+        - name: pelostage
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # replaces the image CMD (node packages/backend ...) to add the chart's config files
+          command: [node]
+          args:
+            - packages/backend
+            - --config
+            - app-config.yaml
+            - --config
+            - app-config.production.yaml
+            - --config
+            - /config/app-config.chart.yaml
+            - --config
+            - /config/app-config.values.yaml
+          ports:
+            - name: http
+              containerPort: 7007
+          env:
+            - name: ORG_NAME
+              value: {{ .Values.portal.title | quote }}
+            - name: BASE_URL
+              value: {{ .Values.portal.baseUrl | quote }}
+            - name: GITHUB_ORG
+              value: {{ .Values.portal.githubOrg | quote }}
+            - name: K8S_CLUSTER_NAME
+              value: {{ .Values.kubernetes.clusterName | quote }}
+            {{- if .Values.kubernetes.enabled }}
+            - name: K8S_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "pelostage.fullname" . }}-sa
+                  key: token
+            {{- end }}
+            {{- if $usePostgres }}
+            {{- if .Values.cnpgCluster.enabled }}
+            - name: POSTGRES_HOST
+              value: {{ include "pelostage.cnpgClusterName" . }}-rw
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "pelostage.cnpgClusterName" . }}-app
+                  key: dbname
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "pelostage.cnpgClusterName" . }}-app
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "pelostage.cnpgClusterName" . }}-app
+                  key: password
+            {{- else }}
+            - name: POSTGRES_HOST
+              value: {{ .Values.database.external.host | quote }}
+            - name: POSTGRES_PORT
+              value: {{ .Values.database.external.port | quote }}
+            - name: POSTGRES_DB
+              value: {{ .Values.database.external.database | quote }}
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "database.external.existingSecret is required" .Values.database.external.existingSecret }}
+                  key: {{ .Values.database.external.userKey }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.external.existingSecret }}
+                  key: {{ .Values.database.external.passwordKey }}
+            {{- end }}
+            {{- end }}
+            {{- with .Values.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ include "pelostage.secretName" . }}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.startupProbe }}
+          startupProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "pelostage.fullname" . }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
