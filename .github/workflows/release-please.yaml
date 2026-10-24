@@ -5,13 +5,14 @@ on:
     branches:
       - main
 
-permissions:
-  contents: write
-  pull-requests: write
+permissions: {}
 
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     outputs:
       release-output: ${{ steps.set-output.outputs.result }}
       paths_released: ${{ steps.release.outputs.paths_released }}
@@ -47,10 +48,11 @@ jobs:
         id: release
         env:
           RELEASE_OUTPUTS: ${{ needs.release-please.outputs.release-output }}
+          CHART_PATH: ${{ matrix.path }}
         with:
           script: |
             var release = JSON.parse(process.env.RELEASE_OUTPUTS);
-            var chartPath = '${{ matrix.path }}';
+            var chartPath = process.env.CHART_PATH;
             var chartName = chartPath.split('/')[1];
             var chartVersion = release[`${chartPath}--version`];
             var gitTag = release[`${chartPath}--tag_name`]
@@ -59,6 +61,8 @@ jobs:
             core.setOutput('chart-version',chartVersion)
             core.setOutput('chart-git-tag', gitTag)
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Build dependencies Helm - ${{ steps.release.outputs.chart-name }}
         uses: WyriHaximus/github-action-helm3@e3894d973c282349e3d41d3347767f2b2545b583 # v4.0.2
         with:
@@ -77,5 +81,9 @@ jobs:
           registry_password: ${{ secrets.github_token }}
       - uses: imjasonh/setup-crane@feee3b6bb0d4c68370f256a4502498c9227e5c6b # v0.7
       - name: update docker images with annotations
+        env:
+          GIT_TAG: ${{ steps.release.outputs.chart-git-tag }}
+          CHART_NAME: ${{ steps.release.outputs.chart-name }}
+          CHART_VERSION: ${{ steps.release.outputs.chart-version }}
         run: |
-          crane mutate -a org.opencontainers.image.revision=${{ steps.release.outputs.chart-git-tag }},org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY ghcr.io/pelotech/charts/${{ steps.release.outputs.chart-name }}:${{ steps.release.outputs.chart-version }}
+          crane mutate -a "org.opencontainers.image.revision=${GIT_TAG},org.opencontainers.image.source=https://github.com/${GITHUB_REPOSITORY}" "ghcr.io/pelotech/charts/${CHART_NAME}:${CHART_VERSION}"
