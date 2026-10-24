@@ -1,0 +1,221 @@
+# -- Override the chart name used in resource names.
+nameOverride: ""
+# -- Override the full resource name.
+fullnameOverride: ""
+
+image:
+  # -- Pelostage image repository.
+  repository: ghcr.io/pelotech/pelostage
+  # -- Image tag. Defaults to the chart appVersion.
+  tag: ""
+  # -- Image pull policy.
+  pullPolicy: IfNotPresent
+
+# -- Image pull secrets for private registries.
+imagePullSecrets: []
+
+# -- Labels added to every resource and pod, e.g. `backstage.io/kubernetes-id` so
+# the portal's own catalog entity shows its workloads. Not added to selectors.
+commonLabels: {}
+
+# -- Annotations added to the pod.
+podAnnotations: {}
+
+# Small image for the wait-for-database init container and the helm test.
+utilityImage:
+  # -- Utility image repository.
+  repository: busybox
+  # -- Utility image tag.
+  tag: "1.37.0"
+
+# -- Number of replicas. Keep 1 with SQLite; use Postgres for more.
+replicaCount: 1
+
+portal:
+  # -- Portal title and organization name shown in the app.
+  title: Backstage
+  # -- Public URL of the portal (frontend and backend are served from it).
+  baseUrl: https://backstage.example.com
+  # -- GitHub organization whose repos, users and teams are imported.
+  githubOrg: ""
+  branding:
+    # -- Logo URL shown when the sidebar is open. Empty uses the built-in logo.
+    logoFullUrl: ""
+    # -- Logo URL shown when the sidebar is collapsed. Empty uses the built-in logo.
+    logoIconUrl: ""
+  home:
+    # -- Links in the home page toolkit widget (`url`, `label`, `icon`).
+    toolkit:
+      - url: https://github.com/pelotech/pelostage
+        label: pelostage repo
+        icon: github
+      - url: https://backstage.io/docs
+        label: Backstage docs
+        icon: docs
+    # -- Default home page layout users start from (widget component names and grid positions).
+    layout:
+      - component: HomePageSearchBar
+        column: 0
+        row: 0
+        width: 12
+        height: 2
+        deletable: false
+      - component: GettingStarted
+        column: 0
+        row: 2
+        width: 4
+        height: 8
+      - component: HomePageStarredEntities
+        column: 4
+        row: 2
+        width: 4
+        height: 4
+      - component: HomePageToolkit
+        column: 8
+        row: 2
+        width: 4
+        height: 4
+      - component: HomePageRecentlyVisited
+        column: 4
+        row: 6
+        width: 4
+        height: 4
+      - component: HomePageMostVisited
+        column: 8
+        row: 6
+        width: 4
+        height: 4
+
+secrets:
+  # -- Existing Secret with keys APP_ID, CLIENT_ID, CLIENT_SECRET, WEBHOOK_SECRET and PRIVATE_KEY.
+  # When empty, a Secret is created from the values below (encrypt them, e.g. with helm-secrets).
+  existingSecret: ""
+  githubApp:
+    # -- GitHub App id.
+    appId: ""
+    # -- GitHub App OAuth client id (also used for GitHub sign-in).
+    clientId: ""
+    # -- GitHub App OAuth client secret.
+    clientSecret: ""
+    # -- GitHub App webhook secret.
+    webhookSecret: ""
+    # -- GitHub App private key (PEM).
+    privateKey: ""
+
+kubernetes:
+  # -- Show workloads from the cluster pelostage runs in on catalog entities.
+  enabled: true
+  # -- Cluster name shown in the Kubernetes tab.
+  clusterName: in-cluster
+  # -- Custom resources to show alongside standard workloads, e.g. Argo CD
+  # applications (`group: argoproj.io`, `apiVersion: v1alpha1`, `plural: applications`).
+  customResources: []
+
+# The database is in-memory SQLite (data is lost on restart) unless
+# `cnpgCluster.enabled` is set or `database.external.host` points at a Postgres.
+database:
+  external:
+    # -- Postgres host. Setting it switches pelostage to this database.
+    host: ""
+    # -- Postgres port.
+    port: 5432
+    # -- Database name.
+    database: pelostage
+    # -- Secret holding the Postgres credentials.
+    existingSecret: ""
+    # -- Key in the secret holding the user name.
+    userKey: username
+    # -- Key in the secret holding the password.
+    passwordKey: password
+
+# -- CloudNativePG cluster (https://github.com/cloudnative-pg/charts) created with pelostage.
+# Needs the CNPG operator installed in the cluster.
+cnpgCluster:
+  enabled: false
+  # resources are named <release>-cnpg (the chart alias is not a valid resource name)
+  nameOverride: cnpg
+  cluster:
+    instances: 1
+    storage:
+      size: 5Gi
+
+# -- Extra Backstage config, merged last (overrides everything above).
+appConfig: {}
+
+serviceAccount:
+  # -- Create a service account (needed for the Kubernetes plugin).
+  create: true
+  # -- Service account name. Defaults to the full name.
+  name: ""
+  # -- Service account annotations.
+  annotations: {}
+
+service:
+  # -- Service type.
+  type: ClusterIP
+  # -- Service port.
+  port: 80
+
+ingress:
+  # -- Create an ingress.
+  enabled: true
+  # -- Ingress class.
+  className: nginx
+  # -- Host name. Defaults to the host of `portal.baseUrl`.
+  host: ""
+  # -- Ingress annotations (e.g. a cert-manager cluster issuer).
+  annotations: {}
+  # -- TLS secret name. Empty disables TLS on the ingress.
+  tlsSecretName: ""
+
+# -- Extra environment variables for the backend container.
+extraEnv: []
+
+# -- Memory headroom for TechDocs builds; no CPU limit to avoid throttling.
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    memory: 2Gi
+
+# -- Pod security context (the image runs as the `node` user, uid 1000).
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+# -- Container security context.
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: [ALL]
+
+# -- Startup probe; allows up to 5 minutes for plugins to initialize.
+startupProbe:
+  httpGet:
+    port: http
+    path: /.backstage/health/v1/liveness
+  periodSeconds: 10
+  failureThreshold: 30
+
+# -- Liveness probe.
+livenessProbe:
+  httpGet:
+    port: http
+    path: /.backstage/health/v1/liveness
+
+# -- Readiness probe.
+readinessProbe:
+  httpGet:
+    port: http
+    path: /.backstage/health/v1/readiness
+
+# -- Node selector.
+nodeSelector: {}
+# -- Tolerations.
+tolerations: []
+# -- Affinity.
+affinity: {}

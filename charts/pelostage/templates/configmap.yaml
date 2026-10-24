@@ -1,0 +1,56 @@
+{{- include "pelostage.validate" . }}
+{{- $usePostgres := include "pelostage.usePostgres" . }}
+{{- $branding := dict }}
+{{- with .Values.portal.branding.logoFullUrl }}{{- $_ := set $branding "logoFullUrl" . }}{{- end }}
+{{- with .Values.portal.branding.logoIconUrl }}{{- $_ := set $branding "logoIconUrl" . }}{{- end }}
+{{- $app := dict
+  "extensions" (list
+    (dict "api:home/visits" true)
+    (dict "app-root-element:home/visit-listener" true)
+    (dict "home-page-widget:home/toolkit" (dict "config" (dict "tools" .Values.portal.home.toolkit)))
+    (dict "page:home" (dict "config" (dict "path" "/" "defaultConfig" .Values.portal.home.layout)))
+  )
+}}
+{{- if $branding }}{{- $_ := set $app "branding" $branding }}{{- end }}
+{{- $config := dict "app" $app }}
+{{- if $usePostgres }}
+{{- $_ := set $config "backend" (dict "database" (dict
+  "client" "pg"
+  "pluginDivisionMode" "schema"
+  "connection" (dict
+    "host" "${POSTGRES_HOST}"
+    "port" "${POSTGRES_PORT}"
+    "user" "${POSTGRES_USER}"
+    "password" "${POSTGRES_PASSWORD}"
+    "database" "${POSTGRES_DB}"
+  )
+)) }}
+{{- end }}
+{{- $clusters := list }}
+{{- if .Values.kubernetes.enabled }}
+{{- $clusters = list (dict
+  "url" "https://kubernetes.default.svc"
+  "name" .Values.kubernetes.clusterName
+  "authProvider" "serviceAccount"
+  "caFile" "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+  "serviceAccountToken" "${K8S_TOKEN}"
+  "customResources" .Values.kubernetes.customResources
+) }}
+{{- end }}
+{{- $_ := set $config "kubernetes" (dict
+  "serviceLocatorMethod" (dict "type" "multiTenant")
+  "clusterLocatorMethods" (list (dict "type" "config" "clusters" $clusters))
+) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "pelostage.fullname" . }}
+  labels:
+    {{- include "pelostage.labels" . | nindent 4 }}
+data:
+  # loaded after the image's app-config.yaml and app-config.production.yaml
+  app-config.chart.yaml: |
+    {{- toYaml $config | nindent 4 }}
+  # values.appConfig, loaded last so it can override anything
+  app-config.values.yaml: |
+    {{- toYaml .Values.appConfig | nindent 4 }}

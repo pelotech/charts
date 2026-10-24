@@ -1,0 +1,60 @@
+{{- if .Values.kubernetes.enabled }}
+# read-only access for the Kubernetes plugin
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "pelostage.fullname" . }}-read-only
+  labels:
+    {{- include "pelostage.labels" . | nindent 4 }}
+rules:
+  - apiGroups: ['*']
+    resources:
+      - pods
+      - pods/log
+      - configmaps
+      - services
+      - deployments
+      - replicasets
+      - horizontalpodautoscalers
+      - ingresses
+      - statefulsets
+      - limitranges
+      - daemonsets
+      - rollouts
+      - applications
+      - appprojects
+      - resourcequotas
+    verbs: [get, list, watch]
+  - apiGroups: [batch]
+    resources: [jobs, cronjobs]
+    verbs: [get, list, watch]
+  - apiGroups: [metrics.k8s.io]
+    resources: [pods]
+    verbs: [get, list]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "pelostage.fullname" . }}-read-only
+  labels:
+    {{- include "pelostage.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "pelostage.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "pelostage.fullname" . }}-read-only
+---
+# long-lived token the Kubernetes plugin uses to call the API server
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "pelostage.fullname" . }}-sa
+  labels:
+    {{- include "pelostage.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/service-account.name: {{ include "pelostage.serviceAccountName" . }}
+type: kubernetes.io/service-account-token
+{{- end }}
