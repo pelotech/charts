@@ -35,3 +35,10 @@ Session.vim
 **/charts/*.tgz
 
 .history
+
+# direnv
+.direnv
+
+# nix
+result
+result-*

@@ -1,4 +1,6 @@
 name: pre-commit
+permissions:
+  contents: read
 on:
   push:
     branches:
@@ -12,23 +14,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: install pre-commit
-        run: pip install pre-commit
-
-      - name: Build dependencies Helm - lrsql
-        uses: WyriHaximus/github-action-helm3@e3894d973c282349e3d41d3347767f2b2545b583 # v4
         with:
-          exec: helm dependency build charts/lrsql
-
-      - name: Build dependencies Helm - umami
-        uses: WyriHaximus/github-action-helm3@e3894d973c282349e3d41d3347767f2b2545b583 # v4
+          persist-credentials: false
+      - uses: $/.github/actions/nix-devshell
         with:
-          exec: helm dependency build charts/umami
+          gh-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build helm dependencies
+        run: helm dependency build charts/umami
 
       # Commit back changes that often show up in renovate changes for versions
       - name: Regenerate docs
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
-        run: pre-commit run helm-docs-built --all-files || true
+        run: prek run helm-docs-built --all-files || true
 
       - name: Check for docs changes
         id: docs
@@ -43,8 +41,8 @@ jobs:
       # Runs on every event and is the required status check. On the docs commit
       # (run #2) this re-runs and lands a green check on the head SHA. Untrusted
       # hooks run here, BEFORE any write-capable token exists.
-      - name: pre-commit
-        run: pre-commit run --all-files --show-diff-on-failure
+      - name: prek
+        run: prek run --all-files --show-diff-on-failure
 
       - name: Generate app token
         id: app-token
@@ -56,6 +54,7 @@ jobs:
         with:
           app-id: ${{ vars.ORG_RELEASE_PLEASE_CLIENT_ID }}
           private-key: ${{ secrets.ORG_RELEASE_PLEASE_PRIVATE_KEY }}
+          permission-contents: write
 
       - name: Commit docs changes back to PR branch (signed)
         if: >-
