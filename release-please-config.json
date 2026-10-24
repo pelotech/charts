@@ -44,6 +44,18 @@
     },
     "charts/umami": {
       "extra-files": ["README.md"]
+    },
+    "images/goose": {
+      "release-type": "simple",
+      "package-name": "goose",
+      "component": "goose",
+      "initial-version": "0.1.0"
+    },
+    "images/keyserver": {
+      "release-type": "simple",
+      "package-name": "keyserver",
+      "component": "keyserver",
+      "initial-version": "0.1.0"
     }
   },
   "changelog-sections": [
