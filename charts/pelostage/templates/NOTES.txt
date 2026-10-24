@@ -1,0 +1,13 @@
+Pelostage is starting at {{ .Values.portal.baseUrl }}
+{{- if not .Values.ingress.enabled }}
+(no ingress: kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "pelostage.fullname" . }} 7007:{{ .Values.service.port }})
+{{- end }}
+
+Check it once the pod is ready:
+  helm test {{ .Release.Name }} -n {{ .Release.Namespace }}
+{{- if not (include "pelostage.usePostgres" .) }}
+
+WARNING: the database is in-memory SQLite. The catalog, user settings,
+notifications and scorecards are lost on every restart. Set
+cnpgCluster.enabled=true or database.external.host for a persistent database.
+{{- end }}

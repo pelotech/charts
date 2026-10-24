@@ -7,5 +7,22 @@
   // stops auto-rebasing the branch.
   gitIgnoredAuthors: [
     '245757523+pt-release-please[bot]@users.noreply.github.com',
-  ]
+  ],
+  customManagers: [
+    {
+      // the pelostage chart's appVersion is the pelostage image tag
+      customType: 'regex',
+      managerFilePatterns: ['/^charts/pelostage/Chart\\.yaml$/'],
+      matchStrings: ['appVersion: (?<currentValue>v\\d+\\.\\d+\\.\\d+)'],
+      datasourceTemplate: 'docker',
+      depNameTemplate: 'ghcr.io/pelotech/pelostage',
+    },
+  ],
+  packageRules: [
+    {
+      // a new pelostage release must publish a new chart, so commit it as a fix for release-please
+      matchDepNames: ['ghcr.io/pelotech/pelostage'],
+      semanticCommitType: 'fix',
+    },
+  ],
 }

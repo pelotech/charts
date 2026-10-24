@@ -6,9 +6,6 @@
   "release-type": "helm",
   "separate-pull-requests": true,
   "packages": {
-    "charts/backstage": {
-      "extra-files": ["README.md"]
-    },
     "charts/crossplane-cluster-config": {
       "extra-files": ["README.md"]
     },
@@ -37,6 +34,9 @@
       "extra-files": ["README.md"]
     },
     "charts/pachyderm": {
+      "extra-files": ["README.md"]
+    },
+    "charts/pelostage": {
       "extra-files": ["README.md"]
     },
     "charts/postgrest": {
