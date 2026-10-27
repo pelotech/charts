@@ -12,7 +12,7 @@ global:
 image:
   registry: docker.io
   repository: yetanalytics/lrsql
-  tag: v0.9.8@sha256:3f566dae7f05c5f7745507436de582b4cb12e0eb93b4bc0a3d38861d0ccb9bad
+  tag: v0.9.11@sha256:bf5661ab216d07175f6e429951bf53c79f6070d54812285ea4c208f991cf0a04
   digest: ""
   pullPolicy: IfNotPresent
   pullSecrets: []
