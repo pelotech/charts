@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.2](https://github.com/pelotech/charts/compare/crossplane-keycloak-realm/0.3.1...crossplane-keycloak-realm/0.3.2) (2026-10-29)
+
+
+### Bug Fixes
+
+* **crossplane-keycloak-realm:** drop hardcoded realm-admin external-name ([#185](https://github.com/pelotech/charts/issues/185)) ([09c01aa](https://github.com/pelotech/charts/commit/09c01aa6d42af65041c75caae4a15aff9298027f))
+
 ## [0.3.1](https://github.com/pelotech/charts/compare/crossplane-keycloak-realm/0.3.0...crossplane-keycloak-realm/0.3.1) (2026-07-07)
 
 
