@@ -28,8 +28,6 @@ spec:
 apiVersion: role.keycloak.m.crossplane.io/v1alpha1
 kind: Role
 metadata:
-  annotations:
-    crossplane.io/external-name: realm-admin
   name: "{{ $roleResourceName }}"
   namespace: "{{ .Release.Namespace }}"
 spec:
