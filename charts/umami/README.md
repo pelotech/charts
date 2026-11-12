@@ -1,6 +1,6 @@
 # umami
 
-### version: 0.1.0<!-- x-release-please-version -->
+### version: 0.2.0<!-- x-release-please-version -->
 
 ![AppVersion: 3.2.0](https://img.shields.io/badge/AppVersion-3.2.0-informational?style=flat-square)
 
