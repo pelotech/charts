@@ -85,7 +85,7 @@ cluster:
           ensure: present
 
 keyserver:
-  image: ghcr.io/pelotech/images/keyserver@sha256:a128a2b37ccf00ab6bbbcd9ed0321bc81b1875aff51d0eb3aa412f07e50804d8
+  image: ghcr.io/pelotech/images/keyserver@sha256:1556674693a6b27161fa914201ef251534fca5dd56ccbc343c4d11fda76badf8
   tag: latest
   api:
     key: a-string-secret-at-least-256-bits-long
