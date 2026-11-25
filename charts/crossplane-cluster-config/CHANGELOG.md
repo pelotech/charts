@@ -4,8 +4,6 @@
 
 BREAKING CHANGE: Upgrading provider-keycloak from [v2 to v3](https://github.com/crossplane-contrib/provider-keycloak/releases?page=2#release-v3.0.0) adds a conversion webhook, served by the provider pod, that must be reachable from the Kubernetes API server. On clusters where the control plane cannot reach pod IPs (e.g. EKS with an overlay CNI such as Cilium), the provider needs to run with hostNetwork until existing resources are migrated. On clusters where the control plane can reach pod IPs, no action is required.
 
-For clusters where the control plane cannot reach pod IPs (e.g. EKS with Cilium), the following steps are required:
-
 Migration steps:
 1. Check if your cluster has any resources that need converting:
 ```
