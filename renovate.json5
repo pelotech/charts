@@ -20,12 +20,27 @@
       datasourceTemplate: 'docker',
       depNameTemplate: 'ghcr.io/pelotech/pelostage',
     },
+    {
+      // the default helm manager only recognizes repository/tag, and this chart uses name/tag
+      customType: 'regex',
+      managerFilePatterns: ['/^charts/crossplane-[^/]+/values\\.yaml$/'],
+      matchStrings: [
+        'package:\\s*\\n\\s+name: (?<depName>\\S+)\\s*\\n\\s+tag: (?<currentValue>\\S+)',
+      ],
+      datasourceTemplate: 'docker',
+    },
   ],
   packageRules: [
     {
       // a new pelostage release must publish a new chart, so commit it as a fix for release-please
       matchDepNames: ['ghcr.io/pelotech/pelostage'],
       semanticCommitType: 'fix',
+    },
+    {
+      // the crossplane templates render packages as `name:tag`, so don't pin digests
+      matchManagers: ['custom.regex'],
+      matchFileNames: ['charts/crossplane-*/values.yaml'],
+      pinDigests: false,
     },
   ],
 }
