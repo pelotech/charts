@@ -2,50 +2,14 @@
 
 ## [1.0.0](https://github.com/pelotech/charts/compare/crossplane-cluster-config/0.0.3...crossplane-cluster-config/1.0.0) (2026-11-25)
 
-BREAKING CHANGE: Upgrading provider-keycloak from [v2 to v3](https://github.com/crossplane-contrib/provider-keycloak/releases?page=2#release-v3.0.0) adds a conversion webhook, served by the provider pod, that must be reachable from the Kubernetes API server. On clusters where the control plane cannot reach pod IPs (e.g. EKS with an overlay CNI such as Cilium), the provider needs to run with hostNetwork until existing resources are migrated. On clusters where the control plane can reach pod IPs, no action is required.
+BREAKING CHANGE: Upgrading provider-keycloak from [v2 to v3](https://github.com/crossplane-contrib/provider-keycloak/releases?page=2#release-v3.0.0) adds a conversion webhook, as well as an additional webhook in [v3.3.0](https://github.com/crossplane-contrib/provider-keycloak/releases/tag/v3.3.0),
+served by the provider pod, that must be reachable from the Kubernetes API server. On clusters where the control plane cannot reach pod IPs (e.g. EKS with an overlay CNI such as Cilium), the provider needs to run with hostNetwork until existing resources are migrated. On clusters where the control plane can reach pod IPs, no action is required.
 
-Migration steps:
-1. Check if your cluster has any resources that need converting:
-```
-kubectl get clients.openidclient.keycloak.crossplane.io,clients.openidclient.keycloak.m.crossplane.io,identityproviders.oidc.keycloak.crossplane.io,identityproviders.oidc.keycloak.m.crossplane.io -A
-```
-If any resources are returned, proceed and keep the list as your inventory. If nothing is returned, apply this chart version and skip the remaining steps.
+If you are running a cluste where the control plane can reach pod IPs, upgrade to this chart version and enable `hostNetwork` for the provider in this chart's values.yaml
 
-2. Add a hostNetwork runtime config for your keycloak provider:
 ```yaml
----
-apiVersion: pkg.crossplane.io/v1beta1
-kind: DeploymentRuntimeConfig
-metadata:
-  name: provider-keycloak-hostnet
-spec:
-  deploymentTemplate:
-    spec:
-      selector: {}
-      template:
-        spec:
-          hostNetwork: true
-          dnsPolicy: ClusterFirstWithHostNet
-          containers:
-            - name: package-runtime
-              args:
-                - --enable-management-policies
+hostNetworkEnabled: true
 ```
-And in this chart's values.yaml:
-```yaml
-providers:
-  keycloak:
-    runtimeConfigRef:
-      name: provider-keycloak-hostnet
-```
-
-3. Apply this chart version (1.0.0) and verify the provider is healthy and the query from step 1 returns without conversion errors.
-4. Update every manifest source for the inventoried resources to `apiVersion: .../v1alpha2` and sync. If `clientSecretWoVersion` is set, it must now be a string (`1` -> `"1"`).
-5. Force a write on every inventoried resource so it is re-stored at v1alpha2. If using Argo CD, manually sync each affected app (without "apply out of sync only"). For any other resource: `kubectl annotate <resource> storage-migrated=v1alpha2`
-6. Once every inventoried resource has been re-written, remove the hostNetwork config from step 2, as the conversion webhook is no longer needed. Verify the query from step 1 still returns without errors. If it fails, re-add the hostNetwork config and repeat step 5.
-
-Note: without a reachable webhook, any later apply of these kinds at v1alpha1 will fail. Keep the hostNetwork config if anything still applies v1alpha1 manifests.
-
 
 ### Chores
 

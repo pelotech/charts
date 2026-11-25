@@ -1,3 +1,6 @@
+# -- Run providers using the enable-management-policies DeploymentRuntimeConfig on the host network (hostNetwork + ClusterFirstWithHostNet) so the control plane can reach their conversion webhooks.
+hostNetworkEnabled: false
+
 providers:
   keycloak:
     package:
