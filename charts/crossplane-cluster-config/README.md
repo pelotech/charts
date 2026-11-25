@@ -11,7 +11,7 @@ A Helm chart for Kubernetes
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | functions.auto-ready.package.name | string | `"xpkg.upbound.io/crossplane-contrib/function-auto-ready"` |  |
-| functions.auto-ready.package.tag | string | `"v0.7.3"` |  |
+| functions.auto-ready.package.tag | string | `"v0.7.4"` |  |
 | functions.extra-resources.package.name | string | `"xpkg.upbound.io/crossplane-contrib/function-extra-resources"` |  |
 | functions.extra-resources.package.tag | string | `"v0.3.0"` |  |
 | functions.go-templating.package.name | string | `"xpkg.upbound.io/crossplane-contrib/function-go-templating"` |  |
