@@ -15,7 +15,7 @@ A Helm chart for Kubernetes
 | functions.extra-resources.package.name | string | `"xpkg.upbound.io/crossplane-contrib/function-extra-resources"` |  |
 | functions.extra-resources.package.tag | string | `"v0.4.1"` |  |
 | functions.go-templating.package.name | string | `"xpkg.upbound.io/crossplane-contrib/function-go-templating"` |  |
-| functions.go-templating.package.tag | string | `"v0.13.2"` |  |
+| functions.go-templating.package.tag | string | `"v0.13.3"` |  |
 | functions.keycloak-builtin-objects.package.name | string | `"registry.gitlab.com/corewire/images/crossplane/function-keycloak-builtin-objects"` |  |
 | functions.keycloak-builtin-objects.package.tag | string | `"v3.1.2"` |  |
 | functions.patch-and-transform.package.name | string | `"xpkg.upbound.io/crossplane-contrib/function-patch-and-transform"` |  |
