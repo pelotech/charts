@@ -10,7 +10,7 @@ functions:
   auto-ready:
     package:
       name: xpkg.upbound.io/crossplane-contrib/function-auto-ready
-      tag: v0.7.3
+      tag: v0.7.4
   extra-resources:
     package:
       name: xpkg.upbound.io/crossplane-contrib/function-extra-resources
