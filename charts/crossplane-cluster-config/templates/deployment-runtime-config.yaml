@@ -9,6 +9,12 @@ spec:
       selector: {}
       template:
         spec:
+          {{- if .Values.hostNetworkEnabled }}
+          # provider-keycloak v3 serves a conversion webhook (openidclient Client v1alpha1 <-> v1alpha2). With
+          # a non default VPC (like EKS with Cilium), this endpoint must be on the host network to be available.
+          hostNetwork: true
+          dnsPolicy: ClusterFirstWithHostNet
+          {{- end }}
           containers:
             - name: package-runtime
               args:
