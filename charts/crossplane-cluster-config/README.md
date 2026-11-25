@@ -1,6 +1,6 @@
 # crossplane-cluster-config
 
-### version: 1.0.0<!-- x-release-please-version -->
+### version: 1.0.1<!-- x-release-please-version -->
 
 ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 

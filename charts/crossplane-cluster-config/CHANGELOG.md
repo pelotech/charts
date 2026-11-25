@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/pelotech/charts/compare/crossplane-cluster-config/1.0.0...crossplane-cluster-config/1.0.1) (2026-11-25)
+
+
+### Bug Fixes
+
+* **provider-keycloak:** add hostnetwork option for v1 ([#196](https://github.com/pelotech/charts/issues/196)) ([fbbf738](https://github.com/pelotech/charts/commit/fbbf7383bde9d66901ba53ad2b9a879f9589e65b))
+
 ## [1.0.0](https://github.com/pelotech/charts/compare/crossplane-cluster-config/0.0.3...crossplane-cluster-config/1.0.0) (2026-11-25)
 
 BREAKING CHANGE: Upgrading provider-keycloak from [v2 to v3](https://github.com/crossplane-contrib/provider-keycloak/releases?page=2#release-v3.0.0) adds a conversion webhook, as well as an additional webhook in [v3.3.0](https://github.com/crossplane-contrib/provider-keycloak/releases/tag/v3.3.0),
