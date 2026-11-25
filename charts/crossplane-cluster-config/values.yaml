@@ -14,7 +14,7 @@ functions:
   extra-resources:
     package:
       name: xpkg.upbound.io/crossplane-contrib/function-extra-resources
-      tag: v0.3.0
+      tag: v0.4.1
   go-templating:
     package:
       name: xpkg.upbound.io/crossplane-contrib/function-go-templating
