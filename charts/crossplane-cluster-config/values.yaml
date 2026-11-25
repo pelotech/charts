@@ -1,3 +1,5 @@
+hostNetworkEnabled: false
+
 providers:
   keycloak:
     package:

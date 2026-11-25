@@ -20,6 +20,7 @@ A Helm chart for Kubernetes
 | functions.keycloak-builtin-objects.package.tag | string | `"v3.1.2"` |  |
 | functions.patch-and-transform.package.name | string | `"xpkg.upbound.io/crossplane-contrib/function-patch-and-transform"` |  |
 | functions.patch-and-transform.package.tag | string | `"v0.11.3"` |  |
+| hostNetworkEnabled | bool | `false` | Enable hostNetwork for the provider, so the control plane can reach the v3+ conversion webhooks. |
 | providers.keycloak.package.name | string | `"xpkg.upbound.io/crossplane-contrib/provider-keycloak"` |  |
 | providers.keycloak.package.tag | string | `"v3.3.0"` |  |
 | providers.keycloak.runtimeConfigRef.name | string | `"enable-management-policies"` |  |
