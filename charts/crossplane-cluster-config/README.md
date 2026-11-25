@@ -21,6 +21,6 @@ A Helm chart for Kubernetes
 | functions.patch-and-transform.package.name | string | `"xpkg.upbound.io/crossplane-contrib/function-patch-and-transform"` |  |
 | functions.patch-and-transform.package.tag | string | `"v0.8.0"` |  |
 | providers.keycloak.package.name | string | `"xpkg.upbound.io/crossplane-contrib/provider-keycloak"` |  |
-| providers.keycloak.package.tag | string | `"v2.24.1"` |  |
+| providers.keycloak.package.tag | string | `"v3.3.0"` |  |
 | providers.keycloak.runtimeConfigRef.name | string | `"enable-management-policies"` |  |
 

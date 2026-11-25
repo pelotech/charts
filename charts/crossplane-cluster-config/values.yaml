@@ -2,7 +2,7 @@ providers:
   keycloak:
     package:
       name: xpkg.upbound.io/crossplane-contrib/provider-keycloak
-      tag: v2.24.1
+      tag: v3.3.0
     runtimeConfigRef:
       name: enable-management-policies
 
